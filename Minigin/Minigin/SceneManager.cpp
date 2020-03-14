@@ -2,7 +2,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-void dae::SceneManager::Update()
+void Rius::SceneManager::Update()
 {
 	for(auto& scene : m_Scenes)
 	{
@@ -10,7 +10,7 @@ void dae::SceneManager::Update()
 	}
 }
 
-void dae::SceneManager::Render()
+void Rius::SceneManager::Render()
 {
 	for (const auto& scene : m_Scenes)
 	{
@@ -18,7 +18,7 @@ void dae::SceneManager::Render()
 	}
 }
 
-dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
+Rius::Scene& Rius::SceneManager::CreateScene(const std::string& name)
 {
 	const auto scene = std::shared_ptr<Scene>(new Scene(name));
 	m_Scenes.push_back(scene);

@@ -1,7 +1,7 @@
 #pragma once
 #include "SceneManager.h"
 
-namespace dae
+namespace Rius
 {
 	class SceneObject;
 	class Scene

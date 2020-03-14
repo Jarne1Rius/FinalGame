@@ -1,5 +1,5 @@
 #pragma once
-namespace dae
+namespace Rius
 {
 	class SceneObject
 	{

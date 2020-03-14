@@ -4,7 +4,7 @@
 #include <glm/vec3.hpp>
 #pragma warning(pop)
 
-namespace dae
+namespace Rius
 {
 	class Transform final
 	{
