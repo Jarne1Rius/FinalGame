@@ -1,7 +1,7 @@
 #include "MiniginPCH.h"
 #include "BaseComponent.h"
 
-BaseComponent::BaseComponent()
+Rius::BaseComponent::BaseComponent()
 	:m_pGameObject(nullptr)
 {
 }

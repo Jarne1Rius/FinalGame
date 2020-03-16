@@ -7,16 +7,19 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <SDL.h>
-#include "TextObject.h"
 #include "GameObject.h"
 #include "Scene.h"
+
+#include "TextComponent.h"
+#include "TextureComponent.h"
 
 using namespace std;
 using namespace std::chrono;
 
+
 void Rius::Minigin::Initialize()
 {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
@@ -29,35 +32,16 @@ void Rius::Minigin::Initialize()
 		480,
 		SDL_WINDOW_OPENGL
 	);
-	if (m_Window == nullptr) 
+	if (m_Window == nullptr)
 	{
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
 	Renderer::GetInstance().Init(m_Window);
+
+	ResourceManager::GetInstance().Init("../Data/");
 }
 
-/**
- * Code constructing the scene world starts here
- */
-void Rius::Minigin::LoadGame() const
-{
-	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
-
-	auto go = std::make_shared<GameObject>();
-	go->SetTexture("background.jpg");
-	scene.Add(go);
-
-	go = std::make_shared<GameObject>();
-	go->SetTexture("logo.png");
-	go->SetPosition(216, 180);
-	scene.Add(go);
-
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto to = std::make_shared<TextObject>("Programming 4 Assignment", font);
-	to->SetPosition(80, 20);
-	scene.Add(to);
-}
 
 void Rius::Minigin::Cleanup()
 {
@@ -69,31 +53,33 @@ void Rius::Minigin::Cleanup()
 
 void Rius::Minigin::Run()
 {
-	Initialize();
+	auto& renderer = Renderer::GetInstance();
+	auto& sceneManager = SceneManager::GetInstance();
+	auto& input = InputManager::GetInstance();
 
-	// tell the resource manager where he can find the game data
-	ResourceManager::GetInstance().Init("../Data/");
-
-	LoadGame();
-
+	bool doContinue = true;
+	auto lastTime = std::chrono::high_resolution_clock::now();
+	float lag = 0.0f;
+	
+	while (doContinue)
 	{
-		auto& renderer = Renderer::GetInstance();
-		auto& sceneManager = SceneManager::GetInstance();
-		auto& input = InputManager::GetInstance();
-
-		bool doContinue = true;
-		while (doContinue)
+		const auto currentTime = high_resolution_clock::now();
+		auto deltaTime = duration<float>(currentTime - lastTime).count() * 1000.f;
+		lastTime = currentTime;
+		lag += deltaTime;
+		doContinue = input.ProcessInput();
+		while (lag > MsPerFrame)
 		{
-			const auto currentTime = high_resolution_clock::now();
-			
-			doContinue = input.ProcessInput();
 			sceneManager.Update();
-			renderer.Render();
-			
-			auto sleepTime = duration_cast<duration<float>>(currentTime + milliseconds(MsPerFrame) - high_resolution_clock::now());
-			this_thread::sleep_for(sleepTime);
+			lag -= MsPerFrame;
 		}
+
+		renderer.Render();
+
+		//auto sleepTime = duration_cast<duration<float>>(currentTime + milliseconds(MsPerFrame) - high_resolution_clock::now());
+		//this_thread::sleep_for(sleepTime);
 	}
+
 
 	Cleanup();
 }

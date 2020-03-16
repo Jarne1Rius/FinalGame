@@ -1,34 +1,35 @@
 #pragma once
 #include "Transform.h"
-#include "SceneObject.h"
 #include "BaseComponent.h"
-#include "Tags.h"
+#include "Extra.h"
 namespace Rius
 {
 	class Texture2D;
-	class GameObject : public SceneObject
+	class GameObject
 	{
 	public:
-		void Update() override;
-		void Render() const override;
+		void Update();
+		void Render() const;
 
-		void SetTexture(const std::string& filename);
+		//void SetTexture(const std::string& filename);
 		void SetPosition(float x, float y);
 
-		GameObject() = default;
+		GameObject();
 		virtual ~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
+		void AddComponent(BaseComponent* component);
+		//getters
 		std::vector<GameObject*> GetAllChildren() const { return m_pChildren; }
 		std::vector<BaseComponent*> GetAllComponents() const { return m_pComponents; }
 		GameObject* GetParent() const { return  m_pParentObject; }
 		Transform GetTransform() const { return m_Transform; }
 		Tag GetTag()const { return m_Tag; }
 		void SetTag(Tag tag) { m_Tag = tag; };
-		bool GetStatic() { return m_Static; }
+		bool GetStatic() const { return m_Static; }
 		
 		template <typename T>
 		T* GetComponent()
@@ -61,14 +62,12 @@ namespace Rius
 		}
 	private:
 		Transform m_Transform;
-		std::shared_ptr<Texture2D> m_Texture{};
 		std::vector<BaseComponent*> m_pComponents{};
 		std::vector<GameObject*> m_pChildren{};
 		Tag m_Tag{};
 		bool m_Static;
 		
 		class GameScene* m_pParentScene;
-		GameObject* m_pParentObject;
-
+		GameObject* m_pParentObject;	
 	};
 }

@@ -1,14 +1,12 @@
 #pragma once
-#pragma warning(push)
-#pragma warning (disable:4201)
-#include <glm/vec3.hpp>
-#pragma warning(pop)
-
+#include  "MiniginPCH.h"
 namespace Rius
 {
 	class Transform final
 	{
 	public:
+		Transform(const glm::vec3& position) : m_Position(position){};
+		Transform():m_Position(){};
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(float x, float y, float z);
 	private:

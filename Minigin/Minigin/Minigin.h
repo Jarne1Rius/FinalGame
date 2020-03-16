@@ -6,7 +6,6 @@ namespace Rius
 	{
 	public:
 		void Initialize();
-		void LoadGame() const;
 		void Cleanup();
 		void Run();
 	private:

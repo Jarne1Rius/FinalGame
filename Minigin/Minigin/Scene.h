@@ -3,12 +3,13 @@
 
 namespace Rius
 {
-	class SceneObject;
+	class GameObject;
 	class Scene
 	{
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
-		void Add(const std::shared_ptr<SceneObject>& object);
+		void Add(GameObject* object);
+		explicit Scene(const std::string& name);
 
 		void Update();
 		void Render() const;
@@ -20,10 +21,9 @@ namespace Rius
 		Scene& operator=(Scene&& other) = delete;
 
 	private: 
-		explicit Scene(const std::string& name);
 
 		std::string m_Name;
-		std::vector < std::shared_ptr<SceneObject>> m_Objects{};
+		std::vector <GameObject*> m_pObjects{};
 
 		static unsigned int m_IdCounter; 
 	};

@@ -1,6 +1,7 @@
 #pragma once
 #include "Singleton.h"
-
+#include <vector>
+#include <iostream>
 namespace Rius
 {
 	class Scene;
@@ -8,12 +9,13 @@ namespace Rius
 	{
 	public:
 		Scene& CreateScene(const std::string& name);
+		void AddScene(Scene* newScene);
 
 		void Update();
 		void Render();
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
-		std::vector<std::shared_ptr<Scene>> m_Scenes;
+		std::vector<Scene*> m_Scenes;
 	};
 }
