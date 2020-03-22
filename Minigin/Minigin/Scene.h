@@ -6,15 +6,15 @@ namespace Rius
 	class GameObject;
 	class Scene
 	{
-		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 		void Add(GameObject* object);
 		explicit Scene(const std::string& name);
 
-		void Update();
+		virtual void Update() = 0;
+		void UpdateObjects();
 		void Render() const;
 
-		~Scene();
+		virtual ~Scene();
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;
 		Scene& operator=(const Scene& other) = delete;

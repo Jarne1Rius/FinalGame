@@ -8,7 +8,6 @@ namespace Rius
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
-		Scene& CreateScene(const std::string& name);
 		void AddScene(Scene* newScene);
 
 		void Update();

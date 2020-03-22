@@ -15,3 +15,13 @@ enum PositionUI
 	LeftBottom,
 	RightBottom
 };
+
+enum KeyFunctions
+{
+	Jump,
+	Right,
+	Left,
+	Up,
+	Down,
+	Shoot
+};

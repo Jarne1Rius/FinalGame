@@ -13,9 +13,7 @@ int main()
 	engine->Initialize();
 #ifdef ProjectTest
 	auto Scene = new TestScene();
-	Rius::SceneManager::GetInstance().AddScene(Scene->GetScene());
+	Rius::SceneManager::GetInstance().AddScene(Scene);
 #endif
-
-
 	engine->Run();
 } 

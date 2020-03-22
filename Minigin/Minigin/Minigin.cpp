@@ -9,6 +9,7 @@
 #include <SDL.h>
 #include "GameObject.h"
 #include "Scene.h"
+#include "time.h"
 
 #include "TextComponent.h"
 #include "TextureComponent.h"
@@ -53,6 +54,7 @@ void Rius::Minigin::Cleanup()
 
 void Rius::Minigin::Run()
 {
+	auto& time = Time::GetInstance();
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
@@ -64,22 +66,21 @@ void Rius::Minigin::Run()
 	while (doContinue)
 	{
 		const auto currentTime = high_resolution_clock::now();
-		auto deltaTime = duration<float>(currentTime - lastTime).count() * 1000.f;
+		auto deltaTime = duration<float>(currentTime - lastTime).count() ;
 		lastTime = currentTime;
 		lag += deltaTime;
 		doContinue = input.ProcessInput();
+		int frames{0};
+		lag *= 1000.f;
 		while (lag > MsPerFrame)
 		{
 			sceneManager.Update();
 			lag -= MsPerFrame;
 		}
-
+		frames++;
+		time.UpdateTimer(deltaTime, frames);
 		renderer.Render();
-
-		//auto sleepTime = duration_cast<duration<float>>(currentTime + milliseconds(MsPerFrame) - high_resolution_clock::now());
-		//this_thread::sleep_for(sleepTime);
 	}
-
 
 	Cleanup();
 }

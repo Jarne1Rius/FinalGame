@@ -7,6 +7,7 @@ void Rius::SceneManager::Update()
 	for(auto& scene : m_Scenes)
 	{
 		scene->Update();
+		scene->UpdateObjects();
 	}
 }
 
@@ -18,12 +19,6 @@ void Rius::SceneManager::Render()
 	}
 }
 
-Rius::Scene& Rius::SceneManager::CreateScene(const std::string& name)
-{
-	const auto scene = new Scene(name);
-	m_Scenes.push_back(scene);
-	return *scene;
-}
 
 void Rius::SceneManager::AddScene(Scene* newScene)
 {

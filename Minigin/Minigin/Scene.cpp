@@ -19,9 +19,9 @@ void Scene::Add(GameObject* object)
 	m_pObjects.push_back(object);
 }
 
-void Scene::Update()
+void Scene::UpdateObjects()
 {
-	for(auto& object : m_pObjects)
+	for (auto& object : m_pObjects)
 	{
 		object->Update();
 	}

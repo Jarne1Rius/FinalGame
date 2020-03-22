@@ -1,18 +1,15 @@
 #pragma once
 #include "Scene.h"
-#include  "TextComponent.h"
+#include  "FPSComponent.h"
 
-class TestScene
+class TestScene : public Rius::Scene
 {
 public:
 	TestScene();
 	~TestScene() = default;
 	void Update();
-	void Render()const;
-	Rius::Scene* GetScene() { return m_pScene; }
 private:
 	void Initialize();
-	Rius::Scene* m_pScene;
-	Rius::TextComponent* m_TextComponent;
+	Rius::FPSComponent* m_pFPSComponent;
 };
 
