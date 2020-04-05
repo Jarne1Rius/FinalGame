@@ -7,6 +7,7 @@ void Rius::Time::UpdateTimer(float deltaTime, int frames)
 	m_FrameCount += frames;
 	if (m_DeltaTime >= 1)
 	{
+		//std::cout << "test\n";
 		m_DeltaTime -= 1.f;
 		m_CurrentFrames = m_FrameCount;
 		m_FrameCount = 0;

@@ -39,6 +39,10 @@ namespace Rius
 		RightShoulder,
 		LeftThumb,
 		RightThumb,
+		RightStick,
+		LeftStick,
+		RightTrigger,
+		LeftTrigger
 	};
 	typedef std::map<KeyFunctions, std::pair<ControllerButton, SDL_Scancode>>  ControllerMap;
 	class InputManager final : public Singleton<InputManager>
@@ -48,12 +52,26 @@ namespace Rius
 		bool ProcessInput();
 		void ChangeKey(KeyFunctions function, ControllerButton GamepadKeys);
 		void ChangeKey(KeyFunctions function, SDL_Scancode Keys);
-		std::map<std::string, ControllerButton> GetControls() const;
-		bool IsPressed(KeyFunctions button) const;
+		ControllerMap GetControls() const { return m_Controles; }
+		float IsPressed(KeyFunctions button) const;
+		glm::vec2 GetAxisGamePad(KeyFunctions button) const;
+		float LeftStickY() const;
+		float LeftStickX() const;
+		float RightStickX() const;
+		float RightStickY() const;
+		float RightTrigger() const;
+		float LeftTrigger() const;
+		glm::vec2 LeftStick() const;
+		glm::vec2 RightStick() const;
+		void SetRumble(float left, float right) const;
+		
 	private:
+		bool LStickInDeadZone() const;
+		bool RStickInDeadZone() const;
+		
 		const static int m_Size{14};
 		XINPUT_STATE m_CurrentState{};
-		int m_id;
+		int m_Id;
 		bool m_Buttons[m_Size];
 		ControllerMap m_Controles;
 		const Uint8* m_Keyboard;

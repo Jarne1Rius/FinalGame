@@ -14,7 +14,7 @@ namespace Rius
 		void UpdateObjects();
 		void Render() const;
 
-		virtual ~Scene();
+		~Scene();
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;
 		Scene& operator=(const Scene& other) = delete;

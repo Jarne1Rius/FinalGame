@@ -18,6 +18,7 @@ Rius::FPSComponent::FPSComponent(Font* font, const glm::vec2& position)
 
 Rius::FPSComponent::~FPSComponent()
 {
+	delete m_Texture;
 	delete m_pFont;
 }
 
@@ -32,13 +33,14 @@ void Rius::FPSComponent::Update()
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
 		}
-		auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
+		Texture2D* texture = new Texture2D(SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf));
 		if (texture == nullptr)
 		{
 			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 		}
 		SDL_FreeSurface(surf);
-		m_Texture = std::make_shared<Texture2D>(texture);
+		delete m_Texture;
+		m_Texture = (texture);
 	}
 }
 

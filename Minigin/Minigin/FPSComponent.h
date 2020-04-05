@@ -25,7 +25,7 @@ namespace Rius
 			Rius::Transform m_Transform;
 			int m_Frames;
 			Font* m_pFont;
-			std::shared_ptr<Texture2D> m_Texture;
+			Texture2D* m_Texture;
 		
 	};
 

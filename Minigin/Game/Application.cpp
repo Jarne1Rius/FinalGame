@@ -16,4 +16,5 @@ int main()
 	Rius::SceneManager::GetInstance().AddScene(Scene);
 #endif
 	engine->Run();
+	delete Scene;
 } 

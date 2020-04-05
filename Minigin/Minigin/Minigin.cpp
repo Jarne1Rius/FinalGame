@@ -1,5 +1,6 @@
 #include "MiniginPCH.h"
 #include "Minigin.h"
+
 #include <chrono>
 #include <thread>
 #include "InputManager.h"
@@ -10,6 +11,11 @@
 #include "GameObject.h"
 #include "Scene.h"
 #include "time.h"
+#if _DEBUG
+// ReSharper disable once CppUnusedIncludeDirective
+#include "vld.h"
+#endif
+#include <SDL_mixer.h>
 
 #include "TextComponent.h"
 #include "TextureComponent.h"
@@ -17,12 +23,15 @@
 using namespace std;
 using namespace std::chrono;
 
-
 void Rius::Minigin::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
+	}
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 	}
 
 	m_Window = SDL_CreateWindow(
@@ -50,6 +59,7 @@ void Rius::Minigin::Cleanup()
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
 	SDL_Quit();
+	Mix_Quit();
 }
 
 void Rius::Minigin::Run()

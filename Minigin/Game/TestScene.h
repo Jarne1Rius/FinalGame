@@ -6,8 +6,7 @@ class TestScene : public Rius::Scene
 {
 public:
 	TestScene();
-	~TestScene() = default;
-	void Update();
+	void Update() override;
 private:
 	void Initialize();
 	Rius::FPSComponent* m_pFPSComponent;

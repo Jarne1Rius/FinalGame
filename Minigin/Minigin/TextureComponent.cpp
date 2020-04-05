@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "Texture2D.h"
 
+
 Rius::TextureComponent::TextureComponent(const std::string& fileName,const glm::vec2& position)
 	:BaseComponent(), m_Transform({ position.x, position.y, 0 })
 {

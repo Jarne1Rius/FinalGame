@@ -24,7 +24,6 @@ void Rius::GameObject::AddComponent(BaseComponent* component)
 {
 	component->m_pGameObject = this;
 	m_pComponents.push_back(component);
-	
 }
 
 void Rius::GameObject::Update()
