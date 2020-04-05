@@ -1,26 +1,25 @@
 #pragma once
-
 #include "Collider.h"
-#include "Extra.h"
-
+#include  "Extra.h"
 namespace Rius
 {
-	class CircleCollider2D final : public Collider
-	{
+	class CircleCollider3D;
 
+	class BoxCollider3D : public Collider
+	{
 	public:
-		CircleCollider2D(Circle2D circle, bool IsTrigger = false);
-		~CircleCollider2D();
+		BoxCollider3D(Rectangle3D rectangle, bool isTrigger = false);
+		~BoxCollider3D();
 		void Initialize() override;
 		void Update() override;
 		void Render() const override;
-		const Circle2D GetCircle2D()const { return m_Circle2D; }
+		const Rectangle3D GetRectangle() const { return m_Rectangle; }
 		bool CheckCollision(CircleCollider2D* circle) override;
 		bool CheckCollision(BoxCollider2D* collider) override;
-		bool CheckCollision(BoxCollider3D* collider) override;
 		bool CheckCollision(CircleCollider3D* circle) override;
+		bool CheckCollision(BoxCollider3D* collider) override;
 	private:
-		Circle2D m_Circle2D;
-		bool m_Trigger;
+		Rectangle3D m_Rectangle;
 	};
 }
+

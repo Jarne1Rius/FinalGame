@@ -1,5 +1,4 @@
 #pragma once
-#include <map>
 #include "Extra.h"
 #include "Collider.h"
 namespace Rius
@@ -8,7 +7,7 @@ namespace Rius
 	class BoxCollider2D : public Collider
 	{
 	public:
-		BoxCollider2D();
+		BoxCollider2D(Rectangle2D rectangle, bool isTrigger = false);
 		~BoxCollider2D();
 		void Initialize() override;
 		void Update() override;

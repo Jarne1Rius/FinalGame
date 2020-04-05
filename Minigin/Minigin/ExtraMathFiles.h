@@ -7,16 +7,19 @@ namespace Rius
 {
 	static std::vector<Collider*> m_AllColliders;
 
-	void AddCollider(Collider* collider)
+	void AddColliderToAllColliders(Collider* collider)
 	{
 		m_AllColliders.push_back(collider);
+		collider->SetCollisions();
+		collider->AddCollider(collider);
+		
 	}
 	
-	float SqrtMagnitude(const glm::vec3& pos1, const glm::vec3& pos2)
+	float MagnitudeSqrt(const glm::vec3& pos1, const glm::vec3& pos2)
 	{
 		return pos1.x * pos2.x + pos2.y * pos2.y + pos1.z + pos2.z;
 	}
-	float SqrtMagnitude(const glm::vec2& pos1, const glm::vec2& pos2)
+	float MagnitudeSqrt(const glm::vec2& pos1, const glm::vec2& pos2)
 	{ 
 		return pos1.x * pos2.x + pos2.y * pos2.y;
 	}
@@ -42,12 +45,12 @@ namespace Rius
 
 	inline bool Collision(const Circle2D& circle1, const Circle2D& circle2)
 	{
-		return SqrtMagnitude(circle1.pos, circle2.pos) < ((circle1.radius + circle2.radius) * (circle1.radius + circle2.radius));
+		return MagnitudeSqrt(circle1.pos, circle2.pos) < ((circle1.radius + circle2.radius) * (circle1.radius + circle2.radius));
 	}
 
 	inline bool Collision(const Circle3D& circle1, const Circle3D& circle2)
 	{
-		return SqrtMagnitude(circle1.pos, circle2.pos) < ((circle1.radius + circle2.radius) * (circle1.radius + circle2.radius));
+		return MagnitudeSqrt(circle1.pos, circle2.pos) < ((circle1.radius + circle2.radius) * (circle1.radius + circle2.radius));
 	}
 	inline bool Collision(const Circle3D& circle1, const Rectangle3D& rectangle3D)
 	{
@@ -55,7 +58,7 @@ namespace Rius
 		float y = glm::max(rectangle3D.pos.y, glm::min(circle1.pos.y, rectangle3D.pos.y + rectangle3D.width));
 		float z = glm::max(rectangle3D.pos.z, glm::min(circle1.pos.z, rectangle3D.pos.z + rectangle3D.depth));
 		glm::vec3 position = {x, y, z};
-		return SqrtMagnitude(position, position) < (circle1.radius * circle1.radius);
+		return MagnitudeSqrt(position, position) < (circle1.radius * circle1.radius);
 	}
 	inline bool Collision(const Rectangle3D& rectangle3D,const Circle3D& circle1)
 	{
@@ -66,7 +69,7 @@ namespace Rius
 		float x = glm::max(rectangle3D.pos.x, glm::min(circle1.pos.x, rectangle3D.pos.x + rectangle3D.width));
 		float y = glm::max(rectangle3D.pos.y, glm::min(circle1.pos.y, rectangle3D.pos.y + rectangle3D.width));
 		glm::vec2 position = { x, y };
-		return SqrtMagnitude(position, position) < (circle1.radius * circle1.radius);
+		return MagnitudeSqrt(position, position) < (circle1.radius * circle1.radius);
 	}
 	inline bool Collision(const Rectangle2D& rectangle3D,const Circle2D& circle1)
 	{

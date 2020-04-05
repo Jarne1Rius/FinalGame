@@ -31,8 +31,8 @@ void TestScene::Initialize()
 	ui->AddComponent(texture);
 	ui->SetPosition(0, 0);
 	Add(ui);
-	Rius::InputManager::GetInstance().ChangeKey(KeyFunctions::Jump, Rius::ControllerButton::ButtonA);
-	Rius::InputManager::GetInstance().ChangeKey(KeyFunctions::Left, Rius::ControllerButton::LeftStick);
+	Rius::InputManager::GetInstance().ChangeKey(Rius::KeyFunctions::Jump, Rius::ControllerButton::ButtonA);
+	Rius::InputManager::GetInstance().ChangeKey(Rius::KeyFunctions::Left, Rius::ControllerButton::LeftStick);
 	Rius::InputManager::GetInstance().SetRumble(1, 1);
 }
 
@@ -40,6 +40,6 @@ void TestScene::Update()
 {
 	
 	//std::cout << Rius::InputManager::GetInstance().IsPressed(KeyFunctions::Jump) << "\n";
-	std::cout << Rius::InputManager::GetInstance().GetAxisGamePad(KeyFunctions::Left).x << "\n";
+	std::cout << Rius::InputManager::GetInstance().GetAxisGamePad(Rius::KeyFunctions::Left).x << "\n";
 	
 }

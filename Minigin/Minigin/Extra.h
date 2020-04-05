@@ -36,27 +36,27 @@ namespace Rius
 	struct Rectangle2D
 	{
 		glm::vec2 pos;
-		float width;
-		float height;
+		float width = 10;
+		float height = 10;
 	};
 
 	struct Rectangle3D
 	{
 		glm::vec3 pos;
-		float width;
-		float height;
-		float depth;
+		float width = 10;
+		float height = 10;
+		float depth = 10;
 	};
 	
 	struct Circle2D
 	{
 		glm::vec2 pos;
-		float radius;
+		float radius = 10;
 	};
 	struct Circle3D
 	{
 		glm::vec3 pos;
-		float radius;
+		float radius = 10;
 	};
 
 	struct Capsule2D

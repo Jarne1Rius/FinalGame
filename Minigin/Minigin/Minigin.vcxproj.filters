@@ -25,6 +25,9 @@
     <Filter Include="Source Files\Objects">
       <UniqueIdentifier>{7d97bff6-5fb7-4130-9d77-45c24bd9690e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Components\Colliders">
+      <UniqueIdentifier>{86cc0096-e871-4b46-b225-dfb106aa8611}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseComponent.h">
@@ -84,16 +87,22 @@
     <ClInclude Include="Audio.h">
       <Filter>Source Files\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="BoxCollider2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Collider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ExtraMathFiles.h">
       <Filter>Source Files\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="BoxCollider2D.h">
+      <Filter>Source Files\Components\Colliders</Filter>
+    </ClInclude>
     <ClInclude Include="CircleCollider2D.h">
+      <Filter>Source Files\Components\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Source Files\Components\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleCollider3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -150,12 +159,18 @@
       <Filter>Source Files\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="BoxCollider2D.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Components\Colliders</Filter>
     </ClCompile>
     <ClCompile Include="Collider.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Components\Colliders</Filter>
     </ClCompile>
     <ClCompile Include="CircleCollider2D.cpp">
+      <Filter>Source Files\Components\Colliders</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxCollider3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleCollider3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
