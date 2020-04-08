@@ -3,6 +3,7 @@
 #include "Extra.h"
 #include "ExtraMathFiles.h"
 #include "CircleCollider2D.h"
+#include "GameObject.h"
 Rius::BoxCollider2D::BoxCollider2D(Rectangle2D rectangle, bool isTrigger)
 	:Collider(isTrigger)
 {
@@ -19,6 +20,7 @@ void Rius::BoxCollider2D::Initialize()
 
 void Rius::BoxCollider2D::Update()
 {
+	bool anyHit{false};
 	for (Collider* collider : m_AllColliders)
 	{
 		bool newHit = collider->CheckCollision(this);
@@ -46,9 +48,11 @@ void Rius::BoxCollider2D::Update()
 		{
 			continue;
 		}
-
+		if (newHit) anyHit = newHit;
 		it->second = newHit;
 	}
+	if (anyHit) GetGameObject()->GetTransform().SetPosition(m_PreviousPos);
+	m_PreviousPos = GetGameObject()->GetTransform().GetPosition();
 }
 
 void Rius::BoxCollider2D::Render() const

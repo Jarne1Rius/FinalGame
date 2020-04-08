@@ -26,6 +26,7 @@ namespace Rius
 		void SetCollisions();
 		void ChangeTrigger(bool isTrigger);
 	protected:
+		glm::vec3 m_PreviousPos;
 		bool m_Trigger;
 		std::map<Collider*, bool> m_CollidersInCollision;
 	};
