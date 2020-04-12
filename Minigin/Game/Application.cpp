@@ -1,6 +1,7 @@
 
 #include "Minigin.h"
 #include "SceneManager.h"
+#include <fstream>
 #define ProjectTest
 
 #ifdef ProjectTest
@@ -17,4 +18,5 @@ int main()
 #endif
 	engine->Run();
 	delete Scene;
+	delete engine;
 } 

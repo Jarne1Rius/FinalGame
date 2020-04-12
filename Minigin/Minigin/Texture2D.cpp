@@ -1,18 +1,35 @@
 #include "MiniginPCH.h"
 #include "Texture2D.h"
-#include <SDL.h>
 
-Rius::Texture2D::~Texture2D()
+#include <glad/glad.h>
+
+#include "stb_image.h"
+
+Rius::Texture2D::Texture2D()
+	: Width(0), Height(0), Internal_Format(GL_RGB), Image_Format(GL_RGB), Wrap_S(GL_REPEAT), Wrap_T(GL_REPEAT), Filter_Min(GL_LINEAR), Filter_Max(GL_LINEAR)
 {
-	SDL_DestroyTexture(m_Texture);
+	glGenTextures(1, &this->ID);
 }
 
-SDL_Texture* Rius::Texture2D::GetSDLTexture() const
+void Rius::Texture2D::Generate(unsigned width, unsigned height, unsigned char* data)
 {
-	return m_Texture;
+    this->Width = width;
+    this->Height = height;
+    // Create Texture
+    glBindTexture(GL_TEXTURE_2D, this->ID);
+    stbi_set_flip_vertically_on_load(true);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, this->Internal_Format, width, height, 0, this->Image_Format, GL_UNSIGNED_BYTE, data);
+    // Set Texture wrap and filter modes
+    // Unbind texture
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-Rius::Texture2D::Texture2D(SDL_Texture* texture)
+void Rius::Texture2D::Bind() const
 {
-	m_Texture = texture;
+    glBindTexture(GL_TEXTURE_2D, this->ID);
 }

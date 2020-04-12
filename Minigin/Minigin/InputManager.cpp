@@ -25,6 +25,10 @@ Rius::InputManager::InputManager()
 	
 }
 
+Rius::InputManager::~InputManager()
+{
+}
+
 bool Rius::InputManager::ProcessInput()
 {
 	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));

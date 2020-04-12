@@ -1,51 +1,73 @@
 #include "MiniginPCH.h"
 #include "Renderer.h"
 #include <SDL.h>
+
 #include "SceneManager.h"
 #include "Texture2D.h"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include "stb_image.h"
+#include "Shader.h"
+#include <fstream>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-void Rius::Renderer::Init(SDL_Window * window)
+
+// settings
+
+
+void Rius::Renderer::Init(unsigned int width, unsigned int height)
 {
-	m_Renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (m_Renderer == nullptr) 
+	m_Height = height;
+	m_Width = width;
+
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	m_pWindow = glfwCreateWindow(m_Width, m_Height, "Testing", NULL, NULL);
+	if (m_pWindow == NULL)
 	{
-		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
+		std::cout << "Failed to create GLFW m_pWindow" << std::endl;
+		glfwTerminate();
+	}
+	glfwMakeContextCurrent(m_pWindow);
+	glfwSetFramebufferSizeCallback(m_pWindow, framebuffer_size_callback);
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		return;
 	}
 }
 
 void Rius::Renderer::Render() const
 {
-	SDL_RenderClear(m_Renderer);
+	//processInput(m_pWindow);
+	glfwSwapBuffers(m_pWindow);
+	glfwPollEvents();
+}
 
-	SceneManager::GetInstance().Render();
-	
-	SDL_RenderPresent(m_Renderer);
+void Rius::Renderer::Input()
+{
+	processInput(m_pWindow);
+}
+
+Rius::Renderer::~Renderer()
+{
 }
 
 void Rius::Renderer::Destroy()
 {
-	if (m_Renderer != nullptr)
-	{
-		SDL_DestroyRenderer(m_Renderer);
-		m_Renderer = nullptr;
-	}
+	glfwTerminate();
+}
+void Rius::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }
 
-void Rius::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y) const
+void Rius::processInput(GLFWwindow* window)
 {
-	SDL_Rect dst;
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
-	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
-}
-
-void Rius::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height) const
-{
-	SDL_Rect dst;
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
-	dst.w = static_cast<int>(width);
-	dst.h = static_cast<int>(height);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
 }

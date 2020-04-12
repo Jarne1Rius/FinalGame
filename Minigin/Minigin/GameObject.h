@@ -26,7 +26,7 @@ namespace Rius
 		std::vector<GameObject*> GetAllChildren() const { return m_pChildren; }
 		std::vector<BaseComponent*> GetAllComponents() const { return m_pComponents; }
 		GameObject* GetParent() const { return  m_pParentObject; }
-		Transform GetTransform() const { return m_Transform; }
+		Transform& GetTransform() { return m_Transform; }
 		Tag GetTag()const { return m_Tag; }
 		void SetTag(Tag tag) { m_Tag = tag; };
 		bool GetStatic() const { return m_Static; }

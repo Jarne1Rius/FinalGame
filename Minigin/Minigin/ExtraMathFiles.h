@@ -1,25 +1,25 @@
 #pragma once
 #include "Extra.h"
 #include <vector>
-#include  "Collider.h"
-#include "glm/glm.hpp"
+#include "Collider.h"
 namespace Rius
 {
 	static std::vector<Collider*> m_AllColliders;
 
-	void AddColliderToAllColliders(Collider* collider)
+	inline void AddColliderToAllColliders(Collider* collider)
 	{
 		m_AllColliders.push_back(collider);
 		collider->SetCollisions();
 		collider->AddCollider(collider);
 		
 	}
-	
-	float MagnitudeSqrt(const glm::vec3& pos1, const glm::vec3& pos2)
+
+	inline float MagnitudeSqrt(const glm::vec3& pos1, const glm::vec3& pos2)
 	{
 		return pos1.x * pos2.x + pos2.y * pos2.y + pos1.z + pos2.z;
 	}
-	float MagnitudeSqrt(const glm::vec2& pos1, const glm::vec2& pos2)
+
+	inline float MagnitudeSqrt(const glm::vec2& pos1, const glm::vec2& pos2)
 	{ 
 		return pos1.x * pos2.x + pos2.y * pos2.y;
 	}

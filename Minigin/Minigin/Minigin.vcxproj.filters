@@ -33,12 +33,6 @@
     <ClInclude Include="BaseComponent.h">
       <Filter>Source Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="TextureComponent.h">
-      <Filter>Source Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="TextComponent.h">
-      <Filter>Source Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="FPSComponent.h">
       <Filter>Source Files\Components</Filter>
     </ClInclude>
@@ -100,20 +94,29 @@
       <Filter>Source Files\Components\Colliders</Filter>
     </ClInclude>
     <ClInclude Include="BoxCollider3D.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Components\Colliders</Filter>
     </ClInclude>
     <ClInclude Include="CircleCollider3D.h">
+      <Filter>Source Files\Components\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Source Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteSheetComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="TextComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="FPSComponent.cpp">
@@ -167,10 +170,28 @@
     <ClCompile Include="CircleCollider2D.cpp">
       <Filter>Source Files\Components\Colliders</Filter>
     </ClCompile>
+    <ClCompile Include="CircleCollider3D.cpp">
+      <Filter>Source Files\Components\Colliders</Filter>
+    </ClCompile>
     <ClCompile Include="BoxCollider3D.cpp">
+      <Filter>Source Files\Components\Colliders</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CircleCollider3D.cpp">
+    <ClCompile Include="stb_image.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteSheetComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

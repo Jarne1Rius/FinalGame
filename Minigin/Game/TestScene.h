@@ -10,5 +10,7 @@ public:
 private:
 	void Initialize();
 	Rius::FPSComponent* m_pFPSComponent;
+	Rius::GameObject* m_UI;
+	float m_Angle;
 };
 

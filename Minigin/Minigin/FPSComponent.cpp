@@ -13,6 +13,7 @@ Rius::FPSComponent::FPSComponent(Font* font, const glm::vec2& position)
 	, m_pFont(font)
 	, m_Transform({ position.x, position.y,0 })
 	, m_Texture(nullptr)
+	, m_Frames()
 {
 }
 
@@ -33,28 +34,28 @@ void Rius::FPSComponent::Update()
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
 		}
-		Texture2D* texture = new Texture2D(SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf));
-		if (texture == nullptr)
-		{
-			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
-		}
-		SDL_FreeSurface(surf);
-		delete m_Texture;
-		m_Texture = (texture);
+		//Texture2D* texture = new Texture2D(SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf));
+		//if (texture == nullptr)
+		//{
+		//	throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
+		//}
+	//	SDL_FreeSurface(surf);
+		//delete m_Texture;
+		//m_Texture = (texture);
 	}
 }
 
 void Rius::FPSComponent::Initialize()
 {
-	
+
 }
 
 void Rius::FPSComponent::Render() const
 {
-	if(m_Texture != nullptr)
+	if (m_Texture != nullptr)
 	{
 		const auto pos = m_Transform.GetPosition();
-		Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
+		//Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 	}
 }
 

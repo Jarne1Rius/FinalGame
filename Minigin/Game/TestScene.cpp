@@ -1,13 +1,14 @@
 #include "TestScene.h"
 #include "GameObject.h"
 #include "ResourceManager.h"
-#include "TextureComponent.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-#include "TextComponent.h"
-#include "Time.h"
+
+#include "SpriteRenderer.h"
 #include "InputManager.h"
-
+#include "Renderer.h"
+#include "Extra.h"
 
 TestScene::TestScene()
 	:Scene("TestScene")
@@ -17,20 +18,22 @@ TestScene::TestScene()
 
 void TestScene::Initialize()
 {
+	/*Rius::Renderer::GetInstance().Init(800, 600);
+	Rius::ResourceManager::GetInstance().LoadShader("Shader/SpriteTexture.vs", "Shader/SpriteTexture.fs", "Sprite");
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(800), static_cast<GLfloat>(600), 0.0f, -1.0f, 1.0f);
+	Rius::ResourceManager::GetInstance().GetShader("Sprite")->Use().SetInt("image", 0);
+	Rius::ResourceManager::GetInstance().GetShader("Sprite")->Use().SetVec3("spriteColor", 0, 1, 1);
+	Rius::ResourceManager::GetInstance().GetShader("Sprite")->SetMat4("projection", projection);
 
-	auto ui = new Rius::GameObject();
-	Rius::Font* font = Rius::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	Rius::TextureComponent* texture = new Rius::TextureComponent("background.jpg");
-	ui->AddComponent(texture);
-	Rius::TextComponent* text = new Rius::TextComponent("Programming 4 Assignment", font, glm::vec2{ 80,20 });
-	ui->AddComponent(text);
-	font = Rius::ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	m_pFPSComponent = new Rius::FPSComponent(font);
-	ui->AddComponent(m_pFPSComponent);
-	texture = new Rius::TextureComponent("logo.png", glm::vec2{ 216,180 });
-	ui->AddComponent(texture);
-	ui->SetPosition(0, 0);
-	Add(ui);
+	Rius::Texture2D* texture  =Rius::ResourceManager::GetInstance().LoadTexture("Resources/awesomeface.png", GL_FALSE, "BackGround");
+	Rius::Shader* a = Rius::ResourceManager::GetInstance().GetShader("Sprite");
+
+	Rius::SpriteRenderer* sprite = new Rius::SpriteRenderer(a, Rius::Rectangle2D(0, 0, 1, 1), Rius::Rectangle2D(0, 0, 1, 1));*/
+	/*m_UI = new Rius::GameObject();
+	m_UI->AddComponent(sprite);
+	sprite->SetTexture(texture);
+	Add(m_UI);*/
+	
 	Rius::InputManager::GetInstance().ChangeKey(Rius::KeyFunctions::Jump, Rius::ControllerButton::ButtonA);
 	Rius::InputManager::GetInstance().ChangeKey(Rius::KeyFunctions::Left, Rius::ControllerButton::LeftStick);
 	Rius::InputManager::GetInstance().SetRumble(1, 1);
@@ -38,8 +41,9 @@ void TestScene::Initialize()
 
 void TestScene::Update()
 {
-	
+	m_Angle += 0.0001f;
+	//m_UI->GetTransform().Rotate(glm::radians(m_Angle), glm::vec3(0, 0, 1));
 	//std::cout << Rius::InputManager::GetInstance().IsPressed(KeyFunctions::Jump) << "\n";
-	std::cout << Rius::InputManager::GetInstance().GetAxisGamePad(Rius::KeyFunctions::Left).x << "\n";
+	//std::cout << Rius::InputManager::GetInstance().GetAxisGamePad(Rius::KeyFunctions::Left).x << "\n";
 	
 }

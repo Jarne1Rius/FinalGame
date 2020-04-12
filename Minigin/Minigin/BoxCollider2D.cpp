@@ -1,11 +1,11 @@
 #include "MiniginPCH.h"
 #include "BoxCollider2D.h"
 #include "Extra.h"
-#include "ExtraMathFiles.h"
 #include "CircleCollider2D.h"
 #include "GameObject.h"
+#include "ExtraMathFiles.h"
 Rius::BoxCollider2D::BoxCollider2D(Rectangle2D rectangle, bool isTrigger)
-	:Collider(isTrigger)
+	:Collider(isTrigger),m_Rectangle(0,0,1,1)
 {
 	
 }

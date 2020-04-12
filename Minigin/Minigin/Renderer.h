@@ -1,28 +1,32 @@
 #pragma once
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include "Singleton.h"
-
 struct SDL_Window;
 struct SDL_Renderer;
 
 namespace Rius
 {
 	class Texture2D;
-	/**
-	 * Simple RAII wrapper for the SDL renderer
-	 */
+	
 	class Renderer final : public Singleton<Renderer>
 	{
 	public:
-		void Init(SDL_Window* window);
+		void Init(unsigned int width, unsigned int height);
 		void Render() const;
+		void Input();
+		GLFWwindow* getWindow() { return m_pWindow; }
+		~Renderer();
 		void Destroy();
 
-		void RenderTexture(const Texture2D& texture, float x, float y) const;
-		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
-
-		SDL_Renderer* GetSDLRenderer() const { return m_Renderer; }
 	private:
-		SDL_Renderer* m_Renderer{};
+		friend class Singleton<Renderer>;
+		Renderer() = default;
+		unsigned int m_Width = 0;
+		unsigned int m_Height = 0;
+		GLFWwindow* m_pWindow = nullptr;
+		
 	};
+	void processInput(GLFWwindow* window);
+	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 }
-

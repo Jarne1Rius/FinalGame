@@ -11,7 +11,7 @@ Scene::Scene(const std::string& name) : m_Name(name) {}
 
 Scene::~Scene()
 {
-	for (int i{}; i < m_pObjects.size(); i++)
+	for (int i{}; i < int(m_pObjects.size()); i++)
 		delete m_pObjects[i];
 }
 

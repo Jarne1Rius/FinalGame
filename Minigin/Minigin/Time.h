@@ -12,9 +12,9 @@ namespace Rius
 	private:
 		friend  class Singleton<Time>;
 		Time() = default;
-		int m_FrameCount;
-		int m_CurrentFrames;
-		float m_DeltaTime;
+		int m_FrameCount = 0;
+		int m_CurrentFrames =  0;
+		float m_DeltaTime = 0;
 	};
 
 

@@ -7,41 +7,96 @@
 #include "Renderer.h"
 #include "Texture2D.h"
 #include "Font.h"
+#include "stb_image.h"
 
-void Rius::ResourceManager::Init(const std::string& dataPath)
+std::map<std::string, Rius::Texture2D*> Rius::ResourceManager::Textures;
+std::map<std::string, Rius::Shader*> Rius::ResourceManager::Shaders;
+
+Rius::Shader* Rius::ResourceManager::LoadShader(const GLchar* vShaderFile, const GLchar* fShaderFile, std::string name)
 {
-	m_DataPath = dataPath;
+	Shaders[name] = LoadShaderFromFile(vShaderFile, fShaderFile);
+	return Shaders[name];
+}
 
-	// load support for png and jpg, this takes a while!
+Rius::Shader* Rius::ResourceManager::GetShader(std::string name)
+{
+	return Shaders[name];
+}
 
-	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) 
+Rius::Texture2D* Rius::ResourceManager::LoadTexture(const GLchar* file, GLboolean alpha, std::string name)
+{
+	Textures[name] = LoadTextureFromFile(file, alpha);
+	return Textures[name];
+}
+
+Rius::Texture2D* Rius::ResourceManager::GetTexture(std::string name)
+{
+	return Textures[name];
+}
+
+void Rius::ResourceManager::Clear()
+{
+	for (auto shader : Shaders)
 	{
-		throw std::runtime_error(std::string("Failed to load support for png's: ") + SDL_GetError());
+		glDeleteProgram(shader.second->ID);
+        delete shader.second;
 	}
-
-	if ((IMG_Init(IMG_INIT_JPG) & IMG_INIT_JPG) != IMG_INIT_JPG) 
+	for (auto texture : Textures)
 	{
-		throw std::runtime_error(std::string("Failed to load support for jpg's: ") + SDL_GetError());
-	}
-
-	if (TTF_Init() != 0) 
-	{
-		throw std::runtime_error(std::string("Failed to load support for fonts: ") + SDL_GetError());
+		glDeleteTextures(1, &texture.second->ID);
+        delete texture.second;
 	}
 }
 
-Rius::Texture2D* Rius::ResourceManager::LoadTexture(const std::string& file) const
+Rius::Shader* Rius::ResourceManager::LoadShaderFromFile(const GLchar* vShaderFile, const GLchar* fShaderFile)
 {
-	const auto fullPath = m_DataPath + file;
-	auto texture = IMG_LoadTexture(Renderer::GetInstance().GetSDLRenderer(), fullPath.c_str());
-	if (texture == nullptr) 
-	{
-		throw std::runtime_error(std::string("Failed to load texture: ") + SDL_GetError());
-	}
-	return new Texture2D(texture);
+    std::string vertexCode;
+    std::string fragmentCode;
+    std::string geometryCode;
+    try
+    {
+        // Open files
+        std::ifstream vertexShaderFile(vShaderFile);
+        std::ifstream fragmentShaderFile(fShaderFile);
+        std::stringstream vShaderStream, fShaderStream;
+        // Read file's buffer contents into streams
+        vShaderStream << vertexShaderFile.rdbuf();
+        fShaderStream << fragmentShaderFile.rdbuf();
+        // close file handlers
+        vertexShaderFile.close();
+        fragmentShaderFile.close();
+        // Convert stream into string
+        vertexCode = vShaderStream.str();
+        fragmentCode = fShaderStream.str();
+        // If geometry shader path is present, also load a geometry shader
+    }
+    catch (std::exception e)
+    {
+        std::cout << "ERROR::SHADER: Failed to read shader files" << std::endl;
+    }
+    const GLchar* vShaderCode = vertexCode.c_str();
+    const GLchar* fShaderCode = fragmentCode.c_str();
+    const GLchar* gShaderCode = geometryCode.c_str();
+    // 2. Now create shader object from source code
+    Shader* shader = new Shader();
+    shader->Compile(vShaderCode, fShaderCode);
+    return shader;
 }
 
-Rius::Font* Rius::ResourceManager::LoadFont(const std::string& file, unsigned int size) const
+Rius::Texture2D* Rius::ResourceManager::LoadTextureFromFile(const GLchar* file, GLboolean alpha)
 {
-	return new Font(m_DataPath + file, size);
+    Texture2D* texture = new Texture2D();
+    if (alpha)
+    {
+        texture->Internal_Format = GL_RGBA;
+        texture->Image_Format = GL_RGBA;
+    }
+    // Load image
+    int width, height;
+    unsigned char* image = stbi_load(file, &width, &height, 0, texture->Image_Format == GL_RGBA ? STBI_rgb_alpha : STBI_rgb);
+    // Now generate texture
+    texture->Generate(width, height, image);
+    // And finally free image data
+    stbi_image_free(image);
+    return texture;
 }

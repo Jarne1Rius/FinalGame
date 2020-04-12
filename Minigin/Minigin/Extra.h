@@ -1,7 +1,8 @@
 #pragma once
+
 namespace Rius
 {
-	enum Tag
+	enum class Tag
 	{
 		Player,
 		Ground,
@@ -35,6 +36,7 @@ namespace Rius
 
 	struct Rectangle2D
 	{
+		Rectangle2D(float x, float y, float widthR, float heightR): pos(x,y),width(widthR),height(heightR){};
 		glm::vec2 pos;
 		float width = 10;
 		float height = 10;

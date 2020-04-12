@@ -49,6 +49,7 @@ namespace Rius
 	{
 	public:
 		InputManager();
+		~InputManager();
 		bool ProcessInput();
 		void ChangeKey(KeyFunctions function, ControllerButton GamepadKeys);
 		void ChangeKey(KeyFunctions function, SDL_Scancode Keys);
