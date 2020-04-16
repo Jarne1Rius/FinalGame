@@ -4,15 +4,10 @@
 #include "Collider.h"
 namespace Rius
 {
-	static std::vector<Collider*> m_AllColliders;
 
-	inline void AddColliderToAllColliders(Collider* collider)
-	{
-		m_AllColliders.push_back(collider);
-		collider->SetCollisions();
-		collider->AddCollider(collider);
-		
-	}
+
+
+
 
 	inline float MagnitudeSqrt(const glm::vec3& pos1, const glm::vec3& pos2)
 	{
@@ -20,19 +15,21 @@ namespace Rius
 	}
 
 	inline float MagnitudeSqrt(const glm::vec2& pos1, const glm::vec2& pos2)
-	{ 
+	{
 		return pos1.x * pos2.x + pos2.y * pos2.y;
 	}
 	inline bool Collision(const Rectangle2D& rect1, const Rectangle2D& rect2)
 	{
-		bool collisionX = rect1.pos.x + rect1.width >= rect2.pos.x &&
-			rect2.pos.x + rect2.width >= rect1.pos.x;
-		bool collisionY = rect1.pos.y + rect1.height >= rect2.pos.y &&
-			rect2.pos.y + rect2.height >= rect1.pos.y;
+		Rectangle2D newRect1{ rect1.pos.x - rect1.width / 2.f,rect1.pos.y - rect1.height / 2.f,rect1.width,rect1.height };
+		Rectangle2D newRect2{ rect2.pos.x - rect2.width / 2.f,rect2.pos.y - rect2.height / 2.f,rect2.width,rect2.height };
+		bool collisionX = newRect1.pos.x + newRect1.width >= newRect2.pos.x &&
+			newRect2.pos.x + newRect2.width >= newRect1.pos.x;
+		bool collisionY = newRect1.pos.y + newRect1.height >= newRect2.pos.y &&
+			newRect2.pos.y + newRect2.height >= newRect1.pos.y;
 		return collisionX && collisionY;
 	}
 
-	inline bool Collision(const Rectangle3D& rect1,const  Rectangle3D& rect2)
+	inline bool Collision(const Rectangle3D& rect1, const  Rectangle3D& rect2)
 	{
 		bool collisionX = rect1.pos.x + rect1.width >= rect2.pos.x &&
 			rect2.pos.x + rect2.width >= rect1.pos.x;
@@ -57,10 +54,10 @@ namespace Rius
 		float x = glm::max(rectangle3D.pos.x, glm::min(circle1.pos.x, rectangle3D.pos.x + rectangle3D.width));
 		float y = glm::max(rectangle3D.pos.y, glm::min(circle1.pos.y, rectangle3D.pos.y + rectangle3D.width));
 		float z = glm::max(rectangle3D.pos.z, glm::min(circle1.pos.z, rectangle3D.pos.z + rectangle3D.depth));
-		glm::vec3 position = {x, y, z};
+		glm::vec3 position = { x, y, z };
 		return MagnitudeSqrt(position, position) < (circle1.radius * circle1.radius);
 	}
-	inline bool Collision(const Rectangle3D& rectangle3D,const Circle3D& circle1)
+	inline bool Collision(const Rectangle3D& rectangle3D, const Circle3D& circle1)
 	{
 		return Collision(circle1, rectangle3D);
 	}
@@ -71,7 +68,7 @@ namespace Rius
 		glm::vec2 position = { x, y };
 		return MagnitudeSqrt(position, position) < (circle1.radius * circle1.radius);
 	}
-	inline bool Collision(const Rectangle2D& rectangle3D,const Circle2D& circle1)
+	inline bool Collision(const Rectangle2D& rectangle3D, const Circle2D& circle1)
 	{
 		return Collision(circle1, rectangle3D);
 	}
@@ -102,7 +99,7 @@ namespace Rius
 		if (Collision(capsule.Center, rectangle2D)) return true;
 		return false;
 	}
-	
+
 	inline bool Collision(const Capsule3D& capsule1, const Capsule3D& capsule2)
 	{
 		if (Collision(capsule1.Center, capsule2.Center)) return true;

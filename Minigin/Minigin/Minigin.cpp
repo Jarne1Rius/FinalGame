@@ -22,23 +22,14 @@
 
 using namespace std;
 using namespace std::chrono;
+int Rius::Minigin::m_Height = 600;
+int Rius::Minigin::m_Width = 800;
 
 
 void Rius::Minigin::Initialize()
 {
-	
-	//m_Sprite = new SpriteRenderer(a);
-	Rius::Renderer::GetInstance().Init(800, 600);
-	Rius::ResourceManager::GetInstance().LoadShader("Shader/SpriteTexture.vs", "Shader/SpriteTexture.fs", "Sprite");
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(800), static_cast<GLfloat>(600), 0.0f, -1.0f, 1.0f);
-	Rius::ResourceManager::GetInstance().GetShader("Sprite")->Use().SetInt("image", 0);
-	Rius::ResourceManager::GetInstance().GetShader("Sprite")->SetMat4("projection", projection);
-
-	Rius::Texture2D* texture = Rius::ResourceManager::GetInstance().LoadTexture("Resources/awesomeface.png", GL_FALSE, "BackGround");
-	Rius::Shader* a = Rius::ResourceManager::GetInstance().GetShader("Sprite");
-
-	m_Sprite = new Rius::SpriteRenderer(a, Rius::Rectangle2D(0, 0, 100, 100), Rius::Rectangle2D(0, 0, 1,1));
-	m_Sprite->SetTexture(texture);
+	Rius::Renderer::GetInstance().Init(m_Width, m_Height);
+	ResourceManager::m_ProjectionMatrix = glm::ortho(0.0f, static_cast<GLfloat>(800), static_cast<GLfloat>(600), 0.0f, -1.0f, 1.0f);
 }
 
 
@@ -46,13 +37,12 @@ void Rius::Minigin::Cleanup()
 {
 	delete m_Sprite;
 	Renderer::GetInstance().Destroy();
-	ResourceManager::GetInstance().Clear();
+	ResourceManager::Clear();
 	Mix_Quit();
 }
 
 void Rius::Minigin::Run()
 {
-	auto& time = Time::GetInstance();
 	//auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
@@ -60,29 +50,31 @@ void Rius::Minigin::Run()
 	bool doContinue = true;
 	auto lastTime = std::chrono::high_resolution_clock::now();
 	float lag = 0.0f;
-	
+
 	while (!glfwWindowShouldClose(Renderer::GetInstance().getWindow()))
 	{
 		Renderer::GetInstance().Input();
 		const auto currentTime = high_resolution_clock::now();
-		auto deltaTime = duration<float>(currentTime - lastTime).count() ;
+		auto deltaTime = duration<float>(currentTime - lastTime).count();
 		lastTime = currentTime;
 		lag += deltaTime;
 		doContinue = input.ProcessInput();
-		int frames{0};
+		int frames{ 0 };
 		lag *= 1000.f;
 		while (lag > MsPerFrame)
 		{
 			sceneManager.Update();
 			lag -= MsPerFrame;
 		}
+		//For LateUpdate
+		//m_Sprite->Update();
+		sceneManager.LateUpdate();
 		frames++;
-		time.UpdateTimer(deltaTime, frames);
+		Time::UpdateTimer(deltaTime, frames);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		sceneManager.Render();
-		Texture2D* texture = ResourceManager::GetInstance().GetTexture("BackGround");
-		m_Sprite->Render();
+		//m_Sprite->Render();
 		Renderer::GetInstance().Render();
 	}
 	Cleanup();

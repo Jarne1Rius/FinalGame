@@ -12,6 +12,7 @@ namespace Rius
 
 		virtual void Update() = 0;
 		void UpdateObjects();
+		void LateUpdateObjects();
 		void Render() const;
 
 		~Scene();

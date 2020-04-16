@@ -24,7 +24,6 @@ void Rius::GameObject::AddComponent(BaseComponent* component)
 {
 	component->m_pGameObject = this;
 	m_pComponents.push_back(component);
-	component->Initialize();
 }
 
 void Rius::GameObject::Update()
@@ -33,12 +32,24 @@ void Rius::GameObject::Update()
 		comp->Update();
 }
 
+void Rius::GameObject::LateUpdate()
+{
+	for (BaseComponent* comp : m_pComponents)
+		comp->LateUpdate();
+}
+
 void Rius::GameObject::Render() const
 {
 	for (BaseComponent* comp : m_pComponents)
 		comp->Render();
 	//const auto pos = m_Transform.GetPosition();
 	//Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
+}
+
+void Rius::GameObject::Initialize()
+{
+	for (BaseComponent* comp : m_pComponents)
+		comp->Initialize();
 }
 
 

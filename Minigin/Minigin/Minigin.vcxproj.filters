@@ -105,14 +105,14 @@
     <ClInclude Include="Shader.h">
       <Filter>Source Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="RigidBody.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteRenderer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SpriteRendererComponent.h">
+      <Filter>Source Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="SpriteSheetComponent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBodyComponent.h">
+      <Filter>Source Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -176,23 +176,23 @@
     <ClCompile Include="BoxCollider3D.cpp">
       <Filter>Source Files\Components\Colliders</Filter>
     </ClCompile>
-    <ClCompile Include="glad.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stb_image.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="RigidBody.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SpriteSheetComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteRenderer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SpriteRendererComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBodyComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.cpp">
+      <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteSheetComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Helpers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

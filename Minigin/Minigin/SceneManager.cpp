@@ -19,6 +19,14 @@ void Rius::SceneManager::Render()
 	}
 }
 
+void Rius::SceneManager::LateUpdate()
+{
+	for (const auto& scene : m_Scenes)
+	{
+		scene->LateUpdateObjects();
+	}
+}
+
 
 void Rius::SceneManager::AddScene(Scene* newScene)
 {

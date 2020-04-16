@@ -5,9 +5,8 @@
 #include "GameObject.h"
 #include "ExtraMathFiles.h"
 Rius::BoxCollider2D::BoxCollider2D(Rectangle2D rectangle, bool isTrigger)
-	:Collider(isTrigger),m_Rectangle(0,0,1,1)
+	:Collider(isTrigger),m_Rectangle(rectangle)
 {
-	
 }
 
 Rius::BoxCollider2D::~BoxCollider2D()
@@ -20,9 +19,12 @@ void Rius::BoxCollider2D::Initialize()
 
 void Rius::BoxCollider2D::Update()
 {
+	m_Rectangle.pos = m_pGameObject->GetTransform().GetPosition();
+	m_Rectangle.pos.y *= -1;
 	bool anyHit{false};
 	for (Collider* collider : m_AllColliders)
 	{
+		if (collider == this) continue;;
 		bool newHit = collider->CheckCollision(this);
 		std::map<Collider*, bool>::iterator it = m_CollidersInCollision.find(collider);
 		bool hit = it->second;
@@ -67,4 +69,14 @@ bool Rius::BoxCollider2D::CheckCollision(CircleCollider2D* circle)
 bool Rius::BoxCollider2D::CheckCollision(BoxCollider2D* collider)
 {
 	return Collision(this->m_Rectangle, collider->m_Rectangle);
+}
+
+bool Rius::BoxCollider2D::CheckCollision(CircleCollider3D* circle)
+{
+	return false;
+}
+
+bool Rius::BoxCollider2D::CheckCollision(BoxCollider3D* collider)
+{
+	return false;
 }

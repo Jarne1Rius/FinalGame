@@ -12,6 +12,7 @@ namespace Rius
 
 		void Update();
 		void Render();
+		void LateUpdate();
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

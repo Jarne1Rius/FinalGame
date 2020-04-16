@@ -1,9 +1,10 @@
 #include "MiniginPCH.h"
 #include "Transform.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "Minigin.h"
 
 Rius::Transform::Transform()
-	: m_Position(0, 0, 0), m_XAngle(0), m_YAngle(0), m_ZAngle(0), m_Scale(1, 1,1)
+	: m_Position(0, 0, 0), m_XAngle(0), m_YAngle(0), m_ZAngle(0), m_Scale(1, 1, 1)
 {
 }
 
@@ -24,14 +25,14 @@ Rius::Transform::Transform(const glm::vec3& position, float xAngle, float yAngle
 
 glm::vec3 Rius::Transform::GetPosition() const
 {
-	glm::vec4 newPos = (m_TransformMatrix * glm::vec4(m_Position,0));
+	glm::vec3 newPos = glm::vec3(m_Position);
 	return newPos;
 }
 
 void Rius::Transform::SetPosition(const float x, const float y, const float z)
 {
 	m_Position.x = x;
-	m_Position.y = y;
+	m_Position.y =  - y;
 	m_Position.z = z;
 }
 
@@ -54,7 +55,7 @@ void Rius::Transform::Rotate(float angle, glm::vec3 rotationAngle)
 	m_XAngle = angle * rotationAngle[0];
 	m_YAngle = angle * rotationAngle[1];
 	m_ZAngle = angle * rotationAngle[2];
-	
+
 }
 
 void Rius::Transform::Scale(glm::vec3 scale)

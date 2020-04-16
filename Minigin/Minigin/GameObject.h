@@ -9,7 +9,9 @@ namespace Rius
 	{
 	public:
 		void Update();
+		void LateUpdate();
 		void Render() const;
+		void Initialize();
 
 		//void SetTexture(const std::string& filename);
 		void SetPosition(float x, float y);
@@ -30,16 +32,16 @@ namespace Rius
 		Tag GetTag()const { return m_Tag; }
 		void SetTag(Tag tag) { m_Tag = tag; };
 		bool GetStatic() const { return m_Static; }
-		
-		template <typename T>
+
+		template <class  T>
 		T* GetComponent()
 		{
 			const type_info& ti = typeid(T);
 			for (auto* component : m_pComponents)
-				if (component && typeid(*component) == ti) return component;
+				if (component && typeid(*component) == ti) return static_cast<T*>(component);
 			return nullptr;
 		}
-		template <typename T>
+		template <class T >
 		T* GetChild()
 		{
 			const type_info& ti = typeid(T);
@@ -66,8 +68,8 @@ namespace Rius
 		std::vector<GameObject*> m_pChildren{};
 		Tag m_Tag{};
 		bool m_Static;
-		
+
 		class GameScene* m_pParentScene;
-		GameObject* m_pParentObject;	
+		GameObject* m_pParentObject;
 	};
 }

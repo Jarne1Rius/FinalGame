@@ -1,4 +1,5 @@
 #pragma once
+#include <glm/glm.hpp>
 
 namespace Rius
 {
@@ -32,11 +33,15 @@ namespace Rius
 	struct Color
 	{
 		float r, g, b, a;
+		glm::vec4 GetVec4() const { return glm::vec4(r, g, b, a); }
+		Color();
+		Color(float red, float green, float blue, float alpha): r(red),b(blue),g(green),a(alpha){};
 	};
 
 	struct Rectangle2D
 	{
 		Rectangle2D(float x, float y, float widthR, float heightR): pos(x,y),width(widthR),height(heightR){};
+		Rectangle2D(glm::vec2 position, float widthR, float heightR): pos(position),width(widthR),height(heightR){};
 		glm::vec2 pos;
 		float width = 10;
 		float height = 10;

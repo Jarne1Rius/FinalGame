@@ -18,6 +18,10 @@ Scene::~Scene()
 void Scene::Add(GameObject* object)
 {
 	m_pObjects.push_back(object);
+	for (auto& object : m_pObjects)
+	{
+		object->Initialize();
+	}
 }
 
 void Scene::UpdateObjects()
@@ -25,6 +29,14 @@ void Scene::UpdateObjects()
 	for (auto& object : m_pObjects)
 	{
 		object->Update();
+	}
+}
+
+void Scene::LateUpdateObjects()
+{
+	for (auto& object : m_pObjects)
+	{
+		object->LateUpdate();
 	}
 }
 

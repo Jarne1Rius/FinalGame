@@ -3,11 +3,13 @@
 #include <glm/glm.hpp>
 namespace Rius
 {
-	class RigidBody :	public BaseComponent
+	class RigidBodyComponent :	public BaseComponent
 	{
 	public:
-		RigidBody();
-		~RigidBody();
+		RigidBodyComponent(float mass = 0);
+		~RigidBodyComponent();
+		void AddForce(glm::vec2& force);
+		void Bounce(float multiply);
 		void Initialize() override;
 		void Update() override;
 		void Render() const override;
@@ -17,5 +19,7 @@ namespace Rius
 		glm::vec2 m_Velocity;
 		
 	};
+
+	
 }
 

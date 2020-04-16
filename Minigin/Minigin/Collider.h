@@ -26,6 +26,13 @@ namespace Rius
 		void SetCollisions();
 		void ChangeTrigger(bool isTrigger);
 	protected:
+		static std::vector<Collider*> m_AllColliders;
+
+		static void AddColliderToAllColliders(Collider* collider);
+		
+		static void RemoveColliderOfAllColliders(Collider* collider);
+		
+	protected:
 		glm::vec3 m_PreviousPos;
 		bool m_Trigger;
 		std::map<Collider*, bool> m_CollidersInCollision;

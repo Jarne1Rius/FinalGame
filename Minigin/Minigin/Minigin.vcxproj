@@ -229,13 +229,13 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="MiniginPCH.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Extra.h" />
-    <ClInclude Include="SpriteRenderer.h" />
+    <ClInclude Include="SpriteRendererComponent.h" />
     <ClInclude Include="SpriteSheetComponent.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture2D.h" />
@@ -265,11 +265,11 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     </ClCompile>
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
-    <ClCompile Include="RigidBody.cpp" />
+    <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="SpriteRendererComponent.cpp" />
     <ClCompile Include="SpriteSheetComponent.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Texture2D.cpp" />

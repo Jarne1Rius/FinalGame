@@ -25,9 +25,9 @@ Rius::FPSComponent::~FPSComponent()
 
 void Rius::FPSComponent::Update()
 {
-	if (m_Frames != Rius::Time::GetInstance().GetFrames())
+	if (m_Frames != Rius::Time::m_CurrentFrames)
 	{
-		m_Frames = Rius::Time::GetInstance().GetFrames();
+		m_Frames = Rius::Time::m_CurrentFrames;
 		const SDL_Color color = { 255,255,255 }; // only white text is supported now
 		const auto surf = TTF_RenderText_Blended(m_pFont->GetFont(), (std::to_string(m_Frames) + " FPS").c_str(), color);
 		if (surf == nullptr)

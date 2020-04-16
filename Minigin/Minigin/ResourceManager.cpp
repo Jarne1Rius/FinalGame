@@ -9,39 +9,40 @@
 #include "Font.h"
 #include "stb_image.h"
 
-std::map<std::string, Rius::Texture2D*> Rius::ResourceManager::Textures;
-std::map<std::string, Rius::Shader*> Rius::ResourceManager::Shaders;
+std::map<std::string, Rius::Texture2D*> Rius::ResourceManager::M_Textures;
+std::map<std::string, Rius::Shader*> Rius::ResourceManager::m_Shaders;
+glm::mat4 Rius::ResourceManager::m_ProjectionMatrix;
 
 Rius::Shader* Rius::ResourceManager::LoadShader(const GLchar* vShaderFile, const GLchar* fShaderFile, std::string name)
 {
-	Shaders[name] = LoadShaderFromFile(vShaderFile, fShaderFile);
-	return Shaders[name];
+	m_Shaders[name] = LoadShaderFromFile(vShaderFile, fShaderFile);
+	return m_Shaders[name];
 }
 
 Rius::Shader* Rius::ResourceManager::GetShader(std::string name)
 {
-	return Shaders[name];
+	return m_Shaders[name];
 }
 
 Rius::Texture2D* Rius::ResourceManager::LoadTexture(const GLchar* file, GLboolean alpha, std::string name)
 {
-	Textures[name] = LoadTextureFromFile(file, alpha);
-	return Textures[name];
+	M_Textures[name] = LoadTextureFromFile(file, alpha);
+	return M_Textures[name];
 }
 
 Rius::Texture2D* Rius::ResourceManager::GetTexture(std::string name)
 {
-	return Textures[name];
+	return M_Textures[name];
 }
 
 void Rius::ResourceManager::Clear()
 {
-	for (auto shader : Shaders)
+	for (auto shader : m_Shaders)
 	{
 		glDeleteProgram(shader.second->ID);
         delete shader.second;
 	}
-	for (auto texture : Textures)
+	for (auto texture : M_Textures)
 	{
 		glDeleteTextures(1, &texture.second->ID);
         delete texture.second;

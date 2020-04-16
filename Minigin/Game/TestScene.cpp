@@ -5,11 +5,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 
-#include "SpriteRenderer.h"
+#include "SpriteRendererComponent.h"
+#include "SpriteSheetComponent.h"
 #include "InputManager.h"
 #include "Renderer.h"
+#include "RigidBodyComponent.h"
 #include "Extra.h"
-
+#include "BoxCollider2D.h"
+using namespace Rius;
 TestScene::TestScene()
 	:Scene("TestScene")
 {
@@ -18,22 +21,37 @@ TestScene::TestScene()
 
 void TestScene::Initialize()
 {
-	/*Rius::Renderer::GetInstance().Init(800, 600);
-	Rius::ResourceManager::GetInstance().LoadShader("Shader/SpriteTexture.vs", "Shader/SpriteTexture.fs", "Sprite");
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(800), static_cast<GLfloat>(600), 0.0f, -1.0f, 1.0f);
-	Rius::ResourceManager::GetInstance().GetShader("Sprite")->Use().SetInt("image", 0);
-	Rius::ResourceManager::GetInstance().GetShader("Sprite")->Use().SetVec3("spriteColor", 0, 1, 1);
-	Rius::ResourceManager::GetInstance().GetShader("Sprite")->SetMat4("projection", projection);
+	m_UI = new GameObject();
+	ResourceManager::LoadShader("Shader/SpriteTexture.vs", "Shader/SpriteTexture.fs", "Sprite");
 
-	Rius::Texture2D* texture  =Rius::ResourceManager::GetInstance().LoadTexture("Resources/awesomeface.png", GL_FALSE, "BackGround");
-	Rius::Shader* a = Rius::ResourceManager::GetInstance().GetShader("Sprite");
-
-	Rius::SpriteRenderer* sprite = new Rius::SpriteRenderer(a, Rius::Rectangle2D(0, 0, 1, 1), Rius::Rectangle2D(0, 0, 1, 1));*/
-	/*m_UI = new Rius::GameObject();
-	m_UI->AddComponent(sprite);
-	sprite->SetTexture(texture);
-	Add(m_UI);*/
+	// to get the variables in fragmentshader
+	ResourceManager::GetShader("Sprite")->Use().SetInt("image", 0);
+	ResourceManager::GetShader("Sprite")->Use().SetBool("EnableTexture", true);
+	ResourceManager::GetShader("Sprite")->SetMat4("projection", ResourceManager::m_ProjectionMatrix);
+	Texture2D* texture = ResourceManager::LoadTexture("Resources/awesomeface.png", GL_TRUE, "BackGround");
+	Shader* a = ResourceManager::GetShader("Sprite");
 	
+	SpriteSheetComponent* sprite = new SpriteSheetComponent(a, Rectangle2D(0, 0, 100, 100),6,4,1);
+	sprite->SetTexture(texture);
+	sprite->SetColor(Color(0, 1, 0, 1));
+	RigidBodyComponent* rigid = new RigidBodyComponent(0.1f);
+	glm::vec2 force{ 0.1f,0 };
+	rigid->AddForce(force);
+	m_UI->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 100, 100)));
+	m_UI->AddComponent(rigid);
+	m_UI->AddComponent(sprite);
+	m_UI->GetTransform().SetPosition(100, 400, 0);
+	Add(m_UI);
+
+	ResourceManager::LoadShader("Shader/SpriteTexture.vs", "Shader/SpriteTexture.fs", "Ground");
+	ResourceManager::GetShader("Ground")->Use().SetInt("image", 0);
+	ResourceManager::GetShader("Ground")->SetMat4("projection", ResourceManager::m_ProjectionMatrix);
+	a = ResourceManager::GetShader("Ground");
+	GameObject* ground = new GameObject();
+	ground->AddComponent(new SpriteRendererComponent(a, Rectangle2D(400, 0, 800, 10)));
+	ground->AddComponent(new BoxCollider2D(Rectangle2D(400, 0, 800, 10)));
+	ground->GetComponent<SpriteRendererComponent>()->SetColor(Color(1, 0, 0, 1));
+	Add(ground);
 	Rius::InputManager::GetInstance().ChangeKey(Rius::KeyFunctions::Jump, Rius::ControllerButton::ButtonA);
 	Rius::InputManager::GetInstance().ChangeKey(Rius::KeyFunctions::Left, Rius::ControllerButton::LeftStick);
 	Rius::InputManager::GetInstance().SetRumble(1, 1);
@@ -42,8 +60,4 @@ void TestScene::Initialize()
 void TestScene::Update()
 {
 	m_Angle += 0.0001f;
-	//m_UI->GetTransform().Rotate(glm::radians(m_Angle), glm::vec3(0, 0, 1));
-	//std::cout << Rius::InputManager::GetInstance().IsPressed(KeyFunctions::Jump) << "\n";
-	//std::cout << Rius::InputManager::GetInstance().GetAxisGamePad(Rius::KeyFunctions::Left).x << "\n";
-	
 }

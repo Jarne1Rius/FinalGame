@@ -15,6 +15,8 @@ namespace Rius
 		const Rectangle2D GetRectangle() const { return m_Rectangle; }
 		bool CheckCollision(CircleCollider2D* circle) override;
 		bool CheckCollision(BoxCollider2D* collider) override;
+		bool CheckCollision(CircleCollider3D* circle)override;
+		bool CheckCollision(BoxCollider3D* collider)override;
 	private:
 		Rectangle2D m_Rectangle;
 	};

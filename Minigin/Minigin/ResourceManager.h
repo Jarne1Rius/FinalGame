@@ -9,12 +9,12 @@
 namespace Rius
 {
 	class Font;
-	class ResourceManager final : public Singleton<ResourceManager>
+	class ResourceManager 
 	{
 	public:
-		static std::map<std::string, Shader*>    Shaders;
-		static std::map<std::string, Texture2D*> Textures;
-		
+		static std::map<std::string, Shader*>    m_Shaders;
+		static std::map<std::string, Texture2D*> M_Textures;
+		static glm::mat4 m_ProjectionMatrix;
 		static Shader* LoadShader(const GLchar* vShaderFile, const GLchar* fShaderFile, std::string name);
 		// Retrieves a stored sader
 		static Shader* GetShader(std::string name);
@@ -24,12 +24,12 @@ namespace Rius
 		static Texture2D* GetTexture(std::string name);
 		// Properly de-allocates all loaded resources
 		static void Clear();
-	private:
-		friend class Singleton<ResourceManager>;
+	private:		
 		ResourceManager() = default;
 		// Loads and generates a shader from file
 		static Shader* LoadShaderFromFile(const GLchar* vShaderFile, const GLchar* fShaderFile);
 		// Loads a single texture from file
 		static Texture2D* LoadTextureFromFile(const GLchar* file, GLboolean alpha);
+		
 	};
 }

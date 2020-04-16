@@ -31,5 +31,7 @@ void Rius::Texture2D::Generate(unsigned width, unsigned height, unsigned char* d
 
 void Rius::Texture2D::Bind() const
 {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBindTexture(GL_TEXTURE_2D, this->ID);
 }
