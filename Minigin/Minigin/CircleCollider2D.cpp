@@ -12,6 +12,16 @@ Rius::CircleCollider2D::~CircleCollider2D()
 {
 }
 
+Rius::CircleCollider2D::CircleCollider2D(const CircleCollider2D& other)
+	: Collider(other.m_Trigger)
+{
+	this->m_CollidersInCollision = other.m_CollidersInCollision;
+	this->m_pGameObject = other.m_pGameObject;
+	this->m_PreviousPos = other.m_PreviousPos;
+	this->m_Trigger = other.m_Trigger;
+	this->m_Circle2D = other.m_Circle2D;
+}
+
 void Rius::CircleCollider2D::Initialize()
 {
 }
@@ -74,4 +84,19 @@ bool Rius::CircleCollider2D::CheckCollision(CircleCollider3D* circle)
 {
 	std::cout << "Error => 3D collider tries to collide with a 2D collider\n";
 	return false;
+}
+
+Rius::BaseComponent* Rius::CircleCollider2D::Clone()
+{
+	return new CircleCollider2D{ *this };
+}
+
+void Rius::CircleCollider2D::SetComponent(BaseComponent* comp)
+{
+	CircleCollider2D* component = static_cast<CircleCollider2D*>(comp);
+	this->m_CollidersInCollision = component->m_CollidersInCollision;
+	this->m_pGameObject = component->m_pGameObject;
+	this->m_PreviousPos = component->m_PreviousPos;
+	this->m_Trigger = component->m_Trigger;
+	this->m_Circle2D = component->m_Circle2D;
 }

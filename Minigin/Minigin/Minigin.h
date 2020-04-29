@@ -1,5 +1,6 @@
 #pragma once
 #include "SpriteSheetComponent.h"
+#include "UndoSystem.h"
 struct SDL_Window;
 namespace Rius
 {
@@ -11,7 +12,10 @@ namespace Rius
 		void Run();
 		static int m_Width;
 		static int m_Height;
+		static UndoSystem m_UndoSystem;
 	private:
+		void StartViewEngine();
+		void ShowAllComponents();
 		static const int MsPerFrame = 16; //16 for 60 fps, 33 for 30 fps
 		SpriteSheetComponent* m_Sprite;
 	};

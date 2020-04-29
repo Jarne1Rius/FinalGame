@@ -5,7 +5,7 @@
 using namespace Rius;
 
 unsigned int Scene::m_IdCounter = 0;
-
+std::vector<GameObject*> Rius::Scene::m_pObjects;
 Scene::Scene(const std::string& name) : m_Name(name) {}
 
 

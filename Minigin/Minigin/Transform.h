@@ -1,17 +1,29 @@
 #pragma once
 #include  "MiniginPCH.h"
 
+#include "BaseComponent.h"
+
 
 namespace Rius
 {
-	class Transform final
+	class Transform: public BaseComponent
 	{
 	public:
 		Transform();
 		Transform(const glm::vec3& position, const glm::vec3& scale);
 		Transform(const glm::vec3& position, float xAngle = 0, float yAngle = 0, float zAngle = 0);
 		Transform(const glm::vec3& position, float xAngle, float yAngle, float zAngle, const glm::vec3& scale);
+		Transform(const Transform& other);
+		Transform(Transform&& other) noexcept = default;
+		Transform& operator= (const Transform& other) = default;
+		Transform& operator= (Transform&& other) = default;
+		BaseComponent* Clone() override;
+		void SetComponent(BaseComponent * comp) override;
+		void Initialize() override ;
+		void Update() override;
+		void Render() const override;
 
+		
 		glm::vec3 GetPosition() const;
 		void SetPosition(float x, float y, float z);
 		void SetPosition(const glm::vec3& pos);

@@ -9,13 +9,14 @@ namespace Rius
 	{
 	public:
 		void AddScene(Scene* newScene);
-
+		static Scene* GetCurrentScene();
 		void Update();
 		void Render();
 		void LateUpdate();
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
-		std::vector<Scene*> m_Scenes;
+		static std::vector<Scene*> m_Scenes;
+		static int m_ActiveScene;
 	};
 }

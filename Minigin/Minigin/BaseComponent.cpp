@@ -2,9 +2,17 @@
 #include "BaseComponent.h"
 #include "GameObject.h"
 #include "RigidBodyComponent.h"
+int Rius::BaseComponent::m_CurrentID = 0;
 Rius::BaseComponent::BaseComponent()
-	:m_pGameObject(nullptr)
+	:m_pGameObject(nullptr), m_Id(m_CurrentID)
 {
+	m_CurrentID++;
+}
+
+
+void Rius::BaseComponent::SetComponent(BaseComponent* comp)
+{
+	*this = *comp;
 }
 
 void Rius::BaseComponent::LateUpdate()
@@ -38,4 +46,9 @@ void Rius::BaseComponent::OnCollisionStay(Collider* collider)
 
 void Rius::BaseComponent::OnCollisionExit(Collider* collider)
 {
+}
+
+Rius::BaseComponent* Rius::BaseComponent::Clone()
+{
+	return nullptr;
 }

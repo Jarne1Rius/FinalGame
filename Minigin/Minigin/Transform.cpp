@@ -1,6 +1,8 @@
 #include "MiniginPCH.h"
 #include "Transform.h"
 #include <glm/gtc/matrix_transform.hpp>
+
+#include "CircleCollider3D.h"
 #include "Minigin.h"
 
 Rius::Transform::Transform()
@@ -20,6 +22,48 @@ Rius::Transform::Transform(const glm::vec3& position, float xAngle, float yAngle
 
 Rius::Transform::Transform(const glm::vec3& position, float xAngle, float yAngle, float zAngle, const glm::vec3& scale)
 	: m_Position(position), m_XAngle(xAngle), m_YAngle(yAngle), m_ZAngle(zAngle), m_Scale(scale)
+{
+}
+
+Rius::Transform::Transform(const Transform& other)
+{
+	this->m_pGameObject = other.m_pGameObject;
+	this->m_Position = other.m_Position;
+	this->m_Scale = other.m_Scale;
+	this->m_ZAngle = other.m_ZAngle;
+	this->m_TransformMatrix = other.m_TransformMatrix;
+	this->m_TransformedPos = other.m_TransformedPos;
+	this->m_YAngle = other.m_YAngle;
+	this->m_XAngle = other.m_XAngle;
+}
+
+Rius::BaseComponent* Rius::Transform::Clone()
+{
+	return new Transform{ *this };
+}
+
+void Rius::Transform::SetComponent(BaseComponent* comp)
+{
+	Transform* component = static_cast<Transform*>(comp);
+	this->m_pGameObject = component->m_pGameObject;
+	this->m_Position = component->m_Position;
+	this->m_Scale = component->m_Scale;
+	this->m_ZAngle = component->m_ZAngle;
+	this->m_TransformMatrix = component->m_TransformMatrix;
+	this->m_TransformedPos = component->m_TransformedPos;
+	this->m_YAngle = component->m_YAngle;
+	this->m_XAngle = component->m_XAngle;
+}
+
+void Rius::Transform::Initialize()
+{
+}
+
+void Rius::Transform::Update()
+{
+}
+
+void Rius::Transform::Render() const
 {
 }
 

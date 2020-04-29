@@ -39,6 +39,31 @@ Rius::SpriteSheetComponent::~SpriteSheetComponent()
 	glDeleteVertexArrays(1, &this->m_QuadVAO);
 }
 
+Rius::SpriteSheetComponent::SpriteSheetComponent(const SpriteSheetComponent& other)
+	:m_Rectangle2D(0,0,0,0),m_TextCoord(0,0,0,0), m_SrcRect(0,0,0,0)
+{
+	this->m_pGameObject = other.m_pGameObject;
+	this->m_Vertices = other.m_Vertices;
+	this->m_Rectangle2D = other.m_Rectangle2D;
+	this->m_TextCoord = other.m_TextCoord;
+	this->m_Colms = other.m_Colms;
+	this->m_Color = other.m_Color;
+	this->m_Indices = other.m_Indices;
+	this->m_CurrentFrame = other.m_CurrentFrame;
+	this->m_pTexture2D = other.m_pTexture2D;
+	this->m_EBO = other.m_EBO;
+	this->m_TotalFrames = other.m_TotalFrames;
+	this->m_TimeNextFrame = other.m_TimeNextFrame;
+	this->m_ModelSpace = other.m_ModelSpace;
+	this->m_HeightObject = other.m_HeightObject;
+	this->m_QuadVAO = other.m_QuadVAO;
+	this->m_pShader = other.m_pShader;
+	this->m_WidthObject = other.m_WidthObject;
+	this->m_VBO = other.m_VBO;
+	this->m_SrcRect = other.m_SrcRect;
+	this->m_Sec = other.m_Sec;
+}
+
 void Rius::SpriteSheetComponent::Initialize()
 {
 	// Configure m_VAO/m_VBO
@@ -81,7 +106,7 @@ void Rius::SpriteSheetComponent::Update()
 	m_ModelSpace = glm::mat4();
 	m_ModelSpace = glm::translate(m_ModelSpace, m_pGameObject->GetTransform().GetPosition());
 	m_ModelSpace = glm::scale(m_ModelSpace, glm::vec3(1, 1, 1.0f));
-	
+
 }
 
 void Rius::SpriteSheetComponent::LateUpdate()
@@ -115,6 +140,36 @@ void Rius::SpriteSheetComponent::SetColor(Color newColor)
 {
 	m_Color = newColor.GetVec4();
 	this->m_pShader->Use().SetVec4("Color", m_Color);
+}
+
+Rius::BaseComponent* Rius::SpriteSheetComponent::Clone()
+{
+	return new SpriteSheetComponent{ *this };
+}
+
+void Rius::SpriteSheetComponent::SetComponent(BaseComponent* comp)
+{
+	SpriteSheetComponent* component = static_cast <SpriteSheetComponent*> (comp);
+	this->m_pGameObject = component->m_pGameObject;
+	this->m_Vertices = component->m_Vertices;
+	this->m_Rectangle2D = component->m_Rectangle2D;
+	this->m_TextCoord = component->m_TextCoord;
+	this->m_Colms = component->m_Colms;
+	this->m_Color = component->m_Color;
+	this->m_Indices = component->m_Indices;
+	this->m_CurrentFrame = component->m_CurrentFrame;
+	this->m_pTexture2D = component->m_pTexture2D;
+	this->m_EBO = component->m_EBO;
+	this->m_TotalFrames = component->m_TotalFrames;
+	this->m_TimeNextFrame = component->m_TimeNextFrame;
+	this->m_ModelSpace = component->m_ModelSpace;
+	this->m_HeightObject = component->m_HeightObject;
+	this->m_QuadVAO = component->m_QuadVAO;
+	this->m_pShader = component->m_pShader;
+	this->m_WidthObject = component->m_WidthObject;
+	this->m_VBO = component->m_VBO;
+	this->m_SrcRect = component->m_SrcRect;
+	this->m_Sec = component->m_Sec;	
 }
 
 void Rius::SpriteSheetComponent::SetIndicesAndVertices()

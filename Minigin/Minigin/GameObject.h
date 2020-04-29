@@ -32,7 +32,8 @@ namespace Rius
 		Tag GetTag()const { return m_Tag; }
 		void SetTag(Tag tag) { m_Tag = tag; };
 		bool GetStatic() const { return m_Static; }
-
+		int GetId() { return m_Id; }
+		BaseComponent* GetComponentById(int id);
 		template <class  T>
 		T* GetComponent()
 		{
@@ -62,14 +63,17 @@ namespace Rius
 			}
 			return  nullptr;
 		}
+		
 	private:
 		Transform m_Transform;
 		std::vector<BaseComponent*> m_pComponents{};
 		std::vector<GameObject*> m_pChildren{};
 		Tag m_Tag{};
 		bool m_Static;
-
+		int m_Id;
 		class GameScene* m_pParentScene;
 		GameObject* m_pParentObject;
+	
+		static int m_CurrentID;
 	};
 }

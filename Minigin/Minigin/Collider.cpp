@@ -25,6 +25,7 @@ void Rius::Collider::AddCollider(Collider* collider)
 	m_CollidersInCollision.insert(std::pair<Collider*, bool>(collider, false));
 }
 
+
 void Rius::Collider::SetCollisions()
 {
 	for (Collider* collider : m_AllColliders)

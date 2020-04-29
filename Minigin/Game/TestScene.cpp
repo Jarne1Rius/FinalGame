@@ -11,14 +11,16 @@
 #include "Renderer.h"
 #include "RigidBodyComponent.h"
 #include "Extra.h"
+#include "ExtraMathFiles.h"
 #include "BoxCollider2D.h"
+#include "UndoSystem.h"
 using namespace Rius;
 TestScene::TestScene()
 	:Scene("TestScene")
 {
 	Initialize();
 }
-
+UndoSystem systemm;
 void TestScene::Initialize()
 {
 	m_UI = new GameObject();
@@ -32,7 +34,7 @@ void TestScene::Initialize()
 	Shader* a = ResourceManager::GetShader("Sprite");
 	
 	SpriteSheetComponent* sprite = new SpriteSheetComponent(a, Rectangle2D(0, 0, 100, 100),6,4,1);
-	sprite->SetTexture(texture);
+	//sprite->SetTexture(texture);
 	sprite->SetColor(Color(0, 1, 0, 1));
 	RigidBodyComponent* rigid = new RigidBodyComponent(0.1f);
 	glm::vec2 force{ 0.1f,0 };
@@ -43,6 +45,8 @@ void TestScene::Initialize()
 	m_UI->GetTransform().SetPosition(100, 400, 0);
 	Add(m_UI);
 
+	
+	
 	ResourceManager::LoadShader("Shader/SpriteTexture.vs", "Shader/SpriteTexture.fs", "Ground");
 	ResourceManager::GetShader("Ground")->Use().SetInt("image", 0);
 	ResourceManager::GetShader("Ground")->SetMat4("projection", ResourceManager::m_ProjectionMatrix);
@@ -54,7 +58,7 @@ void TestScene::Initialize()
 	Add(ground);
 	Rius::InputManager::GetInstance().ChangeKey(Rius::KeyFunctions::Jump, Rius::ControllerButton::ButtonA);
 	Rius::InputManager::GetInstance().ChangeKey(Rius::KeyFunctions::Left, Rius::ControllerButton::LeftStick);
-	Rius::InputManager::GetInstance().SetRumble(1, 1);
+	
 }
 
 void TestScene::Update()

@@ -13,6 +13,11 @@ namespace Rius
 	public:
 		Collider(bool isTrigger);
 		~Collider();
+		Collider(const Collider& other) = default;
+		Collider(Collider&& other) noexcept = default;
+		Collider& operator= (const Collider& other) = default;
+		Collider& operator= (Collider&& other) = default;
+		
 		void Initialize() override = 0;
 		void Update() override = 0;
 		void Render() const override = 0;
@@ -22,11 +27,13 @@ namespace Rius
 		virtual bool CheckCollision(BoxCollider3D* collider) = 0;
 		void DeleteCollider(Collider* collider);
 		void AddCollider(Collider* collider);
+		virtual BaseComponent* Clone() override = 0;
+		virtual void SetComponent(BaseComponent* comp) override = 0;
 
 		void SetCollisions();
 		void ChangeTrigger(bool isTrigger);
-	protected:
 		static std::vector<Collider*> m_AllColliders;
+	protected:
 
 		static void AddColliderToAllColliders(Collider* collider);
 		

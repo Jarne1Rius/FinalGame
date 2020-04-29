@@ -1,6 +1,5 @@
 #pragma once
 #include <glm/glm.hpp>
-
 namespace Rius
 {
 	enum class Tag
@@ -87,5 +86,22 @@ namespace Rius
 			Top.pos = glm::vec3(Center.pos.x + Center.width / 2.f, Center.pos.y + Center.height, Center.pos.z + Center.depth/2.f);
 			Bottom.pos = glm::vec3(Top.pos.x, Top.pos.y - Center.height, Top.pos.z);
 		}
+	};
+
+	struct Ray
+	{
+		glm::vec3 position;
+		glm::vec3 direction;
+		float min;
+		float max;
+		std::vector<Tag> IgnoreTags;
+	};
+	class GameObject;
+	struct HitInfo
+	{
+		glm::vec3 position;
+		glm::vec3 normal;
+		GameObject* hitObject;
+		float length;
 	};
 }

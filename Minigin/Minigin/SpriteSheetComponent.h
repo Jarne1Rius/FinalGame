@@ -16,6 +16,11 @@ namespace Rius
 		SpriteSheetComponent(Shader* shader, const Rectangle2D& destRectangle, int rows, int colms, float timeNextFrame = 10, int firstFrame = 0, int totalFrames = 0);
 		SpriteSheetComponent(Shader* shader, const Rectangle2D& destRectangle, int rows, int colms, float widthColms, float heightOfRows,glm::vec2& startPosition, float timeNextFrame = 10, int firstFrame = 0, int totalFrames = 0);
 		~SpriteSheetComponent();
+		SpriteSheetComponent(const SpriteSheetComponent& other);
+		SpriteSheetComponent(SpriteSheetComponent&& other) noexcept = default;
+		SpriteSheetComponent& operator= (const SpriteSheetComponent& other) = default;
+		SpriteSheetComponent& operator= (SpriteSheetComponent&& other) = default;
+		
 		void Initialize() override;
 		void Render() const override;
 		void Update() override;
@@ -23,6 +28,8 @@ namespace Rius
 		void SetTexture(Texture2D* texture);
 		void SetTexture(const std::string& name);
 		void SetColor(Color newColor);
+		BaseComponent* Clone() override;
+		void SetComponent(BaseComponent* comp) override;
 		Rectangle2D GetRectangle() const { return m_Rectangle2D; }
 	private:
 		Texture2D* m_pTexture2D;

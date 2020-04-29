@@ -16,6 +16,13 @@ namespace Rius
 	public:
 		SpriteRendererComponent(Shader* shader,const Rectangle2D& destRectangle, const Rectangle2D& textCoord = {0,0,1,1});
 		~SpriteRendererComponent();
+		SpriteRendererComponent(const SpriteRendererComponent& other);
+		SpriteRendererComponent(SpriteRendererComponent&& other) noexcept = default;
+		SpriteRendererComponent& operator= (const SpriteRendererComponent& other) = default;
+		SpriteRendererComponent& operator= (SpriteRendererComponent&& other) = default;
+		BaseComponent* Clone() override;
+		void SetComponent(BaseComponent* comp) override;
+		
 		void SetTexture(Texture2D* texture);
 		void SetTexture(const std::string& name);
 		void Initialize() override;

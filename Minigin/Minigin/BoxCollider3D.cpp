@@ -12,6 +12,31 @@ Rius::BoxCollider3D::~BoxCollider3D()
 {
 }
 
+Rius::BoxCollider3D::BoxCollider3D(const BoxCollider3D& other)
+	: Collider(other.m_Trigger), m_Rectangle()
+{
+	this->m_CollidersInCollision = other.m_CollidersInCollision;
+	this->m_pGameObject = other.m_pGameObject;
+	this->m_PreviousPos = other.m_PreviousPos;
+	this->m_Trigger = other.m_Trigger;
+	this->m_Rectangle = other.m_Rectangle;
+}
+
+Rius::BaseComponent* Rius::BoxCollider3D::Clone()
+{
+	return new BoxCollider3D{ *this };
+}
+
+void Rius::BoxCollider3D::SetComponent(BaseComponent* comp)
+{
+	BoxCollider3D* component = static_cast<BoxCollider3D*>(comp);
+	this->m_CollidersInCollision = component->m_CollidersInCollision;
+	this->m_pGameObject = component->m_pGameObject;
+	this->m_PreviousPos = component->m_PreviousPos;
+	this->m_Trigger = component->m_Trigger;
+	this->m_Rectangle = component->m_Rectangle;
+}
+
 void Rius::BoxCollider3D::Initialize()
 {
 }

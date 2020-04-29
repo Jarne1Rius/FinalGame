@@ -20,11 +20,12 @@ namespace Rius
 		Scene(Scene&& other) = delete;
 		Scene& operator=(const Scene& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
+		static std::vector <GameObject*> m_pObjects;
 
 	private: 
 
 		std::string m_Name;
-		std::vector <GameObject*> m_pObjects{};
+		
 
 		static unsigned int m_IdCounter; 
 	};

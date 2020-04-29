@@ -9,6 +9,13 @@ namespace Rius
 	public:
 		CircleCollider3D(Circle3D circle, bool IsTrigger = false);
 		~CircleCollider3D();
+		CircleCollider3D(const CircleCollider3D& other);
+		CircleCollider3D(CircleCollider3D&& other) noexcept = default;
+		CircleCollider3D& operator= (const CircleCollider3D & other) = default;
+		CircleCollider3D& operator= (CircleCollider3D && other) = default;
+		BaseComponent* Clone() override;
+		void SetComponent(BaseComponent* comp) override;
+		
 		void Initialize() override;
 		void Update() override;
 		void Render() const override;

@@ -12,6 +12,31 @@ Rius::CircleCollider3D::~CircleCollider3D()
 {
 }
 
+Rius::CircleCollider3D::CircleCollider3D(const CircleCollider3D& other)
+	: Collider(other.m_Trigger)
+{
+	this->m_CollidersInCollision = other.m_CollidersInCollision;
+	this->m_pGameObject = other.m_pGameObject;
+	this->m_PreviousPos = other.m_PreviousPos;
+	this->m_Trigger = other.m_Trigger;
+	this->m_Circle3D = other.m_Circle3D;
+}
+
+Rius::BaseComponent* Rius::CircleCollider3D::Clone()
+{
+	return new CircleCollider3D{ *this };
+}
+
+void Rius::CircleCollider3D::SetComponent(BaseComponent* comp)
+{
+	CircleCollider3D* component = static_cast<CircleCollider3D*>(comp);
+	this->m_CollidersInCollision = component->m_CollidersInCollision;
+	this->m_pGameObject = component->m_pGameObject;
+	this->m_PreviousPos = component->m_PreviousPos;
+	this->m_Trigger = component->m_Trigger;
+	this->m_Circle3D = component->m_Circle3D;
+}
+
 void Rius::CircleCollider3D::Initialize()
 {
 }

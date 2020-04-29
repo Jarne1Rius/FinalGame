@@ -2,13 +2,13 @@
 #include "Extra.h"
 #include <vector>
 #include "Collider.h"
+#include "SceneManager.h"
+#include "Scene.h"
+#include <algorithm>
+#include "BoxCollider2D.h"
+#include "CircleCollider2D.h"
 namespace Rius
 {
-
-
-
-
-
 	inline float MagnitudeSqrt(const glm::vec3& pos1, const glm::vec3& pos2)
 	{
 		return pos1.x * pos2.x + pos2.y * pos2.y + pos1.z + pos2.z;
@@ -128,4 +128,117 @@ namespace Rius
 		return false;
 	}
 
+	inline bool CheckHit(Circle2D circle2D, Ray& raycast, HitInfo& info)
+	{
+		float A = glm::dot(raycast.direction, raycast.direction);
+		glm::vec2 dir = raycast.direction;
+		dir *= 2;
+		float B = glm::dot(dir, (circle2D.pos - glm::vec2(raycast.position)));
+		float C = glm::dot(circle2D.pos - glm::vec2(raycast.position), circle2D.pos - glm::vec2(raycast.position)) - circle2D.radius * circle2D.radius;
+		float discriminant = B * B - 4 * A * C;
+		if (discriminant >= 0)
+		{
+			float t = ((-B - sqrt(discriminant)) / (2 * A));
+			if (t < info.length)return false;
+			glm::vec3 pos = raycast.position + t * raycast.direction;
+			info.position = pos;
+			info.length = t;
+			return true;
+		}
+		return false;
+	}
+
+	//https://en.wikipedia.org/wiki/Liang%E2%80%93Barsky_algorithm
+	inline bool CheckHit(Rectangle2D rectangle, Ray& raycast, HitInfo& info)
+	{
+		float p1 = -(raycast.direction.x * raycast.max);
+		float p2 = -p1;
+		float p3 = -(raycast.direction.y * raycast.max);
+		float p4 = -p3;
+
+		float q1 = raycast.position.x - rectangle.pos.x;
+		float q2 = (rectangle.pos.x + rectangle.width) - raycast.position.x;
+		float q3 = raycast.position.y - rectangle.pos.y;
+		float q4 = (rectangle.pos.y + rectangle.height) - raycast.position.y;
+
+		float posarr[5], negarr[5];
+		int posind = 1, negind = 1;
+		posarr[0] = 1;
+		negarr[0] = 0;
+
+
+		if ((p1 == 0 && q1 < 0) || (p2 == 0 && q2 < 0) || (p3 == 0 && q3 < 0) || (p4 == 0 && q4 < 0))
+		{
+			return false;
+		}
+		if (p1 != 0) {
+			float r1 = q1 / p1;
+			float r2 = q2 / p2;
+			if (p1 < 0) {
+				negarr[negind++] = r1; // for negative p1, add it to negative array
+				posarr[posind++] = r2; // and add p2 to positive array
+			}
+			else {
+				negarr[negind++] = r2;
+				posarr[posind++] = r1;
+			}
+		}
+		if (p3 != 0) {
+			float r3 = q3 / p3;
+			float r4 = q4 / p4;
+			if (p3 < 0) {
+				negarr[negind++] = r3;
+				posarr[posind++] = r4;
+			}
+			else {
+				negarr[negind++] = r4;
+				posarr[posind++] = r3;
+			}
+		}
+
+		float xn1, yn1;
+		float rn1, rn2;
+		rn1 = *std::max_element(negarr, negarr + negind); // maximum of negative array
+		rn2 = *std::min_element(posarr, posarr + posind); // minimum of positive array
+
+		if (rn1 > rn2)
+			return false;
+
+		xn1 = raycast.position.x + p2 * rn1;
+		yn1 = raycast.position.y + p4 * rn1;
+		float xl = raycast.position.x - xn1;
+		float yl = raycast.position.y - yn1;
+		float length = xl * xl + yl * yl;
+		if (info.length < length)
+		{
+			info.length = length;
+			info.position = { xn1,yn1,0 };
+			return true;
+		}
+		return false;
+	}
+	inline HitInfo& RayCast(Ray& raycast)
+	{
+		std::vector<GameObject*> allGameObjects = SceneManager::GetCurrentScene()->m_pObjects;
+		Collider* current = nullptr;
+		HitInfo info;
+		info.length = FLT_MAX;
+		for (Collider* Collider : Collider::m_AllColliders)
+		{
+			BoxCollider2D* box = reinterpret_cast<BoxCollider2D*>(Collider);
+			if (box)
+			{
+				CheckHit(box->GetRectangle(), raycast, info);				
+				continue;
+			}
+			CircleCollider2D* circle = reinterpret_cast<CircleCollider2D*>(Collider);
+			if (circle)
+			{
+				CheckHit(circle->GetCircle2D(), raycast, info);
+				continue;
+			}
+
+
+		}
+	}
 }

@@ -19,6 +19,45 @@ Rius::SpriteRendererComponent::~SpriteRendererComponent()
 	glDeleteVertexArrays(1, &this->m_QuadVAO);
 }
 
+Rius::SpriteRendererComponent::SpriteRendererComponent(const SpriteRendererComponent& other)
+	: m_Rectangle2D(0, 0, 0, 0), m_TextCoord(0, 0, 0, 0)
+{
+	this->m_pGameObject = other.m_pGameObject;
+	this->m_Vertices = other.m_Vertices;
+	this->m_Rectangle2D = other.m_Rectangle2D;
+	this->m_TextCoord = other.m_TextCoord;
+	this->m_Color = other.m_Color;
+	this->m_Indices = other.m_Indices;
+	this->m_pTexture2D = other.m_pTexture2D;
+	this->m_EBO = other.m_EBO;
+	this->m_ModelSpace = other.m_ModelSpace;
+	this->m_QuadVAO = other.m_QuadVAO;
+	this->m_pShader = other.m_pShader;
+	this->m_VBO = other.m_VBO;
+}
+
+Rius::BaseComponent* Rius::SpriteRendererComponent::Clone()
+{
+	return new SpriteRendererComponent{ *this };
+}
+
+void Rius::SpriteRendererComponent::SetComponent(BaseComponent* comp)
+{
+	SpriteRendererComponent* component = static_cast <SpriteRendererComponent*> (comp);
+	this->m_pGameObject = component->m_pGameObject;
+	this->m_Vertices = component->m_Vertices;
+	this->m_Rectangle2D = component->m_Rectangle2D;
+	this->m_TextCoord = component->m_TextCoord;
+	this->m_Color = component->m_Color;
+	this->m_Indices = component->m_Indices;
+	this->m_pTexture2D = component->m_pTexture2D;
+	this->m_EBO = component->m_EBO;
+	this->m_ModelSpace = component->m_ModelSpace;
+	this->m_QuadVAO = component->m_QuadVAO;
+	this->m_pShader = component->m_pShader;
+	this->m_VBO = component->m_VBO;
+}
+
 void Rius::SpriteRendererComponent::SetTexture(Texture2D* texture)
 {
 	m_pTexture2D = texture;
@@ -107,7 +146,7 @@ void Rius::SpriteRendererComponent::SetIndicesAndVertices()
 	m_Vertices[13] = Minigin::m_Height - (m_Rectangle2D.pos.y + m_Rectangle2D.height / 2.f);
 	m_Vertices[14] = (m_TextCoord.pos.x + m_TextCoord.width);
 	m_Vertices[15] = (m_TextCoord.pos.y);
-	m_Indices = std::vector<unsigned int>{ 0, 1, 3 ,1,2,3};
+	m_Indices = std::vector<unsigned int>{ 0, 1, 3 ,1,2,3 };
 }
 
 

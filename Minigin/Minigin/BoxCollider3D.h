@@ -10,6 +10,13 @@ namespace Rius
 	public:
 		BoxCollider3D(Rectangle3D rectangle, bool isTrigger = false);
 		~BoxCollider3D();
+		BoxCollider3D(const BoxCollider3D& other);
+		BoxCollider3D(BoxCollider3D&& other) noexcept = default;
+		BoxCollider3D& operator= (const BoxCollider3D & other) = default;
+		BoxCollider3D& operator= (BoxCollider3D && other) = default;
+		BaseComponent* Clone() override;
+		void SetComponent(BaseComponent* comp) override;
+		
 		void Initialize() override;
 		void Update() override;
 		void Render() const override;

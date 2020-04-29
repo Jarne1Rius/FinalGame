@@ -4,6 +4,8 @@
 #include "CircleCollider2D.h"
 #include "GameObject.h"
 #include "ExtraMathFiles.h"
+#include "RigidBodyComponent.h"
+
 Rius::BoxCollider2D::BoxCollider2D(Rectangle2D rectangle, bool isTrigger)
 	:Collider(isTrigger),m_Rectangle(rectangle)
 {
@@ -13,8 +15,19 @@ Rius::BoxCollider2D::~BoxCollider2D()
 {
 }
 
+Rius::BoxCollider2D::BoxCollider2D(const BoxCollider2D& other)
+	: Collider(other.m_Trigger), m_Rectangle(0,0,0,0)
+{
+	this->m_CollidersInCollision = other.m_CollidersInCollision;
+	this->m_pGameObject = other.m_pGameObject;
+	this->m_PreviousPos = other.m_PreviousPos;
+	this->m_Trigger = other.m_Trigger;
+	this->m_Rectangle = other.m_Rectangle;
+}
+
 void Rius::BoxCollider2D::Initialize()
 {
+	
 }
 
 void Rius::BoxCollider2D::Update()
@@ -79,4 +92,19 @@ bool Rius::BoxCollider2D::CheckCollision(CircleCollider3D* circle)
 bool Rius::BoxCollider2D::CheckCollision(BoxCollider3D* collider)
 {
 	return false;
+}
+
+Rius::BaseComponent* Rius::BoxCollider2D::Clone()
+{
+	return  new BoxCollider2D{ *this };
+}
+
+void Rius::BoxCollider2D::SetComponent(BaseComponent* comp)
+{
+	BoxCollider2D* component = static_cast<BoxCollider2D*>(comp);
+	this->m_CollidersInCollision = component->m_CollidersInCollision;
+	this->m_pGameObject = component->m_pGameObject;
+	this->m_PreviousPos = component->m_PreviousPos;
+	this->m_Trigger = component->m_Trigger;
+	this->m_Rectangle = component->m_Rectangle;
 }
