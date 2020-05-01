@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "Collider.h"
 #include "ExtraMathFiles.h"
+#include "Minigin.h"
 
 std::vector<Rius::Collider*> Rius::Collider::m_AllColliders = std::vector<Rius::Collider*>{};
 Rius::Collider::Collider(bool isTrigger)
@@ -38,6 +39,7 @@ void Rius::Collider::SetCollisions()
 void Rius::Collider::ChangeTrigger(bool isTrigger)
 {
 	m_Trigger = isTrigger;
+	Minigin::m_UndoSystem.AddAction(this);
 }
 
 void Rius::Collider::AddColliderToAllColliders(Collider* collider)

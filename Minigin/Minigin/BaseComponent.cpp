@@ -2,6 +2,7 @@
 #include "BaseComponent.h"
 #include "GameObject.h"
 #include "RigidBodyComponent.h"
+#include "Collider.h"
 int Rius::BaseComponent::m_CurrentID = 0;
 Rius::BaseComponent::BaseComponent()
 	:m_pGameObject(nullptr), m_Id(m_CurrentID)
@@ -29,10 +30,13 @@ void Rius::BaseComponent::OnTriggerStay(Collider* collider)
 
 void Rius::BaseComponent::OnCollisionEnter(Collider* collider)
 {
-	RigidBodyComponent* com = m_pGameObject->GetComponent<RigidBodyComponent>();
-	if(com)
+	RigidBodyComponent* com = m_pGameObject->GetRigidBodyComponent();
+
+	if (com)
 	{
-		com->Bounce(0.5f);
+		
+
+		com->Bounce(1.f);
 	}
 }
 

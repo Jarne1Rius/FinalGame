@@ -8,13 +8,14 @@
 
 namespace Rius
 {
+	class Material;
 	class Texture2D;
-	class Shader;
 
 	class SpriteRendererComponent : public BaseComponent
 	{
 	public:
-		SpriteRendererComponent(Shader* shader,const Rectangle2D& destRectangle, const Rectangle2D& textCoord = {0,0,1,1});
+		SpriteRendererComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic = true, const Rectangle2D& textCoord = { 0,0,1,1 });
+		SpriteRendererComponent(Material* material, const Rectangle2D& destRectangle, const float widthTile, float heightTile, bool isStatic = true);
 		~SpriteRendererComponent();
 		SpriteRendererComponent(const SpriteRendererComponent& other);
 		SpriteRendererComponent(SpriteRendererComponent&& other) noexcept = default;
@@ -22,17 +23,15 @@ namespace Rius
 		SpriteRendererComponent& operator= (SpriteRendererComponent&& other) = default;
 		BaseComponent* Clone() override;
 		void SetComponent(BaseComponent* comp) override;
-		
-		void SetTexture(Texture2D* texture);
-		void SetTexture(const std::string& name);
+
 		void Initialize() override;
 		void Update() override;
+		void LateUpdate() override;
 		void Render() const override;
-		void SetColor(Color newColor);
-		Rectangle2D GetRectangle()const  { return m_Rectangle2D; };
+		Rectangle2D GetRectangle()const { return m_Rectangle2D; };
 	private:
-		Texture2D* m_pTexture2D;
-		Shader* m_pShader;
+		Material* m_pMaterial;
+		bool m_Static = false;
 		GLuint m_QuadVAO;
 		std::vector<float> m_Vertices;
 		std::vector<unsigned int> m_Indices;

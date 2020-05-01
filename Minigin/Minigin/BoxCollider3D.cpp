@@ -79,6 +79,11 @@ void Rius::BoxCollider3D::Render() const
 {
 }
 
+glm::vec2 Rius::BoxCollider3D::GetCenter()
+{
+	return m_Rectangle.pos;
+}
+
 bool Rius::BoxCollider3D::CheckCollision(CircleCollider2D* circle)
 {
 	std::cout << "Error => 3D collider tries to collide with a 2D collider\n";

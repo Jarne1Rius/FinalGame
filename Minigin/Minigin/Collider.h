@@ -17,10 +17,12 @@ namespace Rius
 		Collider(Collider&& other) noexcept = default;
 		Collider& operator= (const Collider& other) = default;
 		Collider& operator= (Collider&& other) = default;
-		
+
+
 		void Initialize() override = 0;
 		void Update() override = 0;
 		void Render() const override = 0;
+		virtual glm::vec2 GetCenter() = 0;
 		virtual bool CheckCollision(BoxCollider2D* collider) = 0;
 		virtual bool CheckCollision(CircleCollider2D* circle) = 0;
 		virtual bool CheckCollision(CircleCollider3D* circle) = 0;
@@ -29,21 +31,23 @@ namespace Rius
 		void AddCollider(Collider* collider);
 		virtual BaseComponent* Clone() override = 0;
 		virtual void SetComponent(BaseComponent* comp) override = 0;
-
+		void SetStatic(bool isStatic) { m_Static = isStatic; }
+		bool GetStatic() { return m_Static; }
 		void SetCollisions();
 		void ChangeTrigger(bool isTrigger);
 		static std::vector<Collider*> m_AllColliders;
-	protected:
+	private:
 
 		static void AddColliderToAllColliders(Collider* collider);
-		
+
 		static void RemoveColliderOfAllColliders(Collider* collider);
-		
+
 	protected:
+		bool m_Static = false;
 		glm::vec3 m_PreviousPos;
 		bool m_Trigger;
 		std::map<Collider*, bool> m_CollidersInCollision;
 	};
 
-	
+
 }

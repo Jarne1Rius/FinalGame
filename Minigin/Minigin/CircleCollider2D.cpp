@@ -64,6 +64,11 @@ void Rius::CircleCollider2D::Render() const
 {
 }
 
+glm::vec2 Rius::CircleCollider2D::GetCenter()
+{
+	return m_Circle2D.pos;
+}
+
 bool Rius::CircleCollider2D::CheckCollision(CircleCollider2D* circle)
 {
 	return Collision(this->m_Circle2D, circle->m_Circle2D);

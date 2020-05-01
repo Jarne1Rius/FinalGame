@@ -80,6 +80,11 @@ void Rius::CircleCollider3D::Render() const
 {
 }
 
+glm::vec2 Rius::CircleCollider3D::GetCenter()
+{
+	return m_Circle3D.pos;
+}
+
 bool Rius::CircleCollider3D::CheckCollision(CircleCollider2D* circle)
 {
 	//TODO Change all the errors with the gmui

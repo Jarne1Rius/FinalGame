@@ -49,8 +49,8 @@ namespace Rius
 		void SetAmountRedu(int amount);
 		~UndoSystem();
 	private:
-		Node* m_pHead;
-		Node* m_pLast;
+		Node* m_pHead = nullptr;
+		Node* m_pLast = nullptr;
 		int m_Size{};
 		int m_MaxSize = 10;
 	};

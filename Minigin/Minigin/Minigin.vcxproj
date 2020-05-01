@@ -222,6 +222,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="CircleCollider3D.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="ExtraMathFiles.h" />
+    <ClInclude Include="FiniteStateMachine.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameObject.h" />
@@ -231,8 +232,12 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="imgui_impl_opengl3.h" />
     <ClInclude Include="imgui_internal.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="LevelReader.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MiniginPCH.h" />
+    <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="ReaderWriter.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -244,8 +249,10 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="Extra.h" />
     <ClInclude Include="SpriteRendererComponent.h" />
     <ClInclude Include="SpriteSheetComponent.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="TextureMaterial.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UndoSystem.h" />
@@ -258,6 +265,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="CircleCollider2D.cpp" />
     <ClCompile Include="CircleCollider3D.cpp" />
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="FiniteStateMachine.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -299,6 +307,9 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="LevelReader.cpp" />
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="MiniginPCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -307,6 +318,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MiniginPCH.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="ReaderWriter.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
@@ -316,8 +328,10 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SpriteRendererComponent.cpp" />
     <ClCompile Include="SpriteSheetComponent.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="TextureMaterial.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UndoSystem.cpp" />

@@ -6,6 +6,8 @@
 #include "Texture2D.h"
 #include <string>
 
+#include "Material.h"
+
 namespace Rius
 {
 	class Shader;
@@ -13,8 +15,8 @@ namespace Rius
 	class SpriteSheetComponent : public BaseComponent
 	{
 	public:
-		SpriteSheetComponent(Shader* shader, const Rectangle2D& destRectangle, int rows, int colms, float timeNextFrame = 10, int firstFrame = 0, int totalFrames = 0);
-		SpriteSheetComponent(Shader* shader, const Rectangle2D& destRectangle, int rows, int colms, float widthColms, float heightOfRows,glm::vec2& startPosition, float timeNextFrame = 10, int firstFrame = 0, int totalFrames = 0);
+		SpriteSheetComponent(Material* material,  const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, float timeNextFrame = 10, int firstFrame = 0, int totalFrames = 0);
+		SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, float widthColms, float heightOfRows,glm::vec2& startPosition, float timeNextFrame = 10, int firstFrame = 0, int totalFrames = 0);
 		~SpriteSheetComponent();
 		SpriteSheetComponent(const SpriteSheetComponent& other);
 		SpriteSheetComponent(SpriteSheetComponent&& other) noexcept = default;
@@ -25,15 +27,12 @@ namespace Rius
 		void Render() const override;
 		void Update() override;
 		void LateUpdate() override;
-		void SetTexture(Texture2D* texture);
-		void SetTexture(const std::string& name);
-		void SetColor(Color newColor);
 		BaseComponent* Clone() override;
 		void SetComponent(BaseComponent* comp) override;
 		Rectangle2D GetRectangle() const { return m_Rectangle2D; }
 	private:
-		Texture2D* m_pTexture2D;
-		Shader* m_pShader;
+		Material* m_pMaterial;
+		bool m_Static;
 		GLuint m_QuadVAO;
 		GLuint m_VBO;
 		GLuint m_EBO;

@@ -1,6 +1,7 @@
 #pragma once
 #include "SpriteSheetComponent.h"
 #include "UndoSystem.h"
+#include "FiniteStateMachine.h"
 struct SDL_Window;
 namespace Rius
 {
@@ -11,8 +12,11 @@ namespace Rius
 		void Cleanup();
 		void Run();
 		static int m_Width;
+		static float m_TileHeight;
+		static float m_TileWidth;
 		static int m_Height;
 		static UndoSystem m_UndoSystem;
+		//static FiniteStateMachine* m_FSM;
 	private:
 		void StartViewEngine();
 		void ShowAllComponents();

@@ -8,10 +8,6 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include <SDL.h>
-#include "GameObject.h"
-#include "Scene.h"
-#include "time.h"
 #if _DEBUG
 // ReSharper disable once CppUnusedIncludeDirective
 #include "vld.h"
@@ -21,19 +17,22 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include "UndoSystem.h"
+#include "time.h"
 using namespace std;
 using namespace std::chrono;
 int Rius::Minigin::m_Height = 720;
+float Rius::Minigin::m_TileHeight = 720.f / 32.f;
+float Rius::Minigin::m_TileWidth = 1280.f / 32.f;
 int Rius::Minigin::m_Width = 1280;
-
-
+//Rius::FiniteStateMachine* Rius::Minigin::m_FSM = new Rius::FiniteStateMachine{};
+Rius::UndoSystem  Rius::Minigin::m_UndoSystem{};
+ 
 void Rius::Minigin::Initialize()
 {
 	
 
 	Rius::Renderer::GetInstance().Init(m_Width, m_Height);
-	ResourceManager::m_ProjectionMatrix = glm::ortho(0.0f, static_cast<GLfloat>(800), static_cast<GLfloat>(600), 0.0f, -1.0f, 1.0f);
+	ResourceManager::m_ProjectionMatrix = glm::ortho(0.0f, static_cast<GLfloat>(m_Width), static_cast<GLfloat>(m_Height), 0.0f, -1.0f, 1.0f);
 }
 
 
@@ -42,9 +41,9 @@ void Rius::Minigin::Cleanup()
 	delete m_Sprite;
 	Renderer::GetInstance().Destroy();
 	ResourceManager::Clear();
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
+	//ImGui_ImplOpenGL3_Shutdown();
+	//ImGui_ImplGlfw_Shutdown();
+	//ImGui::DestroyContext();
 	Mix_Quit();
 }
 
@@ -60,9 +59,9 @@ void Rius::Minigin::Run()
 
 	while (!glfwWindowShouldClose(Renderer::GetInstance().getWindow()))
 	{
-		ImGui_ImplOpenGL3_NewFrame();
+		/*ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+		ImGui::NewFrame();*/
 
 		Renderer::GetInstance().Input();
 		const auto currentTime = high_resolution_clock::now();
@@ -82,40 +81,13 @@ void Rius::Minigin::Run()
 		sceneManager.LateUpdate();
 		frames++;
 		Time::UpdateTimer(deltaTime, frames);
-
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		//sceneManager.Render();
-		//m_Sprite->Render();
-
+		sceneManager.Render();/*
 		bool show_demo_window = true;
 		bool show_another_window = false;
-		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-		StartViewEngine();
-		//if (show_demo_window)
-		//	ImGui::ShowDemoWindow(&show_demo_window);
-
-		//static float f = 0.0f;
-		//static int counter = 0;
-
-		//ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-		//ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		//ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-		//ImGui::Checkbox("Another Window", &show_another_window);
-
-		//ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		//ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-		//if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-		//	counter++;
-		//ImGui::SameLine();
-		//ImGui::Text("counter = %d", counter);
-
-		//ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		//ImGui::End();
-
-
+		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);*/
+		//StartViewEngine();
 		Renderer::GetInstance().Render();
 
 	}

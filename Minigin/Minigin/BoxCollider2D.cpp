@@ -32,39 +32,48 @@ void Rius::BoxCollider2D::Initialize()
 
 void Rius::BoxCollider2D::Update()
 {
-	m_Rectangle.pos = m_pGameObject->GetTransform().GetPosition();
+	if(!m_Static)
+		m_Rectangle.pos = m_pGameObject->GetTransform().GetPosition();
 	m_Rectangle.pos.y *= -1;
 	bool anyHit{false};
+	if (this->m_Static) return;
 	for (Collider* collider : m_AllColliders)
 	{
-		if (collider == this) continue;;
+		if (collider == this) continue;
+		//if(collider->GetStatic() == true)continue;
 		bool newHit = collider->CheckCollision(this);
-		std::map<Collider*, bool>::iterator it = m_CollidersInCollision.find(collider);
-		bool hit = it->second;
-		if (newHit != hit && hit)
+		if(newHit)
 		{
-			//exit collider
-			if (m_Trigger) OnTriggerExit(collider);
-			else OnCollisionExit(collider);
-		}
-		else if (newHit == hit && hit)
-		{
-			//exit collider
-			if (m_Trigger) OnTriggerStay(collider);
-			else OnCollisionStay(collider);
-		}
-		else if (newHit != hit && hit == false)
-		{
-			//exit collider
 			if (m_Trigger) OnTriggerEnter(collider);
+			
 			else OnCollisionEnter(collider);
 		}
-		else
-		{
-			continue;
-		}
-		if (newHit) anyHit = newHit;
-		it->second = newHit;
+		//std::map<Collider*, bool>::iterator it = m_CollidersInCollision.find(collider);
+		//bool hit = it->second;
+		//if (newHit != hit && hit)
+		//{
+		//	//exit collider
+		//	if (m_Trigger) OnTriggerExit(collider);
+		//	else OnCollisionExit(collider);
+		//}
+		//else if (newHit == hit && hit)
+		//{
+		//	//exit collider
+		//	if (m_Trigger) OnTriggerStay(collider);
+		//	else OnCollisionStay(collider);
+		//}
+		//else if (newHit != hit && hit == false)
+		//{
+		//	//exit collider
+		//	if (m_Trigger) OnTriggerEnter(collider);
+		//	else OnCollisionEnter(collider);
+		//}
+		//else
+		//{
+		//	continue;
+		//}
+		//if (newHit) anyHit = newHit;
+		//it->second = newHit;
 	}
 	if (anyHit) GetGameObject()->GetTransform().SetPosition(m_PreviousPos);
 	m_PreviousPos = GetGameObject()->GetTransform().GetPosition();
@@ -74,6 +83,11 @@ void Rius::BoxCollider2D::Render() const
 {
 }
 
+glm::vec2 Rius::BoxCollider2D::GetCenter()
+{
+	return m_Rectangle.pos;
+}
+
 bool Rius::BoxCollider2D::CheckCollision(CircleCollider2D* circle)
 {
 	return Collision(this->m_Rectangle, circle->GetCircle2D());
@@ -81,7 +95,12 @@ bool Rius::BoxCollider2D::CheckCollision(CircleCollider2D* circle)
 
 bool Rius::BoxCollider2D::CheckCollision(BoxCollider2D* collider)
 {
-	return Collision(this->m_Rectangle, collider->m_Rectangle);
+	glm::vec3 vel{ 0,0,0 };
+	RigidBodyComponent* com = collider->m_pGameObject->GetRigidBodyComponent();
+	if(com)
+		return Collision(this->m_Rectangle, collider->m_Rectangle,vel, com->GetVelocity());
+	else
+		return Collision(this->m_Rectangle, collider->m_Rectangle, vel, vel);
 }
 
 bool Rius::BoxCollider2D::CheckCollision(CircleCollider3D* circle)

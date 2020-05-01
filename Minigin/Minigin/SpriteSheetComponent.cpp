@@ -8,9 +8,9 @@
 #include "ResourceManager.h"
 #include "GameObject.h"
 
-Rius::SpriteSheetComponent::SpriteSheetComponent(Shader* shader, const Rectangle2D& destRectangle, int rows, int colms, float timeNextFrame, int firstFrame, int totalFrames)
-	:m_Vertices(), m_Rectangle2D(destRectangle), m_QuadVAO(), m_pShader(shader), m_pTexture2D(), m_TimeNextFrame(timeNextFrame), m_Colms(colms), m_Rows(rows), m_CurrentFrame(firstFrame)
-	, m_TextCoord(0, 0, 1, 1), m_Sec(0), m_WidthObject(), m_HeightObject(), m_SrcRect(0, 0, 1, 1), m_VBO(), m_TotalFrames((totalFrames == 0) ? colms * rows : totalFrames)
+Rius::SpriteSheetComponent::SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, float timeNextFrame, int firstFrame, int totalFrames)
+	:m_Vertices(), m_Rectangle2D(destRectangle), m_Static(isStatic), m_QuadVAO(), m_pMaterial(material), m_TimeNextFrame(timeNextFrame), m_Colms(colms), m_Rows(rows), m_CurrentFrame(firstFrame)
+	, m_TextCoord(0, 0, 1, 1), m_Sec(0), m_WidthObject(), m_HeightObject(), m_SrcRect(0, 0, 1, 1), m_VBO(), m_TotalFrames((totalFrames == 0) ? colms * rows : totalFrames),m_Indices(),m_ModelSpace(),m_Color(),m_EBO()
 {
 	m_WidthObject = 1.f / colms;
 	m_HeightObject = 1.f / rows;
@@ -20,9 +20,9 @@ Rius::SpriteSheetComponent::SpriteSheetComponent(Shader* shader, const Rectangle
 	m_TextCoord = Rectangle2D{ pos.x,pos.y,m_WidthObject,m_HeightObject };
 }
 
-Rius::SpriteSheetComponent::SpriteSheetComponent(Shader* shader, const Rectangle2D& destRectangle, int rows, int colms, float widthColms, float heightOfRows, glm::vec2& startPosition, float timeNextFrame, int firstFrame, int totalFrames)
-	:m_Vertices(), m_Rectangle2D(destRectangle), m_QuadVAO(), m_pShader(shader), m_pTexture2D(), m_TimeNextFrame(timeNextFrame), m_Colms(colms), m_Rows(rows), m_CurrentFrame(firstFrame), m_TextCoord(0, 0, 1, 1)
-	, m_SrcRect(startPosition, widthColms, heightOfRows), m_Sec(0), m_WidthObject(), m_HeightObject(), m_TotalFrames(), m_VBO()
+Rius::SpriteSheetComponent::SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, float widthColms, float heightOfRows, glm::vec2& startPosition, float timeNextFrame, int firstFrame, int totalFrames)
+	:m_Vertices(), m_Rectangle2D(destRectangle), m_Static(isStatic), m_QuadVAO(), m_pMaterial(material), m_TimeNextFrame(timeNextFrame), m_Colms(colms), m_Rows(rows), m_CurrentFrame(firstFrame), m_TextCoord(0, 0, 1, 1)
+	, m_SrcRect(startPosition, widthColms, heightOfRows), m_Sec(0), m_WidthObject(), m_HeightObject(), m_TotalFrames(), m_VBO(),m_Indices(),m_ModelSpace(),m_Color(),m_EBO()
 {
 	m_WidthObject = m_SrcRect.width / colms;
 	m_HeightObject = m_SrcRect.height / rows;
@@ -40,7 +40,7 @@ Rius::SpriteSheetComponent::~SpriteSheetComponent()
 }
 
 Rius::SpriteSheetComponent::SpriteSheetComponent(const SpriteSheetComponent& other)
-	:m_Rectangle2D(0,0,0,0),m_TextCoord(0,0,0,0), m_SrcRect(0,0,0,0)
+	:m_Rectangle2D(0, 0, 0, 0), m_TextCoord(0, 0, 0, 0), m_SrcRect(0, 0, 0, 0)
 {
 	this->m_pGameObject = other.m_pGameObject;
 	this->m_Vertices = other.m_Vertices;
@@ -50,14 +50,13 @@ Rius::SpriteSheetComponent::SpriteSheetComponent(const SpriteSheetComponent& oth
 	this->m_Color = other.m_Color;
 	this->m_Indices = other.m_Indices;
 	this->m_CurrentFrame = other.m_CurrentFrame;
-	this->m_pTexture2D = other.m_pTexture2D;
 	this->m_EBO = other.m_EBO;
 	this->m_TotalFrames = other.m_TotalFrames;
 	this->m_TimeNextFrame = other.m_TimeNextFrame;
 	this->m_ModelSpace = other.m_ModelSpace;
 	this->m_HeightObject = other.m_HeightObject;
 	this->m_QuadVAO = other.m_QuadVAO;
-	this->m_pShader = other.m_pShader;
+	this->m_pMaterial = other.m_pMaterial;
 	this->m_WidthObject = other.m_WidthObject;
 	this->m_VBO = other.m_VBO;
 	this->m_SrcRect = other.m_SrcRect;
@@ -84,17 +83,12 @@ void Rius::SpriteSheetComponent::Initialize()
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	this->m_pShader->SetVec3("spriteColor", 1, 1, 1);
 	Update();
 }
 
 void Rius::SpriteSheetComponent::Render() const
 {
-	this->m_pShader->Use();
-	this->m_pShader->SetMat4("model", m_ModelSpace);
-	glActiveTexture(GL_TEXTURE0);
-	if (m_pTexture2D != nullptr)
-		m_pTexture2D->Bind();
+	m_pMaterial->UpdateVariables();
 	glBindVertexArray(this->m_QuadVAO);
 	glDrawElements(GL_TRIANGLES, GLsizei(m_Indices.size())
 		, GL_UNSIGNED_INT, static_cast<void*>(nullptr));
@@ -111,6 +105,13 @@ void Rius::SpriteSheetComponent::Update()
 
 void Rius::SpriteSheetComponent::LateUpdate()
 {
+	if (!m_Static)
+	{
+		m_ModelSpace = glm::mat4();
+		m_ModelSpace = glm::translate(m_ModelSpace, m_pGameObject->GetTransform().GetPosition());
+		m_ModelSpace = glm::scale(m_ModelSpace, glm::vec3(1, 1, 1.0f));
+		m_pMaterial->SetModelSpace(m_ModelSpace);
+	}
 	m_Sec += Time::m_DeltaTime;
 	while (m_Sec >= m_TimeNextFrame)
 	{
@@ -124,24 +125,6 @@ void Rius::SpriteSheetComponent::LateUpdate()
 		Initialize();
 	}
 }
-
-void Rius::SpriteSheetComponent::SetTexture(Texture2D* texture)
-{
-	m_pTexture2D = texture;
-
-}
-
-void Rius::SpriteSheetComponent::SetTexture(const std::string& name)
-{
-	m_pTexture2D = ResourceManager::GetTexture(name);
-}
-
-void Rius::SpriteSheetComponent::SetColor(Color newColor)
-{
-	m_Color = newColor.GetVec4();
-	this->m_pShader->Use().SetVec4("Color", m_Color);
-}
-
 Rius::BaseComponent* Rius::SpriteSheetComponent::Clone()
 {
 	return new SpriteSheetComponent{ *this };
@@ -158,18 +141,17 @@ void Rius::SpriteSheetComponent::SetComponent(BaseComponent* comp)
 	this->m_Color = component->m_Color;
 	this->m_Indices = component->m_Indices;
 	this->m_CurrentFrame = component->m_CurrentFrame;
-	this->m_pTexture2D = component->m_pTexture2D;
 	this->m_EBO = component->m_EBO;
 	this->m_TotalFrames = component->m_TotalFrames;
 	this->m_TimeNextFrame = component->m_TimeNextFrame;
 	this->m_ModelSpace = component->m_ModelSpace;
 	this->m_HeightObject = component->m_HeightObject;
 	this->m_QuadVAO = component->m_QuadVAO;
-	this->m_pShader = component->m_pShader;
+	this->m_pMaterial = component->m_pMaterial;
 	this->m_WidthObject = component->m_WidthObject;
 	this->m_VBO = component->m_VBO;
 	this->m_SrcRect = component->m_SrcRect;
-	this->m_Sec = component->m_Sec;	
+	this->m_Sec = component->m_Sec;
 }
 
 void Rius::SpriteSheetComponent::SetIndicesAndVertices()
@@ -177,26 +159,26 @@ void Rius::SpriteSheetComponent::SetIndicesAndVertices()
 	m_Vertices.clear();
 	m_Vertices.resize(24);
 	//TopRight
-	m_Vertices[0] = (m_Rectangle2D.pos.x + m_Rectangle2D.width / 2.f);
-	m_Vertices[1] = Minigin::m_Height - (m_Rectangle2D.pos.y + m_Rectangle2D.height / 2.f);
+	m_Vertices[0] = (m_Rectangle2D.pos.x + m_Rectangle2D.width);
+	m_Vertices[1] = Minigin::m_Height - (m_Rectangle2D.pos.y + m_Rectangle2D.height);
 	m_Vertices[2] = (m_TextCoord.pos.x);
 	m_Vertices[3] = (m_TextCoord.pos.y);
 
 	//BottomRight
-	m_Vertices[4] = (m_Rectangle2D.pos.x + m_Rectangle2D.width / 2.f);
-	m_Vertices[5] = Minigin::m_Height - (m_Rectangle2D.pos.y - m_Rectangle2D.height / 2.f);
+	m_Vertices[4] = (m_Rectangle2D.pos.x + m_Rectangle2D.width);
+	m_Vertices[5] = Minigin::m_Height - (m_Rectangle2D.pos.y);// -m_Rectangle2D.height );
 	m_Vertices[6] = (m_TextCoord.pos.x);
 	m_Vertices[7] = (m_TextCoord.pos.y + m_TextCoord.height);
 
 	//BottomLeft
-	m_Vertices[8] = (m_Rectangle2D.pos.x - m_Rectangle2D.width / 2.f);
-	m_Vertices[9] = Minigin::m_Height - (m_Rectangle2D.pos.y - m_Rectangle2D.height / 2.f);
+	m_Vertices[8] = (m_Rectangle2D.pos.x);
+	m_Vertices[9] = Minigin::m_Height - (m_Rectangle2D.pos.y);// -m_Rectangle2D.height / 2.f);
 	m_Vertices[10] = (m_TextCoord.pos.x + m_TextCoord.width);
 	m_Vertices[11] = (m_TextCoord.pos.y + m_TextCoord.height);
 
 	//TopLeft
-	m_Vertices[12] = (m_Rectangle2D.pos.x - m_Rectangle2D.width / 2.f);
-	m_Vertices[13] = Minigin::m_Height - (m_Rectangle2D.pos.y + m_Rectangle2D.height / 2.f);
+	m_Vertices[12] = (m_Rectangle2D.pos.x);//- m_Rectangle2D.width / 2.f);
+	m_Vertices[13] = Minigin::m_Height - (m_Rectangle2D.pos.y + m_Rectangle2D.height);
 	m_Vertices[14] = (m_TextCoord.pos.x + m_TextCoord.width);
 	m_Vertices[15] = (m_TextCoord.pos.y);
 	m_Indices = std::vector<unsigned int>{ 0, 1, 3 ,1,2,3 };

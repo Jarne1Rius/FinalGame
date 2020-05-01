@@ -39,8 +39,10 @@ namespace Rius
 
 	struct Rectangle2D
 	{
+		Rectangle2D() :pos{ 0,0 }, width{ 0 }, height{ 0 } {};
 		Rectangle2D(float x, float y, float widthR, float heightR): pos(x,y),width(widthR),height(heightR){};
 		Rectangle2D(glm::vec2 position, float widthR, float heightR): pos(position),width(widthR),height(heightR){};
+		bool operator==(Rectangle2D& rect) { return (pos == rect.pos && width == rect.width && height == rect.height); }
 		glm::vec2 pos;
 		float width = 10;
 		float height = 10;
@@ -99,9 +101,10 @@ namespace Rius
 	class GameObject;
 	struct HitInfo
 	{
-		glm::vec3 position;
-		glm::vec3 normal;
-		GameObject* hitObject;
-		float length;
+		HitInfo() = default;;
+		glm::vec3 position{};
+		glm::vec3 normal{};
+		GameObject* hitObject{nullptr};
+		float length{0};
 	};
 }

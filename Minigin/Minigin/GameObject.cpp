@@ -6,7 +6,7 @@
 
 int Rius::GameObject::m_CurrentID = 0;
 Rius::GameObject::GameObject()
-	:m_pComponents(), m_pChildren(), m_pParentObject(), m_Tag(), m_Static(), m_Transform(), m_pParentScene()
+	:m_pComponents(), m_pChildren(), m_pParentObject(), m_Tag(), m_Static(), m_Transform(), m_pParentScene(), m_pRigidBodyComponent(nullptr)
 {
 	m_Id = m_CurrentID;
 	m_CurrentID++;
@@ -27,6 +27,13 @@ void Rius::GameObject::AddComponent(BaseComponent* component)
 {
 	component->m_pGameObject = this;
 	m_pComponents.push_back(component);
+}
+
+void Rius::GameObject::AddComponent(RigidBodyComponent* rigid)
+{
+	rigid->m_pGameObject = this;
+	m_pRigidBodyComponent = rigid;
+	m_pComponents.push_back(rigid);
 }
 
 Rius::BaseComponent* Rius::GameObject::GetComponentById(int id)

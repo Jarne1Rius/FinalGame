@@ -24,6 +24,7 @@ namespace Rius
 		static Texture2D* GetTexture(std::string name);
 		// Properly de-allocates all loaded resources
 		static void Clear();
+		static void ClearTexture(Texture2D* pTexture);
 	private:		
 		ResourceManager() = default;
 		// Loads and generates a shader from file

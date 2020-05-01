@@ -18,15 +18,28 @@ namespace Rius
 	{
 		return pos1.x * pos2.x + pos2.y * pos2.y;
 	}
-	inline bool Collision(const Rectangle2D& rect1, const Rectangle2D& rect2)
+	inline bool Collision(const Rectangle2D& rect1, const Rectangle2D& rect2, glm::vec3& velocityRect1, glm::vec3& velocityRect2)
 	{
-		Rectangle2D newRect1{ rect1.pos.x - rect1.width / 2.f,rect1.pos.y - rect1.height / 2.f,rect1.width,rect1.height };
-		Rectangle2D newRect2{ rect2.pos.x - rect2.width / 2.f,rect2.pos.y - rect2.height / 2.f,rect2.width,rect2.height };
-		bool collisionX = newRect1.pos.x + newRect1.width >= newRect2.pos.x &&
-			newRect2.pos.x + newRect2.width >= newRect1.pos.x;
-		bool collisionY = newRect1.pos.y + newRect1.height >= newRect2.pos.y &&
-			newRect2.pos.y + newRect2.height >= newRect1.pos.y;
-		return collisionX && collisionY;
+		bool hit = false;
+		if (rect1.pos.x + rect1.width + velocityRect1.x > rect2.pos.x + velocityRect2.x &&
+			rect1.pos.x + velocityRect1.x < rect2.pos.x + rect2.width + velocityRect2.x &&
+			rect1.pos.y + rect1.height > rect2.pos.y &&
+			rect1.pos.y < rect2.pos.y + rect2.height)
+		{
+			velocityRect1.x *= -1;
+			velocityRect2.x *= -1;
+			hit = true;
+		}
+		if (rect1.pos.x + rect1.width > rect2.pos.x &&
+			rect1.pos.x < rect2.pos.x + rect2.width &&
+			rect1.pos.y + rect1.height - velocityRect1.y > rect2.pos.y - velocityRect2.y &&
+			rect1.pos.y - velocityRect1.y < rect2.pos.y + rect2.height - velocityRect2.y)
+		{
+			velocityRect1.y *= -1;
+			velocityRect2.y *= -1;
+			hit = true;
+		}
+		return hit;
 	}
 
 	inline bool Collision(const Rectangle3D& rect1, const  Rectangle3D& rect2)
@@ -74,7 +87,8 @@ namespace Rius
 	}
 	inline bool Collision(const Capsule2D& capsule1, const Capsule2D& capsule2)
 	{
-		if (Collision(capsule1.Center, capsule2.Center)) return true;
+		glm::vec3 vel{ 0,0,0 };
+		if (Collision(capsule1.Center, capsule2.Center, vel, vel)) return true;
 		if (Collision(capsule1.Center, capsule2.Bottom)) return true;
 		if (Collision(capsule1.Center, capsule2.Top)) return true;
 		if (Collision(capsule1.Top, capsule2.Center)) return true;
@@ -87,9 +101,10 @@ namespace Rius
 	}
 	inline bool Collision(const Capsule2D& capsule, const Rectangle2D& rectangle2D)
 	{
-		if (Collision(capsule.Center, rectangle2D)) return true;
-		if (Collision(capsule.Center, rectangle2D)) return true;
-		if (Collision(capsule.Center, rectangle2D)) return true;
+		glm::vec3 vel{ 0,0,0 };
+		if (Collision(capsule.Center, rectangle2D, vel, vel)) return true;
+		if (Collision(capsule.Center, rectangle2D, vel, vel)) return true;
+		if (Collision(capsule.Center, rectangle2D, vel, vel)) return true;
 		return false;
 	}
 	inline bool Collision(const Capsule2D& capsule, const Circle2D& rectangle2D)
@@ -228,7 +243,7 @@ namespace Rius
 			BoxCollider2D* box = reinterpret_cast<BoxCollider2D*>(Collider);
 			if (box)
 			{
-				CheckHit(box->GetRectangle(), raycast, info);				
+				CheckHit(box->GetRectangle(), raycast, info);
 				continue;
 			}
 			CircleCollider2D* circle = reinterpret_cast<CircleCollider2D*>(Collider);

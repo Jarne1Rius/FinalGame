@@ -19,6 +19,7 @@ namespace Rius
 		void Initialize() override;
 		void Update() override;
 		void Render() const override;
+		glm::vec2 GetCenter() override;
 		const Circle3D GetCircle3D()const { return m_Circle3D; }
 		bool CheckCollision(CircleCollider2D* circle) override;
 		bool CheckCollision(BoxCollider2D* collider) override;
