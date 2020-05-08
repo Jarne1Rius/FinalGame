@@ -1,6 +1,6 @@
 #include "MiniginPCH.h"
 #include "Audio.h"
-
+#include "Logger.h"
 namespace Rius
 {
 
@@ -16,7 +16,7 @@ namespace Rius
 		:Audio(loops), m_ChannelInUse(-1)
 	{
 		m_Effect = Mix_LoadWAV(fileName.c_str());
-		if (m_Effect == nullptr) printf("Failed to load Effect! SDL_mixer Error: %s\n", Mix_GetError());
+		if (m_Effect == nullptr) Logger::LogInfo("Failed to load Effect! SDL_mixer Error: %s\n");
 	}
 
 	SoundEffect::~SoundEffect()
@@ -62,7 +62,7 @@ namespace Rius
 		:Audio(loops), m_Fade(fade), m_MsFade(msFade)
 	{
 		m_Music = Mix_LoadMUS(fileName.c_str());
-		if (m_Music == nullptr) printf("Failed to load sound!SDL_mixer Error: %s\n", Mix_GetError());
+		if (m_Music == nullptr) Logger::LogInfo("Failed to load sound!SDL_mixer Error: %s\n");
 	}
 
 	BackGroundMusic::~BackGroundMusic()

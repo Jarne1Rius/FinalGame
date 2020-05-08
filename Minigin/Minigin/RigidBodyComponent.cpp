@@ -3,8 +3,9 @@
 #include "GameObject.h"
 #include "Minigin.h"
 #include "time.h"
+#include <glm/gtx/norm.hpp>
 Rius::RigidBodyComponent::RigidBodyComponent(float mass)
-	:m_AccelerationForce(0, 9.81f), m_Velocity(0, 0,0), m_Mass(mass),m_Kinematic()
+	:m_AccelerationForce(0, 9.81f), m_Velocity(0, 0, 0), m_Mass(mass), m_Kinematic(),m_MaxForce(0.5f)
 {
 }
 
@@ -32,19 +33,33 @@ void Rius::RigidBodyComponent::SetComponent(BaseComponent* comp)
 	this->m_pGameObject = component->m_pGameObject;
 }
 
-void Rius::RigidBodyComponent::AddForce(glm::vec2& force)
+void Rius::RigidBodyComponent::AddForce(glm::vec2 force)
 {
 
 	m_Velocity.x += force.x;
 	m_Velocity.y -= force.y;
-	//Minigin::m_UndoSystem.AddAction(this);
+	if (glm::length2(m_Velocity) > (m_MaxForce * m_MaxForce))
+	{
+		m_Velocity = glm::normalize(m_Velocity) * m_MaxForce;
+	}
 }
 
 void Rius::RigidBodyComponent::Bounce(float multiply)
 {
-	m_Velocity *= multiply;
-	m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
+	if (!m_OnGround)
+	{
+		glm::vec2 previous = m_Velocity;
+		m_Velocity *= 0;
 
+		if(previous.y <0 && abs(m_Velocity.y) < 0.001f)
+		{
+			m_OnGround = true;
+			m_Velocity.y = 0;
+		}
+		m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
+	}
+	else
+		m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
 }
 
 void Rius::RigidBodyComponent::Initialize()
@@ -53,10 +68,11 @@ void Rius::RigidBodyComponent::Initialize()
 
 void Rius::RigidBodyComponent::Update()
 {
- 	m_pGameObject->m_PreviousPos = m_pGameObject->GetTransform().GetPosition();
+	if (abs(m_Velocity.y) > 0.01f) m_OnGround = false;
+	m_pGameObject->m_PreviousPos = m_pGameObject->GetTransform().GetPosition();
 	Transform& transform = m_pGameObject->GetTransform();
 	if (!m_Kinematic)
-		m_Velocity += ((glm::vec3(m_AccelerationForce,0) * m_Mass) / 1000000.f);
+		m_Velocity += ((glm::vec3(m_AccelerationForce, 0) * m_Mass) / 100000.f);
 	transform.SetPosition(transform.GetPosition() + m_Velocity * Time::m_DeltaTime);
 }
 
@@ -68,6 +84,11 @@ void Rius::RigidBodyComponent::SetKinematic(bool kinematic)
 {
 	m_Kinematic = kinematic;
 	Minigin::m_UndoSystem.AddAction(this);
+}
+
+bool Rius::RigidBodyComponent::IsOnGround()
+{
+	return m_OnGround;
 }
 
 Rius::BaseComponent* Rius::RigidBodyComponent::Clone()

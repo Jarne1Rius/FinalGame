@@ -1,12 +1,14 @@
 #pragma once
 #include "BaseComponent.h"
 #include "FiniteStateMachine.h"
+#include "RigidBodyComponent.h"
+#include "SpriteSheetComponent.h"
 namespace Rius
 {
 	class PlayerComponent :	public BaseComponent
 	{
 	public:
-		PlayerComponent();
+		PlayerComponent(int idInput);
 		~PlayerComponent();
 		PlayerComponent(const PlayerComponent& other);
 		PlayerComponent(PlayerComponent&& other) noexcept = default;
@@ -17,12 +19,21 @@ namespace Rius
 		void Initialize() override;
 		void Update() override;
 		void Render() const override;
-		void TakeDamage();
+		void TakeDamage(int amount);
+		void Jump(float value);
+		void Move(float value);
+		void Fire(float value);
 	public:
+		RigidBodyComponent* m_Rigid;
 		int m_Lives;
 		float m_MovementSpeed;
 		int m_GamepadID;
 		FiniteStateMachine* m_FSM;
+		SpriteSheetComponent* m_Sprite;
+		int m_IdInput;
+		bool m_Jump;
+		bool m_Attack;
+		float m_Moving;
 	};
 
 }

@@ -2,7 +2,10 @@
 #include <XInput.h>
 #include "Singleton.h"
 #include <map>
+#include <thread>
+
 #include "../SDL2/include/SDL.h"
+#include "Command.h"
 
 #include "Extra.h"
 
@@ -44,38 +47,44 @@ namespace Rius
 		RightTrigger,
 		LeftTrigger
 	};
-	typedef std::map<KeyFunctions, std::pair<ControllerButton, SDL_Scancode>>  ControllerMap;
+	//typedef std::map<KeyFunctions, std::pair<ControllerButton, SDL_Scancode>>  ControllerMap;
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
 		InputManager();
 		~InputManager();
 		bool ProcessInput();
-		void ChangeKey(KeyFunctions function, ControllerButton GamepadKeys);
-		void ChangeKey(KeyFunctions function, SDL_Scancode Keys);
-		ControllerMap GetControls() const { return m_Controles; }
-		float IsPressed(KeyFunctions button) const;
-		glm::vec2 GetAxisGamePad(KeyFunctions button) const;
-		float LeftStickY() const;
-		float LeftStickX() const;
-		float RightStickX() const;
-		float RightStickY() const;
-		float RightTrigger() const;
-		float LeftTrigger() const;
-		glm::vec2 LeftStick() const;
-		glm::vec2 RightStick() const;
+		void ProcessInputt(GameObject* gameObject,int id);
+		void Test(GameObject* gameObject);
+		//void ChangeKey(KeyFunctions function, ControllerButton GamepadKeys);
+		//void ChangeKey(KeyFunctions function, SDL_Scancode Keys);
+		//ControllerMap GetControls() const { return m_Controles; }
+		float IsPressed(ControllerButton button, int id) const;
+		glm::vec2 GetAxisGamePad(KeyFunctions button, int id) const;
+		float LeftStickY(int id) const;
+		float LeftStickX(int id) const;
+		float RightStickX(int id) const;
+		float RightStickY(int id) const;
+		float RightTrigger(int id) const;
+		float LeftTrigger(int id) const;
+		glm::vec2 LeftStick(int id) const;
+		glm::vec2 RightStick(int id) const;
 		void SetRumble(float left, float right) const;
-		
+
 	private:
-		bool LStickInDeadZone() const;
-		bool RStickInDeadZone() const;
-		
-		const static int m_Size{14};
-		XINPUT_STATE m_CurrentState{};
+		bool LStickInDeadZone(int id) const;
+		bool RStickInDeadZone(int id) const;
+		const static int m_Size{ 14 };
+		std::vector <std::thread> m_Threads;
+		std::vector<XINPUT_STATE> m_CurrentState{};
 		int m_Id;
 		bool m_Buttons[m_Size];
-		ControllerMap m_Controles;
+		Command* m_ButtonsCommand[m_Size];
+		//ControllerMap m_Controles;
 		const Uint8* m_Keyboard;
+		std::vector<int> m_Controllers;
+		bool m_Stop;
+
 	};
 
 }

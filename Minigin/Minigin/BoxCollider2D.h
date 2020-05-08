@@ -24,7 +24,10 @@ namespace Rius
 		bool CheckCollision(BoxCollider3D* collider)override;
 		BaseComponent* Clone() override;
 		void SetComponent(BaseComponent* comp) override;
+		void Check(Collider* collider);
 	private:
 		Rectangle2D m_Rectangle;
 	};
+
+	
 }

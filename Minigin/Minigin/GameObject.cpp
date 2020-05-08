@@ -3,6 +3,8 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include  "Texture2D.h"
+#include "RigidBodyComponent.h"
+#include "PlayerComponent.h"
 
 int Rius::GameObject::m_CurrentID = 0;
 Rius::GameObject::GameObject()
@@ -34,6 +36,13 @@ void Rius::GameObject::AddComponent(RigidBodyComponent* rigid)
 	rigid->m_pGameObject = this;
 	m_pRigidBodyComponent = rigid;
 	m_pComponents.push_back(rigid);
+}
+
+void Rius::GameObject::AddComponent(PlayerComponent* playerComponent)
+{
+	playerComponent->m_pGameObject = this;
+	m_pPlayerComponent = playerComponent;
+	m_pComponents.push_back(playerComponent);
 }
 
 Rius::BaseComponent* Rius::GameObject::GetComponentById(int id)

@@ -69,6 +69,7 @@ void Rius::Minigin::Run()
 		lastTime = currentTime;
 		lag += deltaTime;
 		doContinue = input.ProcessInput();
+		//input.Test();
 		int frames{ 0 };
 		lag *= 1000.f;
 		while (lag > MsPerFrame)

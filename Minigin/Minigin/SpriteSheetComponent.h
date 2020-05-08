@@ -12,9 +12,21 @@ namespace Rius
 {
 	class Shader;
 
+	struct SpriteTotal
+	{
+		std::string m_Name;
+		int m_TotalFrames;
+		int m_StartFrame;
+		float m_TimeNextFrame;
+		int m_Colms;
+		int m_Rows;
+		int m_FirstFrame = 0;
+	};
+
 	class SpriteSheetComponent : public BaseComponent
 	{
 	public:
+		SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, std::vector<SpriteTotal> totalAnimations);
 		SpriteSheetComponent(Material* material,  const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, float timeNextFrame = 10, int firstFrame = 0, int totalFrames = 0);
 		SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, float widthColms, float heightOfRows,glm::vec2& startPosition, float timeNextFrame = 10, int firstFrame = 0, int totalFrames = 0);
 		~SpriteSheetComponent();
@@ -22,7 +34,9 @@ namespace Rius
 		SpriteSheetComponent(SpriteSheetComponent&& other) noexcept = default;
 		SpriteSheetComponent& operator= (const SpriteSheetComponent& other) = default;
 		SpriteSheetComponent& operator= (SpriteSheetComponent&& other) = default;
-		
+
+		void SetAnimation(int animation);
+		void SetAnimation(std::string name);
 		void Initialize() override;
 		void Render() const override;
 		void Update() override;
@@ -42,15 +56,15 @@ namespace Rius
 		glm::vec4 m_Color;
 		Rectangle2D m_Rectangle2D;
 		Rectangle2D m_TextCoord;
-		float m_TimeNextFrame;
 		int m_Colms;
 		int m_Rows;
 		int m_CurrentFrame;
-		int m_TotalFrames;
 		float m_Sec;
 		float m_WidthObject;
 		float m_HeightObject;
 		Rectangle2D m_SrcRect;
+		std::vector<SpriteTotal> m_TotalAnimations;
+		int m_CurrentAnimation;
 		void SetIndicesAndVertices();
 	};
 }

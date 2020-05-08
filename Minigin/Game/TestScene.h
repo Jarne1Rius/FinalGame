@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include "Scene.h"
 #include  "FPSComponent.h"
 #include "RigidBodyComponent.h"

@@ -221,6 +221,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="CircleCollider2D.h" />
     <ClInclude Include="CircleCollider3D.h" />
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="Command.h" />
     <ClInclude Include="ExtraMathFiles.h" />
     <ClInclude Include="FiniteStateMachine.h" />
     <ClInclude Include="Font.h" />
@@ -265,6 +266,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="CircleCollider2D.cpp" />
     <ClCompile Include="CircleCollider3D.cpp" />
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Command.cpp" />
     <ClCompile Include="FiniteStateMachine.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FPSComponent.cpp" />
