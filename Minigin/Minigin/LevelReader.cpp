@@ -65,7 +65,7 @@ std::vector<Rius::Rectangle2D> Rius::LevelReader::LoadLevel(std::bitset<800000>&
 
 	//Try to get 3 colliders or so
 	size_t size{ L1.size() };
-	for (int i = 0; i < size; ++i)
+	for (int i = 0; i < int(size); ++i)
 	{
 		std::vector<Rectangle2D> removing;
 		for (Rectangle2D& l1 : L1)

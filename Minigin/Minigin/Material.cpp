@@ -1,12 +1,12 @@
 #include "MiniginPCH.h"
 #include "Material.h"
 
-Rius::Material::Material(const std::string nameShader, glm::mat4& projectionMatrix )
+Rius::Material::Material(std::string vertexShader, std::string fragmentShader, const std::string nameShader, glm::mat4& projectionMatrix )
 	:m_ProjectionMatrix(projectionMatrix),m_ModelSpace()
 {
 	//LoadShader from file
-	m_pShader = ResourceManager::LoadShader("Shader/SpriteTexture.vs", "Shader/SpriteTexture.fs", nameShader);
-	m_pShader->Use().SetBool("EnableTexture", true);
+	m_pShader = ResourceManager::LoadShader(vertexShader.c_str(), fragmentShader.c_str(), nameShader);
+
 	m_pShader->SetMat4("projection", m_ProjectionMatrix);
 }
 

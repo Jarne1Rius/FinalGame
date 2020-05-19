@@ -7,7 +7,7 @@
 #include <string>
 
 #include "Material.h"
-
+#include "TextRenderer.h"
 namespace Rius
 {
 	class Shader;

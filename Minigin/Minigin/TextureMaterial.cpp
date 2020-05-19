@@ -1,11 +1,13 @@
 #include "MiniginPCH.h"
 #include "TextureMaterial.h"
 
-Rius::TextureMaterial::TextureMaterial(const std::string fileTexture,const std::string nameShader,const std::string nameTexture, bool transparent, glm::mat4& projectionMatrix)
-	:m_Transparent(transparent),Material(nameShader,projectionMatrix)
+#include "MaterialManager.h"
+
+Rius::TextureMaterial::TextureMaterial(const std::string fileTexture, const std::string nameShader, const std::string nameTexture, bool transparent, glm::mat4& projectionMatrix)
+	:m_Transparent(transparent), Material("Shader/SpriteTexture.vs", "Shader/SpriteTexture.fs", nameShader, projectionMatrix)
 {
-	
 	m_pTexture = ResourceManager::LoadTexture(fileTexture.c_str(), m_Transparent, nameTexture);
+	m_pShader->Use().SetBool("EnableTexture", true);
 }
 
 

@@ -91,6 +91,12 @@ bool Rius::RigidBodyComponent::IsOnGround()
 	return m_OnGround;
 }
 
+void Rius::RigidBodyComponent::MoveTo(const glm::vec3& location)
+{
+	m_Velocity.x = glm::vec3{ location - GetGameObject()->GetTransform().GetPosition() }.x;
+	//GetGameObject()->GetTransform().SetPosition(location);
+}
+
 Rius::BaseComponent* Rius::RigidBodyComponent::Clone()
 {
 	return new RigidBodyComponent{ *this };

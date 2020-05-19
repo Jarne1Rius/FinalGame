@@ -94,6 +94,11 @@ glm::mat4& Rius::Transform::GetMatrix()
 	return m_TransformMatrix;
 }
 
+void Rius::Transform::Translate(const glm::vec3& newPos)
+{
+	m_Position += newPos;
+}
+
 void Rius::Transform::Rotate(float angle, glm::vec3 rotationAngle)
 {
 	m_XAngle = angle * rotationAngle[0];
@@ -113,13 +118,3 @@ void Rius::Transform::RotateAllAngles(glm::mat4& trans) const
 	trans = glm::rotate(trans, m_YAngle, glm::vec3(0, 1, 0));
 	trans = glm::rotate(trans, m_ZAngle, glm::vec3(0, 0, 1));
 }
-
-//
-//void Rius::Transform::SetRotation(glm::vec3& rotation)
-//{
-//	m_Rotation = rotation;
-//}
-//
-//void Rius::Transform::SetRotation(float x, float y, float z)
-//{
-//}

@@ -5,12 +5,13 @@
 #include "time.h"
 
 Rius::PlayerComponent::PlayerComponent(int idInput)
-	:m_FSM(), m_MovementSpeed(), m_GamepadID(), m_Lives(3), m_IdInput(idInput)
+	:m_FSM(), m_MovementSpeed(), m_GamepadID(), m_Lives(3), m_IdInput(idInput),m_Moving(1.f)
 {
 }
 
 Rius::PlayerComponent::~PlayerComponent()
 {
+	
 	delete m_FSM;
 }
 
@@ -110,7 +111,9 @@ void Rius::PlayerComponent::Update()
 	std::string name = m_FSM->m_CurrentState->GetName();
 	if (name == "running" || name == "jumping")
 	{
-		m_Rigid->AddForce(glm::vec2{ 0.001f * m_Moving * Time::m_DeltaTime,0 });
+
+	//	m_Rigid->MoveTo(this->GetGameObject()->GetTransform().GetPosition() + glm::vec3{ 10.f * m_Moving * Time::m_DeltaTime,0,0 });
+		//m_Rigid->AddForce(glm::vec2{ 0.001f * m_Moving * Time::m_DeltaTime,0 }); 
 	}
 }
 

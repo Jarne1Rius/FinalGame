@@ -13,6 +13,7 @@ Rius::SpriteSheetComponent::SpriteSheetComponent(Material* material, const Recta
 	:m_Vertices(), m_Rectangle2D(destRectangle), m_Static(isStatic), m_QuadVAO(), m_pMaterial(material), m_Colms(colms), m_Rows(rows), m_CurrentFrame(totalAnimations[0].m_FirstFrame)
 	, m_TextCoord(0, 0, 1, 1), m_Sec(0), m_WidthObject(), m_HeightObject(), m_SrcRect(0, 0, 1, 1), m_VBO(), m_Indices(), m_ModelSpace(), m_Color(), m_EBO(),m_TotalAnimations(totalAnimations)
 {
+	
 }
 
 Rius::SpriteSheetComponent::SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, float timeNextFrame, int firstFrame, int totalFrames)
@@ -133,6 +134,7 @@ void Rius::SpriteSheetComponent::Initialize()
 
 void Rius::SpriteSheetComponent::Render() const
 {
+	
 	m_pMaterial->UpdateVariables();
 	glBindVertexArray(this->m_QuadVAO);
 	glDrawElements(GL_TRIANGLES, GLsizei(m_Indices.size())

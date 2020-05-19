@@ -96,7 +96,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\SDL2_mixer\include;$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\glfw\include;$(SolutionDir)3rdParty\Imgui;$(SolutionDir)3rdParty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\freetype\include;$(SolutionDir)3rdParty\SDL2_mixer\include;$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\glfw\include;$(SolutionDir)3rdParty\Imgui;$(SolutionDir)3rdParty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>MiniginPCH.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -112,8 +112,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\x86\*.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x86\*.dll" "$(OutputPath)" /R /Y</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;SDL2_mixer.lib; xinput.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x86;$(SolutionDir)3rdParty\SDL2_ttf\lib\x86;$(SolutionDir)3rdParty\SDL2_image\lib\x86;$(SolutionDir)3rdParty\SDL2_mixer\lib\x86;$(SolutionDir)3rdParty\SDL2\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;SDL2_mixer.lib;xinput.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x86;$(SolutionDir)3rdParty\SDL2\lib\x86;$(SolutionDir)3rdParty\SDL2_ttf\lib\x86;$(SolutionDir)3rdParty\SDL2_image\lib\x86;$(SolutionDir)3rdParty\SDL2_mixer\lib\x86;$(SolutionDir)3rdParty\freetype\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Lib>
@@ -126,7 +126,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x86\*.dll" "$(OutputPath)" /R /Y</Com
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\SDL2_mixer\include;$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\glfw\include;$(SolutionDir)3rdParty\Imgui;$(SolutionDir)3rdParty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\freetype\include;$(SolutionDir)3rdParty\SDL2_mixer\include;$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\glfw\include;$(SolutionDir)3rdParty\Imgui;$(SolutionDir)3rdParty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>MiniginPCH.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -142,8 +142,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\x64\*.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;SDL2_mixer.lib; xinput.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x64;$(SolutionDir)3rdParty\SDL2_ttf\lib\x64;$(SolutionDir)3rdParty\SDL2_image\lib\x64;$(SolutionDir)3rdParty\SDL2_mixer\lib\x64;$(SolutionDir)3rdParty\glfw\lib86;$(SolutionDir)3rdParty\SDL2\lib\x64;$(SolutionDir)3rdParty\glfw-3.3.2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;xinput.lib;freetype.lib;SDL2_mixer.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x64;$(SolutionDir)3rdParty\SDL2_ttf\lib\x64;$(SolutionDir)3rdParty\SDL2_image\lib\x64;$(SolutionDir)3rdParty\SDL2_mixer\lib\x64;$(SolutionDir)3rdParty\SDL2\lib\x64;$(SolutionDir)3rdParty\freetype\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Lib>
@@ -158,7 +158,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\SDL2_mixer\include;$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\glfw\include;$(SolutionDir)3rdParty\Imgui;$(SolutionDir)3rdParty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\freetype\include;$(SolutionDir)3rdParty\SDL2_mixer\include;$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\glfw\include;$(SolutionDir)3rdParty\Imgui;$(SolutionDir)3rdParty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>MiniginPCH.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -176,8 +176,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\x86\*.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x86\*.dll" "$(OutputPath)" /R /Y</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;SDL2_mixer.lib; xinput.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x86;$(SolutionDir)3rdParty\SDL2_ttf\lib\x86;$(SolutionDir)3rdParty\SDL2_image\lib\x86;$(SolutionDir)3rdParty\SDL2_mixer\lib\x86;$(SolutionDir)3rdParty\SDL2\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;SDL2_mixer.lib;xinput.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x86;$(SolutionDir)3rdParty\SDL2\lib\x86;$(SolutionDir)3rdParty\SDL2_ttf\lib\x86;$(SolutionDir)3rdParty\SDL2_image\lib\x86;$(SolutionDir)3rdParty\SDL2_mixer\lib\x86;$(SolutionDir)3rdParty\freetype\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -190,7 +190,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x86\*.dll" "$(OutputPath)" /R /Y</Com
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\SDL2_mixer\include;$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\glfw\include;$(SolutionDir)3rdParty\Imgui;$(SolutionDir)3rdParty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glad;$(SolutionDir)3rdParty\SDL2\include;$(SolutionDir)3rdParty\SDL2_image\include;$(SolutionDir)3rdParty\freetype\include;$(SolutionDir)3rdParty\SDL2_mixer\include;$(SolutionDir)3rdParty\SDL2_ttf\include;$(SolutionDir)3rdParty\glfw\include;$(SolutionDir)3rdParty\Imgui;$(SolutionDir)3rdParty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>MiniginPCH.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -208,11 +208,12 @@ xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\x64\*.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;SDL2_mixer.lib; xinput.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x64;$(SolutionDir)3rdParty\SDL2_ttf\lib\x64;$(SolutionDir)3rdParty\SDL2_image\lib\x64;$(SolutionDir)3rdParty\SDL2_mixer\lib\x64;$(SolutionDir)3rdParty\glfw\lib86;$(SolutionDir)3rdParty\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;SDL2_mixer.lib;xinput.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x64;$(SolutionDir)3rdParty\SDL2_ttf\lib\x64;$(SolutionDir)3rdParty\SDL2_image\lib\x64;$(SolutionDir)3rdParty\SDL2_mixer\lib\x64;$(SolutionDir)3rdParty\glfw\lib86;$(SolutionDir)3rdParty\SDL2\lib\x64;$(SolutionDir)3rdParty\glfw-3.3.2\lib\x64;%(AdditionalLibraryDirectories);$(SolutionDir)3rdParty\freetype\lib\x64</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AI.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="BinaryReaderAndWriter.h" />
@@ -236,6 +237,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="LevelReader.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MiniginPCH.h" />
     <ClInclude Include="PlayerComponent.h" />
@@ -252,6 +254,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="SpriteSheetComponent.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="TextMaterial.h" />
+    <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureMaterial.h" />
     <ClInclude Include="Time.h" />
@@ -259,6 +263,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="UndoSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AI.cpp" />
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="BoxCollider2D.cpp" />
@@ -312,6 +317,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="LevelReader.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="MiniginPCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -332,6 +338,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="SpriteSheetComponent.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="TextMaterial.cpp" />
+    <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureMaterial.cpp" />
     <ClCompile Include="Time.cpp" />

@@ -13,11 +13,19 @@
 #include "vld.h"
 #endif
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <SDL_mixer.h>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "time.h"
+
+#include <ft2build.h>
+
+#include "MaterialManager.h"
+
+#include FT_FREETYPE_H
+
 using namespace std;
 using namespace std::chrono;
 int Rius::Minigin::m_Height = 720;
@@ -26,13 +34,23 @@ float Rius::Minigin::m_TileWidth = 1280.f / 32.f;
 int Rius::Minigin::m_Width = 1280;
 //Rius::FiniteStateMachine* Rius::Minigin::m_FSM = new Rius::FiniteStateMachine{};
 Rius::UndoSystem  Rius::Minigin::m_UndoSystem{};
+struct Character {
+	unsigned int TextureID; // ID handle of the glyph texture
+	glm::ivec2   Size;      // Size of glyph
+	glm::ivec2   Bearing;   // Offset from baseline to left/top of glyph
+	unsigned int Advance;   // Horizontal offset to advance to next glyph
+};
+
+unsigned int VAO, VBO;
  
 void Rius::Minigin::Initialize()
 {
-	
-
 	Rius::Renderer::GetInstance().Init(m_Width, m_Height);
+	//glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	ResourceManager::m_ProjectionMatrix = glm::ortho(0.0f, static_cast<GLfloat>(m_Width), static_cast<GLfloat>(m_Height), 0.0f, -1.0f, 1.0f);
+
 }
 
 
@@ -41,6 +59,7 @@ void Rius::Minigin::Cleanup()
 	delete m_Sprite;
 	Renderer::GetInstance().Destroy();
 	ResourceManager::Clear();
+	MaterialManager::Clear();
 	//ImGui_ImplOpenGL3_Shutdown();
 	//ImGui_ImplGlfw_Shutdown();
 	//ImGui::DestroyContext();
@@ -49,7 +68,6 @@ void Rius::Minigin::Cleanup()
 
 void Rius::Minigin::Run()
 {
-	//auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
@@ -84,7 +102,9 @@ void Rius::Minigin::Run()
 		Time::UpdateTimer(deltaTime, frames);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		sceneManager.Render();/*
+		sceneManager.Render();
+		/*
+		
 		bool show_demo_window = true;
 		bool show_another_window = false;
 		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);*/
@@ -94,7 +114,6 @@ void Rius::Minigin::Run()
 	}
 	Cleanup();
 }
-
 void Rius::Minigin::StartViewEngine()
 {
 	static ImGuiID dockSpaceID = 0;

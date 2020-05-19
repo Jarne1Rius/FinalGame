@@ -22,6 +22,7 @@ namespace Rius
 		void SetKinematic(bool kinematic);
 		glm::vec3& GetVelocity() { return m_Velocity; }
 		bool IsOnGround();
+		void MoveTo(const glm::vec3& location);
 	private:
 		float m_Mass;
 		glm::vec2 m_AccelerationForce;

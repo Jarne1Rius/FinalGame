@@ -28,6 +28,7 @@ namespace Rius
 		void SetPosition(float x, float y, float z);
 		void SetPosition(const glm::vec3& pos);
 		glm::mat4& GetMatrix();
+		void Translate(const glm::vec3& newPos);
 		
 		//const glm::vec3& GetRotation() const { return m_Rotation; }
 		//void SetRotation(glm::vec3& rotation);

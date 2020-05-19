@@ -34,8 +34,6 @@ void Rius::BaseComponent::OnCollisionEnter(Collider* collider)
 
 	if (com)
 	{
-		
-
 		com->Bounce(1.f);
 	}
 }

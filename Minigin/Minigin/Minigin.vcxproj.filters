@@ -171,6 +171,18 @@
     <ClInclude Include="Command.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AI.h">
+      <Filter>Source Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialManager.h">
+      <Filter>Source Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextRenderer.h">
+      <Filter>Source Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TextMaterial.h">
+      <Filter>Source Files\Helpers\Materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseComponent.cpp">
@@ -210,9 +222,6 @@
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="MiniginPCH.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Audio.cpp">
@@ -298,6 +307,21 @@
     </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AI.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="TextMaterial.cpp">
+      <Filter>Source Files\Helpers\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRenderer.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialManager.cpp">
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

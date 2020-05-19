@@ -42,15 +42,15 @@ Rius::InputManager::InputManager()
 Rius::InputManager::~InputManager()
 {
 	m_Stop = true;
-	for (int i = 0; i <int(m_Threads.size()); i++)
+	for (int i = 0; i < m_Size; ++i)
 	{
-		//m_Threads[i].join();
+		delete m_ButtonsCommand[i];
 	}
 }
 
 bool Rius::InputManager::ProcessInput()
 {
-	for (int i = 0; i < m_Controllers.size(); i++)
+	for (int i = 0; i <int( m_Controllers.size()); i++)
 	{
 		ZeroMemory(&m_CurrentState[i], sizeof(XINPUT_STATE));
 

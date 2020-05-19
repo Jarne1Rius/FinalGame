@@ -22,5 +22,6 @@ namespace Rius
 		void ShowAllComponents();
 		static const int MsPerFrame = 16; //16 for 60 fps, 33 for 30 fps
 		SpriteSheetComponent* m_Sprite;
+		
 	};
 }

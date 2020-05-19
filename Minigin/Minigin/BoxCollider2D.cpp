@@ -44,6 +44,7 @@ void Rius::BoxCollider2D::Update()
 		bool newHit = collider->CheckCollision(this);
 		if(newHit)
 		{
+			anyHit = true;
 			if (m_Trigger) OnTriggerEnter(collider);
 			
 			else OnCollisionEnter(collider);
