@@ -4,18 +4,28 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <ft2build.h>
 #include FT_FREETYPE_H
-
-
+#include "TextMaterial.h"
+#include "Transform.h"
 #include "ResourceManager.h"
+#include "GameObject.h"
+#include "Minigin.h"
 
-Rius::TextRenderer::TextRenderer(std::string text)
-	:m_VBO(),m_VAO(),m_Src(5,5,1,1),m_TextShader(),m_Text(text)
+Rius::TextRenderer::TextRenderer(const glm::vec2& localPos, TextMaterial* material, std::string text, std::string font, int size)
+	:m_VBO(), m_VAO(), m_Pos(localPos), m_TextMaterial(material), m_Text(text)
 {
-	Load("Resources/Lingua.otf", 24);
-	m_TextShader = ResourceManager::LoadShader("Shader/Text.vs", "Shader/Text.fs", "Text");
-	m_TextShader->SetMat4("projection", glm::ortho(0.0f, static_cast<float>(1280), static_cast<float>(720),0.f));
-	m_TextShader->Use();
-	this->m_TextShader->SetInt("text", 0);
+	m_Pos.y = Minigin::m_Height - m_Pos.y;
+	Load(font, size);
+	Initialize();
+}
+
+Rius::TextRenderer::~TextRenderer()
+{
+	Characters.clear();
+	//delete m_TextShader;
+}
+
+void Rius::TextRenderer::Initialize()
+{
 	glGenVertexArrays(1, &m_VAO);
 	glGenBuffers(1, &m_VBO);
 	glBindVertexArray(m_VAO);
@@ -27,38 +37,16 @@ Rius::TextRenderer::TextRenderer(std::string text)
 	glBindVertexArray(0);
 }
 
-Rius::TextRenderer::~TextRenderer()
-{
-	Characters.clear();
-	//delete m_TextShader;
-}
 
-void Rius::TextRenderer::SetComponent(BaseComponent* comp)
-{
-}
-
-void Rius::TextRenderer::Initialize()
-{
-}
-
-Rius::BaseComponent* Rius::TextRenderer::Clone()
-{
-	return nullptr;
-}
-
-void Rius::TextRenderer::Update()
-{
-}
 void Rius::TextRenderer::Render() const
 {
 	// activate corresponding render state	
-	m_TextShader->Use();
-	m_TextShader->SetVec3("textColor", {1,1,1});
+	m_TextMaterial->UpdateVariables();
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(m_VAO);
 	float x, y;
-	x = m_Src.pos.x;
-	y = m_Src.pos.y;
+	x = m_Pos.x;
+	y = m_Pos.y;
 	// iterate through all characters
 	std::string::const_iterator c;
 	for (c = m_Text.begin(); c != m_Text.end(); c++)
@@ -72,11 +60,11 @@ void Rius::TextRenderer::Render() const
 		float h = ch.Size.y * 1.f;
 		// update VBO for each character
 		float vertices[6][4] = {
-			{ xpos,     ypos + h,   0.0f, 1.0f },
-			{ xpos + w, ypos,       1.0f, 0.0f },
-			{ xpos,     ypos,       0.0f, 0.0f },
+			{ xpos,		ypos + h,   0.0f, 1.0f },
+			{ xpos + w,	ypos,       1.0f, 0.0f },
+			{ xpos,		ypos,       0.0f, 0.0f },
 
-			{ xpos,     ypos + h,   0.0f, 1.0f },
+			{ xpos,		ypos + h,   0.0f, 1.0f },
 			{ xpos + w, ypos + h,   1.0f, 1.0f },
 			{ xpos + w, ypos,       1.0f, 0.0f }
 		};
@@ -93,6 +81,12 @@ void Rius::TextRenderer::Render() const
 	}
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Rius::TextRenderer::SetPos(const glm::vec2& pos)
+{
+	m_Pos.x = pos.x;
+	m_Pos.y = Minigin::m_Height - pos.y;
 }
 
 void Rius::TextRenderer::Load(std::string font, int fontSize)

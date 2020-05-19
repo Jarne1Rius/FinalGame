@@ -6,7 +6,7 @@ Rius::Material::Material(std::string vertexShader, std::string fragmentShader, c
 {
 	//LoadShader from file
 	m_pShader = ResourceManager::LoadShader(vertexShader.c_str(), fragmentShader.c_str(), nameShader);
-
+	//m_pShader->Use();
 	m_pShader->SetMat4("projection", m_ProjectionMatrix);
 }
 

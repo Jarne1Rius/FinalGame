@@ -18,9 +18,10 @@
 #include "UndoSystem.h"
 #include "FiniteStateMachine.h"
 #include "Logger.h"
+#include "MaterialManager.h"
 #include "TextureMaterial.h"
 #include "PlayerComponent.h"
-#include "TextRenderer.h"
+#include "FPSComponent.h"
 using namespace Rius;
 TestScene::TestScene()
 	:Scene("TestScene")
@@ -50,10 +51,11 @@ void TestScene::Initialize()
 	}
 	delete FSM;*/
 	TextureMaterial* mat = new TextureMaterial{ "Resources/awesomeface.png", "Sprite","Background",true };
-
+	MaterialManager::AddMaterial(mat, 1);
 	SpriteSheetComponent* sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false, 6, 4, 1);
 
-	TextRenderer* text = new TextRenderer{"Test"};
+	//TextMaterial* mat2 = new TextMaterial{ "Text",{1,0,0} };
+	FPSComponent* text = new FPSComponent{};
 	m_Rigid = new RigidBodyComponent(0.1f);
 	glm::vec2 force{ -0.1f,0 };
 	m_UI->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 50, 50)));

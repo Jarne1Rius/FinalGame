@@ -4,29 +4,25 @@
 #include <memory>
 #include "Transform.h"
 #include "glm/glm.hpp"
+#include "TextRenderer.h"
 namespace Rius
 {
 	class Font;
-	class Texture2D;
 	class Transform;
 	class FPSComponent : public BaseComponent
 	{
-		
-		public:
-			FPSComponent(Font* font, const glm::vec2& position = { 0,0 });
-			virtual ~FPSComponent();
-			void Update() override;
-			void Initialize() override;
-			void Render() const override;
-			void SetPosition(float x, float y);
-			Rius::Transform GetTransform() const { return  m_Transform; }
 
-		private:
-			Rius::Transform m_Transform;
-			int m_Frames;
-			Font* m_pFont;
-			Texture2D* m_Texture;
-		
+	public:
+		explicit FPSComponent(glm::vec3 color = { 0,0,0 }, const std::string& font = "Resources/Lingua.otf");
+		virtual ~FPSComponent();
+		void Update() override;
+		void Initialize() override;
+		void Render() const override;
+		void SetComponent(BaseComponent* comp) override ;
+		BaseComponent* Clone() override;
+	private:
+		TextRenderer* m_pTextRenderer;
+		TextMaterial* m_pMat;
 	};
 
 }

@@ -4,7 +4,7 @@ namespace Rius
 	class Time
 	{
 	public:
-		static void UpdateTimer(float deltaTime, int frames);
+		static void UpdateTimer(float deltaTime);
 		static float m_DeltaTime;
 		static int m_CurrentFrames;
 	private:

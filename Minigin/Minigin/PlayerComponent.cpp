@@ -5,7 +5,7 @@
 #include "time.h"
 
 Rius::PlayerComponent::PlayerComponent(int idInput)
-	:m_FSM(), m_MovementSpeed(), m_GamepadID(), m_Lives(3), m_IdInput(idInput),m_Moving(1.f)
+	:m_FSM(), m_MovementSpeed(), m_GamepadID(), m_Lives(3), m_IdInput(idInput),m_Moving(1.f),m_Jump(),m_Sprite(),m_Attack(),m_Rigid()
 {
 }
 

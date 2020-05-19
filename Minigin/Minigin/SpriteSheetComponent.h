@@ -14,12 +14,12 @@ namespace Rius
 
 	struct SpriteTotal
 	{
-		std::string m_Name;
-		int m_TotalFrames;
-		int m_StartFrame;
-		float m_TimeNextFrame;
-		int m_Colms;
-		int m_Rows;
+		std::string m_Name = "";
+		int m_TotalFrames = 0;
+		int m_StartFrame = 0;
+		float m_TimeNextFrame = 0;
+		int m_Colms = 1;
+		int m_Rows = 1;
 		int m_FirstFrame = 0;
 	};
 
