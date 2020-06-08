@@ -5,13 +5,12 @@ namespace Rius
 	class FiniteStateMachine
 	{
 	public:
-		FiniteStateMachine(std::vector<StateClass*> allStates);
+		FiniteStateMachine(std::vector<State*> allStates);
 		~FiniteStateMachine();
 		void UpdateState();
-		void AddTransitions(std::vector<Transition*> transitions, StateClass* addState);
-		StateClass* m_CurrentState;
+		State* m_CurrentState;
 	private:
-		std::vector<StateClass*> m_States;
+		std::vector<State*> m_States;
 	};
 
 	

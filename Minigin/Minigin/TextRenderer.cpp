@@ -10,8 +10,8 @@
 #include "GameObject.h"
 #include "Minigin.h"
 
-Rius::TextRenderer::TextRenderer(const glm::vec2& localPos, TextMaterial* material, std::string text, std::string font, int size)
-	:m_VBO(), m_VAO(), m_Pos(localPos), m_TextMaterial(material), m_Text(text)
+Rius::TextRenderer::TextRenderer(const glm::vec2& localPos, TextMaterial* material, std::string text, std::string font, int size, float scale)
+	:m_VBO(), m_VAO(), m_Pos(localPos), m_TextMaterial(material), m_Text(text), m_Scale(scale)
 {
 	m_Pos.y = Minigin::m_Height - m_Pos.y;
 	Load(font, size);
@@ -40,24 +40,30 @@ void Rius::TextRenderer::Initialize()
 
 void Rius::TextRenderer::Render() const
 {
-	// activate corresponding render state	
+	// activate corresponding render state
+	RenderText(m_Pos, m_Text, m_Scale);
+}
+
+void Rius::TextRenderer::RenderText(const glm::vec2& pos, std::string text, float scale, glm::vec3 color) const
+{	// activate corresponding render state
+	m_TextMaterial->SetColor(color);
 	m_TextMaterial->UpdateVariables();
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(m_VAO);
 	float x, y;
-	x = m_Pos.x;
-	y = m_Pos.y;
+	x = pos.x;
+	y = Minigin::m_Height - pos.y;
 	// iterate through all characters
 	std::string::const_iterator c;
-	for (c = m_Text.begin(); c != m_Text.end(); c++)
+	for (c = text.begin(); c != text.end(); c++)
 	{
 		Character ch = Characters.at(*c);
 
-		float xpos = x + ch.Bearing.x * 1;
-		float ypos = y + (this->Characters.at('H').Bearing.y - ch.Bearing.y) * 1;
+		float xpos = x + ch.Bearing.x * scale;
+		float ypos = y + (this->Characters.at('H').Bearing.y - ch.Bearing.y) * scale;
 
-		float w = ch.Size.x * 1.f;
-		float h = ch.Size.y * 1.f;
+		float w = ch.Size.x * scale;
+		float h = ch.Size.y * scale;
 		// update VBO for each character
 		float vertices[6][4] = {
 			{ xpos,		ypos + h,   0.0f, 1.0f },
@@ -77,7 +83,7 @@ void Rius::TextRenderer::Render() const
 		// render quad
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		// now advance cursors for next glyph
-		x += (ch.Advance >> 6) * 1; // bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
+		x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
 	}
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -86,7 +92,7 @@ void Rius::TextRenderer::Render() const
 void Rius::TextRenderer::SetPos(const glm::vec2& pos)
 {
 	m_Pos.x = pos.x;
-	m_Pos.y = Minigin::m_Height - pos.y;
+	m_Pos.y = pos.y;
 }
 
 void Rius::TextRenderer::Load(std::string font, int fontSize)

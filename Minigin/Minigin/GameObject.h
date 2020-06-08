@@ -8,6 +8,7 @@ namespace Rius
 	class PlayerComponent;
 	class RigidBodyComponent;
 	class Texture2D;
+	class Subject;
 	class GameObject final
 	{
 	public:
@@ -42,7 +43,7 @@ namespace Rius
 		bool GetStatic() const { return m_Static; }
 		void SetStatic(bool isStatic) { m_Static = isStatic; }
 		int GetId() const { return m_Id; }
-
+		Subject* GetSubject() const { return m_Subject; }
 		
 		BaseComponent* GetComponentById(int id);
 		template <class  T>
@@ -87,7 +88,7 @@ namespace Rius
 		int m_Id;
 		class GameScene* m_pParentScene;
 		GameObject* m_pParentObject;
-	
+		Subject* m_Subject;
 		static int m_CurrentID;
 	};
 }

@@ -2,13 +2,14 @@
 #include "FPSComponent.h"
 #include "TextMaterial.h"
 #include "MaterialManager.h"
+#include "Minigin.h"
 #include "Time.h"
 
 Rius::FPSComponent::FPSComponent(glm::vec3 color, const std::string& font)
 {
 	m_pMat = new TextMaterial{"FPS",color};
 	MaterialManager::AddMaterial(m_pMat, 100);
-	m_pTextRenderer = new TextRenderer{ {100,100},m_pMat,"test",font};
+	m_pTextRenderer = new TextRenderer{ {0, Minigin::m_Height},m_pMat,"test",font};
 }
 
 Rius::FPSComponent::~FPSComponent()

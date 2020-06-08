@@ -33,7 +33,6 @@ void Rius::Material::SetModelSpace(glm::mat4& modelSpace)
 void Rius::Material::UpdateVariables() const
 {
 	m_pShader->Use();
-
+	
 	m_pShader->SetMat4("model", m_ModelSpace);
-
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "SceneManager.h"
-
+#include "UI.h"
 namespace Rius
 {
 	class GameObject;
@@ -21,7 +21,6 @@ namespace Rius
 		Scene& operator=(const Scene& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
 		static std::vector <GameObject*> m_pObjects;
-
 	private: 
 
 		std::string m_Name;

@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Helpers\Materials">
       <UniqueIdentifier>{c6495293-0025-4254-89a8-5eddcec89ed6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Helpers\Observer">
+      <UniqueIdentifier>{82e37147-7820-40d2-8816-1998228a4bd2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseComponent.h">
@@ -111,9 +114,6 @@
     <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteRendererComponent.h">
-      <Filter>Source Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="SpriteSheetComponent.h">
       <Filter>Source Files\Components</Filter>
     </ClInclude>
@@ -168,9 +168,6 @@
     <ClInclude Include="Shader.h">
       <Filter>Source Files\Helpers\Materials</Filter>
     </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AI.h">
       <Filter>Source Files\Components</Filter>
     </ClInclude>
@@ -182,6 +179,24 @@
     </ClInclude>
     <ClInclude Include="TextMaterial.h">
       <Filter>Source Files\Helpers\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Source Files\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Source Files\Helpers\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Subject.h">
+      <Filter>Source Files\Helpers\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Source Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>Source Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -248,9 +263,6 @@
     <ClCompile Include="SpriteSheetComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteRendererComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="RigidBodyComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -305,9 +317,6 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\Helpers\Materials</Filter>
     </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AI.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -322,6 +331,24 @@
     </ClCompile>
     <ClCompile Include="MaterialManager.cpp">
       <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Subject.cpp">
+      <Filter>Source Files\Helpers\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer.cpp">
+      <Filter>Source Files\Helpers\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Source Files\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

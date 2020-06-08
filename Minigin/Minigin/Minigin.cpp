@@ -51,12 +51,14 @@ void Rius::Minigin::Initialize()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	ResourceManager::m_ProjectionMatrix = glm::ortho(0.0f, static_cast<GLfloat>(m_Width), static_cast<GLfloat>(m_Height), 0.0f, -1.0f, 1.0f);
 
+
+
 }
 
 
 void Rius::Minigin::Cleanup()
 {
-	delete m_Sprite;
+//	delete m_Sprite;
 	Renderer::GetInstance().Destroy();
 	ResourceManager::Clear();
 	MaterialManager::Clear();

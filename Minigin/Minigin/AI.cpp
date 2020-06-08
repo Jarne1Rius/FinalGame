@@ -13,12 +13,12 @@ Rius::Ai::~Ai()
 
 void Rius::Ai::Initialize()
 {
-	StateClass* follow = new StateClass{ "Follow" };
-	StateClass* wander = new StateClass{ "Wander" };
-	StateClass* jumping = new StateClass{ "jumping" };
-	StateClass* death = new StateClass{ "Death" };
-	StateClass* idle = new StateClass{ "Idle" };
-	StateClass* running = new StateClass{ "Running" };
+	State* follow = new State{ "Follow" };
+	State* wander = new State{ "Wander" };
+	State* jumping = new State{ "jumping" };
+	State* death = new State{ "Death" };
+	State* idle = new State{ "Idle" };
+	State* running = new State{ "Running" };
 	m_pFSM = new FiniteStateMachine{ {follow, wander, death, idle, running} };
 	auto following = [this]()->bool
 	{

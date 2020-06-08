@@ -2,6 +2,7 @@
 #include "SpriteSheetComponent.h"
 #include "UndoSystem.h"
 #include "FiniteStateMachine.h"
+#include "UI.h"
 struct SDL_Window;
 namespace Rius
 {
@@ -21,7 +22,6 @@ namespace Rius
 		void StartViewEngine();
 		void ShowAllComponents();
 		static const int MsPerFrame = 16; //16 for 60 fps, 33 for 30 fps
-		SpriteSheetComponent* m_Sprite;
 		
 	};
 }

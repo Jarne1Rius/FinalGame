@@ -43,12 +43,12 @@ Rius::BaseComponent* Rius::PlayerComponent::Clone()
 
 void Rius::PlayerComponent::Initialize()
 {
-	StateClass* running = new StateClass{ "running" };
-	StateClass* idle = new StateClass{ "idle" };
-	StateClass* menu = new StateClass{ "menu" };
-	StateClass* jumping = new StateClass{ "jumping" };
-	StateClass* attack = new StateClass{ "attack" };
-	StateClass* defeat = new StateClass{ "defeat" };
+	State* running = new State{ "running" };
+	State* idle = new State{ "idle" };
+	State* menu = new State{ "menu" };
+	State* jumping = new State{ "jumping" };
+	State* attack = new State{ "attack" };
+	State* defeat = new State{ "defeat" };
 
 	auto isDeadLambda = [this]()->bool
 	{
@@ -82,21 +82,22 @@ void Rius::PlayerComponent::Initialize()
 			return true;
 		return false;
 	};
-
-	Transition* transition = new Transition{ isDeadLambda,running,defeat };
-	transition = new Transition{ isDeadLambda,idle,defeat };
-	transition = new Transition{ isDeadLambda,jumping,defeat };
-	transition = new Transition{ isDeadLambda,attack,defeat };
-	transition = new Transition{ jump,running,jumping };
-	transition = new Transition{ jump,idle,jumping };
-	transition = new Transition{ jump,attack,jumping };
-	transition = new Transition{ stopJump, jumping,idle };
-	transition = new Transition{ attacking, idle, attack };
-	transition = new Transition{ attacking, jumping, attack };
-	transition = new Transition{ attacking, running, attack };
-	transition = new Transition{ stopAttacking, attack, idle };
-	transition = new Transition{ moving, idle, running };
-
+	running->SetTransition(isDeadLambda, defeat);
+	running->SetTransition(jump, jumping);
+	running->SetTransition(attacking, attack);
+	
+	idle->SetTransition(isDeadLambda, defeat);
+	idle->SetTransition(jump, jumping);
+	idle->SetTransition(attacking, attack);
+	idle->SetTransition(moving, running);
+	
+	jumping->SetTransition(isDeadLambda, defeat);
+	jumping->SetTransition(attacking, attack);
+	jumping->SetTransition(stopJump, idle);
+	
+	attack->SetTransition(isDeadLambda, defeat);
+	attack->SetTransition(stopAttacking, idle);
+	attack->SetTransition(jump, jumping);
 
 	m_FSM = new FiniteStateMachine{ {running,idle,menu,jumping,attack,defeat} };
 	m_FSM->m_CurrentState = idle;

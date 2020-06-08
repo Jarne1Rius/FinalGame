@@ -136,6 +136,7 @@ void Rius::SpriteSheetComponent::Render() const
 {
 	
 	m_pMaterial->UpdateVariables();
+	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(this->m_QuadVAO);
 	glDrawElements(GL_TRIANGLES, GLsizei(m_Indices.size())
 		, GL_UNSIGNED_INT, static_cast<void*>(nullptr));

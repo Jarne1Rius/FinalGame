@@ -6,7 +6,10 @@ using namespace Rius;
 
 unsigned int Scene::m_IdCounter = 0;
 std::vector<GameObject*> Rius::Scene::m_pObjects;
-Scene::Scene(const std::string& name) : m_Name(name) {}
+Scene::Scene(const std::string& name) : m_Name(name)
+{
+	UI::GetInstance().Initialize();
+}
 
 
 Scene::~Scene()
@@ -26,6 +29,7 @@ void Scene::Add(GameObject* object)
 
 void Scene::UpdateObjects()
 {
+	UI::GetInstance().Update();
 	for (auto& object : m_pObjects)
 	{
 		object->Update();
@@ -42,6 +46,7 @@ void Scene::LateUpdateObjects()
 
 void Scene::Render() const
 {
+	UI::GetInstance().Render();
 	for (const auto& object : m_pObjects)
 	{
 		object->Render();

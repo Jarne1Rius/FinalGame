@@ -1,7 +1,7 @@
 #version 330 core
 in vec2 TexCoords;
 out vec4 color;
-uniform bool EnableTexture = false ;
+uniform bool EnableTexture = true ;
 uniform vec4 Color;
 uniform sampler2D image;
 
@@ -15,4 +15,5 @@ void main()
     {
         color = Color;
     } 
+   // color = vec4(0,0,0,1);
 }  

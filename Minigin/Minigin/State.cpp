@@ -3,91 +3,85 @@
 #include "FiniteStateMachine.h"
 #include "Logger.h"
 
-Rius::Action::Action(std::function<void()> action, StateClass* state)
-{
-	m_Action = action;
-	state->AddAction(this);
-}
-
-void Rius::Action::Update()
-{
-	m_Action();
-}
 
 //Transition
-Rius::Transition::Transition(std::function<bool()> trans, StateClass* fromState, StateClass* nextState)
+Rius::Transition::Transition(std::function<bool()> trans,  State* nextState)
 {
 	m_Transition = trans;
 	m_NextState = nextState;
-	m_FromState = fromState;
-	m_FromState->AddTransition(this);
 }
 
-Rius::StateClass* Rius::Transition::CheckState()
+Rius::State* Rius::Transition::CheckState()
 {
-	if(m_Transition() == true)
+	if (m_Transition() == true)
 	{
 		return this->m_NextState;
 	}
-	return m_FromState;
+	return nullptr;
 }
+
 
 //State
 
-
-Rius::StateClass::StateClass(std::string name)
+Rius::State::State(std::string name)
 	:m_Name(name)
 {
 }
 
-Rius::StateClass::~StateClass()
+Rius::State::~State()
 {
 	for (int i = 0; i < int(m_Transitions.size()); ++i)
 	{
 		delete m_Transitions[i];
 	}
-	for (int i = 0; i < int(m_Actions.size()); ++i)
+}
+
+void Rius::State::SetTransition(std::function<bool()> transtionfunction, State* nextState)
+{
+	m_Transitions.push_back(new Transition{ transtionfunction,nextState });
+}
+
+void Rius::State::SetAction(std::function<void()> action)
+{
+	m_Actions.push_back(action );
+}
+
+void Rius::State::SetActionEnd(std::function<void()> action)
+{
+	m_EndActions.push_back(action);
+}
+
+void Rius::State::SetActionStart(std::function<void()> action)
+{
+	m_StartActions.push_back(action);
+}
+
+Rius::State* Rius::State::UpdateState()
+{
+	for (auto action : m_Actions)
 	{
-		delete m_Actions[i];
-	}
-}
-
-void Rius::StateClass::AddTransition(Transition* transition)
-{
-	m_Transitions.push_back(transition);
-}
-
-void Rius::StateClass::AddTransitions(std::vector<Transition*> transitions)
-{
-	for (Transition* transition : transitions)
-	{
-		m_Transitions.push_back(transition);
-	}
-}
-
-void Rius::StateClass::AddActions(std::vector<Action*> actions)
-{
-	for (Action* action : actions)
-	{
-		m_Actions.push_back(action);
-	}
-}
-
-void Rius::StateClass::AddAction(Action* action)
-{
-	m_Actions.push_back(action);
-}
-
-Rius::StateClass* Rius::StateClass::UpdateState()
-{
-	for (Action* action : m_Actions)
-	{
-		action->Update();
+		action();
 	}
 	for (Transition* transition : m_Transitions)
 	{
-		StateClass* newone = transition->CheckState();
-		if(newone != this) return newone;
+		State* newone = transition->CheckState();
+		if (newone != nullptr) return newone;
 	}
 	return this;
+}
+
+void Rius::State::StartState()
+{
+	for (auto action : m_StartActions)
+	{
+		action();
+	}
+}
+
+void Rius::State::EndState()
+{
+	for (auto action : m_EndActions)
+	{
+		action();
+	}
 }
