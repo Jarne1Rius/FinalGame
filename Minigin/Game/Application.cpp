@@ -14,10 +14,10 @@ int main()
 	auto engine = new Rius::Minigin();
 	engine->Initialize();
 #ifdef ProjectTest
-	//auto Scene = new TestScene();
-	//Rius::SceneManager::GetInstance().AddScene(Scene);
+	auto Scene = new TestScene();
+	Rius::SceneManager::GetInstance().AddScene(Scene);
 #endif
 	//engine->Run();
-	//delete Scene;
+	delete Scene;
 	delete engine;
 } 

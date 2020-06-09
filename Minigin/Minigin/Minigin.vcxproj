@@ -112,8 +112,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\x86\*.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x86\*.dll" "$(OutputPath)" /R /Y</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;SDL2_mixer.lib;xinput.lib;freetype.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x86;$(SolutionDir)3rdParty\SDL2\lib\x86;$(SolutionDir)3rdParty\SDL2_ttf\lib\x86;$(SolutionDir)3rdParty\SDL2_image\lib\x86;$(SolutionDir)3rdParty\SDL2_mixer\lib\x86;$(SolutionDir)3rdParty\freetype\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;xinput.lib;freetype.lib;SDL2_mixer.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x86;$(SolutionDir)3rdParty\SDL2_ttf\lib\x86;$(SolutionDir)3rdParty\SDL2_image\lib\x86;$(SolutionDir)3rdParty\SDL2_mixer\lib\x86;C:\Users\jarne rius\source\repos\Jarne1Rius\FinalGame\Minigin\3rdParty\SDL2\lib\x86;$(SolutionDir)3rdParty\glfw-3.3.2\lib\x86;%(AdditionalLibraryDirectories);$(SolutionDir)3rdParty\freetype\lib\x86</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Lib>
@@ -176,8 +176,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\x86\*.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x86\*.dll" "$(OutputPath)" /R /Y</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;SDL2_mixer.lib;xinput.lib;freetype.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x86;$(SolutionDir)3rdParty\SDL2\lib\x86;$(SolutionDir)3rdParty\SDL2_ttf\lib\x86;$(SolutionDir)3rdParty\SDL2_image\lib\x86;$(SolutionDir)3rdParty\SDL2_mixer\lib\x86;$(SolutionDir)3rdParty\freetype\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;xinput.lib;freetype.lib;SDL2_mixer.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x86;$(SolutionDir)3rdParty\SDL2_ttf\lib\x86;$(SolutionDir)3rdParty\SDL2_image\lib\x86;$(SolutionDir)3rdParty\SDL2_mixer\lib\x86;$(SolutionDir)3rdParty\SDL2\lib\x86;$(SolutionDir)3rdParty\glfw-3.3.2\lib\x86;%(AdditionalLibraryDirectories);$(SolutionDir)3rdParty\freetype\lib\x86</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -208,7 +208,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\x64\*.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;SDL2_mixer.lib;xinput.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;xinput.lib;freetype.lib;SDL2_mixer.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\glfw\lib\x64;$(SolutionDir)3rdParty\SDL2_ttf\lib\x64;$(SolutionDir)3rdParty\SDL2_image\lib\x64;$(SolutionDir)3rdParty\SDL2_mixer\lib\x64;$(SolutionDir)3rdParty\glfw\lib86;$(SolutionDir)3rdParty\SDL2\lib\x64;$(SolutionDir)3rdParty\glfw-3.3.2\lib\x64;%(AdditionalLibraryDirectories);$(SolutionDir)3rdParty\freetype\lib\x64</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
