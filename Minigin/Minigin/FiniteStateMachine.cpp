@@ -19,3 +19,35 @@ void Rius::FiniteStateMachine::UpdateState()
 {
 	m_CurrentState = m_CurrentState->UpdateState();
 }
+
+void Rius::FiniteStateMachine::AddTransitionsTo(std::function<bool()> trans, std::vector<State*> states, State* toState)
+{
+	for (auto state : states)
+	{
+		state->SetTransition(trans, toState);
+	}
+}
+
+void Rius::FiniteStateMachine::AddActionTo(std::function<void()> action, std::vector<State*> states)
+{
+	for (auto state : states)
+	{
+		state->SetAction(action);
+	}
+}
+
+void Rius::FiniteStateMachine::AddEndActionTo(std::function<void()> endAction, std::vector<State*> states)
+{
+	for (auto state : states)
+	{
+		state->SetActionEnd(endAction);
+	}
+}
+
+void Rius::FiniteStateMachine::AddStartActionTo(std::function<void()> startAction, std::vector<State*> states)
+{
+	for (auto state : states)
+	{
+		state->SetActionStart(startAction);
+	}
+}

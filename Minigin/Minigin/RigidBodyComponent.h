@@ -30,6 +30,7 @@ namespace Rius
 		bool m_Kinematic;
 		bool m_OnGround;
 		float m_MaxForce;
+		bool m_UpdatePos;
 	};
 
 

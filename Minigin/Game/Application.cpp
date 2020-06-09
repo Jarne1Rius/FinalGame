@@ -1,4 +1,5 @@
 
+#include <vld.h>
 #include "Minigin.h"
 #include "SceneManager.h"
 #include <fstream>
@@ -13,10 +14,10 @@ int main()
 	auto engine = new Rius::Minigin();
 	engine->Initialize();
 #ifdef ProjectTest
-	auto Scene = new TestScene();
-	Rius::SceneManager::GetInstance().AddScene(Scene);
+	//auto Scene = new TestScene();
+	//Rius::SceneManager::GetInstance().AddScene(Scene);
 #endif
-	engine->Run();
-	delete Scene;
+	//engine->Run();
+	//delete Scene;
 	delete engine;
 } 

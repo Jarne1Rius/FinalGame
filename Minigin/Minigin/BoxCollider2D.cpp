@@ -76,8 +76,8 @@ void Rius::BoxCollider2D::Update()
 		//if (newHit) anyHit = newHit;
 		//it->second = newHit;
 	}
-	if (anyHit) GetGameObject()->GetTransform().SetPosition(m_PreviousPos);
-	m_PreviousPos = GetGameObject()->GetTransform().GetPosition();
+	//if (anyHit) GetGameObject()->GetTransform().SetPosition(m_PreviousPos);
+	//m_PreviousPos = GetGameObject()->GetTransform().GetPosition();
 }
 
 void Rius::BoxCollider2D::Render() const

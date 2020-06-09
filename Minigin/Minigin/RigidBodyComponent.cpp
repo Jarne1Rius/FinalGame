@@ -5,7 +5,7 @@
 #include "time.h"
 #include <glm/gtx/norm.hpp>
 Rius::RigidBodyComponent::RigidBodyComponent(float mass)
-	:m_AccelerationForce(0, 9.81f), m_Velocity(0, 0, 0), m_Mass(mass), m_Kinematic(),m_MaxForce(0.5f)
+	:m_AccelerationForce(0, 9.81f), m_Velocity(0, 0, 0), m_Mass(mass), m_Kinematic(), m_MaxForce(0.5f)
 {
 }
 
@@ -46,20 +46,20 @@ void Rius::RigidBodyComponent::AddForce(glm::vec2 force)
 
 void Rius::RigidBodyComponent::Bounce(float multiply)
 {
-	if (!m_OnGround)
-	{
-		glm::vec2 previous = m_Velocity;
-		m_Velocity *= 0;
+	//if (!m_OnGround)
+	//{
+	glm::vec2 previous = m_Velocity;
+	m_Velocity *= 0;
 
-		if(previous.y <0 && abs(m_Velocity.y) < 0.001f)
-		{
-			m_OnGround = true;
-			m_Velocity.y = 0;
-		}
-		m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
+	if (previous.y < 0 && abs(m_Velocity.y) < 0.001f)
+	{
+		m_OnGround = true;
+		m_Velocity.y = 0;
 	}
-	else
-		m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
+	m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
+	//}
+	//else
+	//	m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
 }
 
 void Rius::RigidBodyComponent::Initialize()
@@ -68,8 +68,14 @@ void Rius::RigidBodyComponent::Initialize()
 
 void Rius::RigidBodyComponent::Update()
 {
-	if (abs(m_Velocity.y) > 0.01f) m_OnGround = false;
-	m_pGameObject->m_PreviousPos = m_pGameObject->GetTransform().GetPosition();
+	if (abs(m_Velocity.y) > 0.01f)
+	{
+		m_OnGround = false;
+	}
+	if (!m_UpdatePos)
+		m_pGameObject->m_PreviousPos = m_pGameObject->GetTransform().GetPosition();
+	else
+		m_UpdatePos = false;
 	Transform& transform = m_pGameObject->GetTransform();
 	if (!m_Kinematic)
 		m_Velocity += ((glm::vec3(m_AccelerationForce, 0) * m_Mass) / 100000.f);
@@ -93,8 +99,12 @@ bool Rius::RigidBodyComponent::IsOnGround()
 
 void Rius::RigidBodyComponent::MoveTo(const glm::vec3& location)
 {
+	//m_Prev = GetGameObject()->GetTransform().GetPosition();
 	m_Velocity.x = glm::vec3{ location - GetGameObject()->GetTransform().GetPosition() }.x;
-	//GetGameObject()->GetTransform().SetPosition(location);
+	m_UpdatePos = true;
+	m_pGameObject->m_PreviousPos = m_pGameObject->GetTransform().GetPosition();
+	GetGameObject()->GetTransform().SetPosition(location);
+
 }
 
 Rius::BaseComponent* Rius::RigidBodyComponent::Clone()

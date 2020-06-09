@@ -2,6 +2,7 @@
 #include "BaseComponent.h"
 #include <vector>
 #include "FiniteStateMachine.h"
+#include "RigidBodyComponent.h"
 
 namespace Rius
 {
@@ -29,15 +30,17 @@ namespace Rius
 		void OnCollisionEnter(Collider* collider) override;
 	private:
 		std::vector<GameObject*> m_Targets;
+		RigidBodyComponent* m_Rigid;
 		GameObject* m_CurrentTarget;
 		float m_Radius;
 		glm::vec3 m_Direction;
 		FiniteStateMachine* m_pFSM;
 		ChaseEnemyType m_TypeChase;
 		float m_DurationRunning;
-		bool m_StartRunning;
+		bool m_StartFollowing;
 		int m_Lives;
 		float m_Sec;
+		bool m_L;
 		Movement m_Movement;
 
 		void Wander();

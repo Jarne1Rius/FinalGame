@@ -2,13 +2,11 @@
 #include "GameObject.h"
 #include "ResourceManager.h"
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 #include "TextMaterial.h"
 #include "SpriteRenderer.h"
 #include "SpriteSheetComponent.h"
 #include "InputManager.h"
-#include "Renderer.h"
 #include "RigidBodyComponent.h"
 #include "Extra.h"
 #include "ExtraMathFiles.h"
@@ -21,8 +19,9 @@
 #include "MaterialManager.h"
 #include "TextureMaterial.h"
 #include "HealthComponent.h"
-#include "FPSComponent.h"
 #include "UI.h"
+#include "WallComponent.h"
+#include "AI.h"
 using namespace Rius;
 TestScene::TestScene()
 	:Scene("TestScene")
@@ -33,17 +32,8 @@ UndoSystem systemm;
 void TestScene::Initialize()
 {
 	TextureMaterial* mat = new TextureMaterial{ "Resources/awesomeface.png", "Sprite","Background",true };
-
-	GameObject* player1 = new GameObject();
-	HealthComponent* pHealthComponent = new HealthComponent{ 2,true };
-	Player p1;
-	p1.pPlayer = player1;
-	p1.m_Health = pHealthComponent;
-	p1.m_color = { 1,0,0 };
-	UI::GetInstance().AddPlayer(p1);
-	player1->AddComponent(pHealthComponent);
-	player1->GetTransform().SetPosition(100, 100,0);
-	Add(player1);
+	GameObject* p = new GameObject{};
+	
 	/*
 	player1 = new GameObject();
 	pHealthComponent = new HealthComponent{ 3,false };
@@ -61,45 +51,57 @@ void TestScene::Initialize()
 	MaterialManager::AddMaterial(mat, 20);
 	SpriteSheetComponent* sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false, 6, 4, 1);
 	m_UI = new GameObject{};
-//	//TextMaterial* mat2 = new TextMaterial{ "Text",{1,0,0} };
-//	//HealthComponent* text = new HealthComponent{3,false};
-//	//m_Rigid = new RigidBodyComponent(0.1f);
-//	//glm::vec2 force{ -0.1f,0 };
-////	m_UI->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 50, 50)));
-//	//m_UI->AddComponent(m_Rigid);
+	//TextMaterial* mat2 = new TextMaterial{ "Text",{1,0,0} };
+	//HealthComponent* text = new HealthComponent{3,false};
+	m_Rigid = new RigidBodyComponent(0.1f);
+	Ai* tes = new Ai{};
+	m_UI->AddComponent(tes);
+	//glm::vec2 force{ -0.1f,0 };
+	m_UI->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 50, 50)));
+	m_UI->AddComponent(m_Rigid);
 	m_UI->AddComponent(sprite);
-//	//m_UI->AddComponent(text);
-//
-	m_UI->GetTransform().SetPosition(10, 10, 0);
+	//m_UI->AddComponent(text);
+	m_UI->GetTransform().SetPosition(200, 300, 0);
 
 	Add(m_UI);
 
 	////m_Rigid->AddForce(force);
 	////rigid->SetKinematic(true);
-	//LevelReader reader;
-	//std::vector<Rectangle2D> level = reader.ReadFromObjFile("Resources/FixedLevelData.dat")[10];
-	//SpriteRenderer* obj;
-	//GameObject* ground = new GameObject();
-	//float width = float(Minigin::m_Width);
-	//width /= 32.f;
-	//float height = float(Minigin::m_Height);
-	//height /= 25.f;
-	//TextureMaterial* mat2 = new TextureMaterial{ "Resources/awesomeface.png", "Back","Background",true };
-	//for (Rectangle2D rectangle2D : level)
-	//{
-	//	obj = new SpriteRenderer(mat2, rectangle2D, width, height, true);
-	//	BoxCollider2D* box = new BoxCollider2D(rectangle2D);
-	//	box->SetStatic(true);
-	//	ground->AddComponent(box);
-	//	ground->AddComponent(obj);
+	LevelReader reader;
+	std::vector<Rectangle2D> level = reader.ReadFromObjFile("Resources/FixedLevelData.dat")[10];
+	WallComponent* obj;
+	GameObject* ground = new GameObject();
+	float width = float(Minigin::m_Width);
+	width /= 32.f;
+	float height = float(Minigin::m_Height);
+	height /= 25.f;
+	TextureMaterial* mat2 = new TextureMaterial{ "Resources/awesomeface.png", "Back","Background",true };
+	for (Rectangle2D rectangle2D : level)
+	{
+		obj = new WallComponent(false, { 0,0 }, mat2, rectangle2D, width,height);
+		BoxCollider2D* box = new BoxCollider2D(rectangle2D);
+		box->SetStatic(true);
+		ground->AddComponent(box);
+		ground->AddComponent(obj);
 
-	//	//obj->SetTexture(texture);
-	//	//ground->GetTransform().SetPosition(640, 0, 0);
-	//	ground->SetStatic(true);
-	//}
-	//Add(ground);
+		//obj->SetTexture(texture);
+		//ground->GetTransform().SetPosition(640, 0, 0);
+		ground->SetStatic(true);
+	}
+	Add(ground);
 
-	//mat = new TextureMaterial{ "Resources/awesomeface.png", "Sprite","Background",true };
+
+	GameObject* player1 = new GameObject();
+	HealthComponent* pHealthComponent = new HealthComponent{ 2,true };
+	Player p1;
+	p1.pPlayer = player1;
+	p1.m_Health = pHealthComponent;
+	p1.m_color = { 1,0,0 };
+	UI::GetInstance().AddPlayer(p1);
+	player1->AddComponent(pHealthComponent);
+	Add(player1);
+
+	mat = new TextureMaterial{ "Resources/awesomeface.png", "Sprite","Background",true };
 	//sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false, 6, 4, 1);
 	//mat = new TextureMaterial{ "Resources/awesomeface.png", "Sprite","Background",true };
 	//GameObject* test = new GameObject{};

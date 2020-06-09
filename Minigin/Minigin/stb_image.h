@@ -7598,7 +7598,7 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user
       0.90    fix a few more warnings; bump version number to approach 1.0
       0.61    bugfixes due to Marc LeBlanc, Christopher Lloyd
       0.60    fix compiling as c++
-      0.59    fix warnings: merge Dave Moore's -Wall fixes
+      0.59    fix warnings: merge Dave Moore's -WallComponent fixes
       0.58    fix bug: zlib uncompressed mode len/nlen was wrong endian
       0.57    fix bug: jpg last huffman symbol before marker was >9 bits but less than 16 available
       0.56    fix bug: zlib uncompressed mode len vs. nlen
