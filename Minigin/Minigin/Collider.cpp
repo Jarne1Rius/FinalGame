@@ -4,8 +4,8 @@
 #include "Minigin.h"
 
 std::vector<Rius::Collider*> Rius::Collider::m_AllColliders = std::vector<Rius::Collider*>{};
-Rius::Collider::Collider(bool isTrigger)
-	:m_Trigger(isTrigger)
+Rius::Collider::Collider(bool isTrigger, CollisionGroup collisionGroup)
+	:m_Trigger(isTrigger), m_CurrentCollisionGroup(collisionGroup)
 {
 	AddColliderToAllColliders(this);
 }
@@ -41,6 +41,30 @@ void Rius::Collider::ChangeTrigger(bool isTrigger)
 	m_Trigger = isTrigger;
 	Minigin::m_UndoSystem.AddAction(this);
 }
+
+void Rius::Collider::SetIgnore(bool ignore)
+{
+	m_IgnoreCollisionGroup = ignore;
+}
+
+void Rius::Collider::SetIgnoreGroups(CollisionGroup group, bool ignore)
+{
+	m_IgnoreGroups[group] = ignore;
+}
+
+void Rius::Collider::SetIgnoreGroups(bool ignore[Group3 + 1])
+{
+	for (int i = 0; i < Group3; ++i)
+	{
+		m_IgnoreGroups[i] = ignore[i];
+	}
+}
+
+void Rius::Collider::SetCollisionGroup(CollisionGroup group)
+{
+	m_CurrentCollisionGroup = group;
+}
+
 
 void Rius::Collider::AddColliderToAllColliders(Collider* collider)
 {

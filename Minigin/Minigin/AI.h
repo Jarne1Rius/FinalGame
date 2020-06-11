@@ -11,14 +11,11 @@ namespace Rius
 		closest, furthest
 	};
 
-	enum Movement
-	{
-		running, jumping
-	};
+
 	class Ai : public BaseComponent
 	{
 	public:
-		Ai();
+		Ai(float durationWalking,const glm::vec2& randomRangeWalking, bool target);
 		~Ai();
 		void Initialize() override;
 		void Render() const override;
@@ -29,6 +26,7 @@ namespace Rius
 		void SetCurrentTarget(GameObject* currentTarget);
 		void OnCollisionEnter(Collider* collider) override;
 	private:
+		Collider* m_pCollider;
 		std::vector<GameObject*> m_Targets;
 		RigidBodyComponent* m_Rigid;
 		GameObject* m_CurrentTarget;
@@ -40,10 +38,8 @@ namespace Rius
 		bool m_StartFollowing;
 		int m_Lives;
 		float m_Sec;
-		bool m_L;
-		Movement m_Movement;
-
-		void Wander();
+		float m_SecWalking;
+		glm::vec2 m_RandomRangeWalking;
 	};
 }
 

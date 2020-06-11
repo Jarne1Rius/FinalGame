@@ -3,8 +3,8 @@
 #include  "ExtraMathFiles.h"
 #include "BoxCollider2D.h"
 #include <iostream>
-Rius::CircleCollider2D::CircleCollider2D(Circle2D circle, bool isTrigger)
-	:Collider(isTrigger), m_Circle2D(circle)
+Rius::CircleCollider2D::CircleCollider2D(Circle2D circle, bool isTrigger, CollisionGroup collisionGroup)
+	:Collider(isTrigger, collisionGroup), m_Circle2D(circle)
 {
 }
 
@@ -13,7 +13,7 @@ Rius::CircleCollider2D::~CircleCollider2D()
 }
 
 Rius::CircleCollider2D::CircleCollider2D(const CircleCollider2D& other)
-	: Collider(other.m_Trigger)
+	: Collider(other.m_Trigger, other.m_CurrentCollisionGroup)
 {
 	this->m_CollidersInCollision = other.m_CollidersInCollision;
 	this->m_pGameObject = other.m_pGameObject;

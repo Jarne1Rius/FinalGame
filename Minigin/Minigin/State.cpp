@@ -65,7 +65,12 @@ Rius::State* Rius::State::UpdateState()
 	for (Transition* transition : m_Transitions)
 	{
 		State* newone = transition->CheckState();
-		if (newone != nullptr) return newone;
+		if (newone != nullptr)
+		{
+			EndState();
+			newone->StartState();
+			return newone;
+		}
 	}
 	return this;
 }

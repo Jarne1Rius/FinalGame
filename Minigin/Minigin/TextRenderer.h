@@ -23,7 +23,7 @@ namespace Rius
 		TextRenderer(const glm::vec2& localPos,TextMaterial* material, std::string text, std::string font = "Resources/Lingua.otf", int size = 24, float scale = 1);
 		~TextRenderer();
 		void Render() const ;
-		void RenderText(const glm::vec2& pos, std::string text, float scale, glm::vec3 color = glm::vec3{ 1.f }) const;
+		void RenderText(const glm::vec2& pos, std::string text, float scale, glm::vec3 color = glm::vec3{-1,0,0}) const;
 		void ChangeText(const std::string& text) { m_Text = text; }
 		void SetPos(const glm::vec2& pos);
 		

@@ -3,8 +3,8 @@
 #include "BoxCollider3D.h"
 #include "ExtraMathFiles.h"
 
-Rius::CircleCollider3D::CircleCollider3D(Circle3D circle, bool IsTrigger)
-	:Collider(IsTrigger)
+Rius::CircleCollider3D::CircleCollider3D(Circle3D circle, bool IsTrigger, CollisionGroup collisionGroup)
+	:Collider(IsTrigger, collisionGroup)
 {
 }
 
@@ -13,7 +13,7 @@ Rius::CircleCollider3D::~CircleCollider3D()
 }
 
 Rius::CircleCollider3D::CircleCollider3D(const CircleCollider3D& other)
-	: Collider(other.m_Trigger)
+	: Collider(other.m_Trigger, other.m_CurrentCollisionGroup)
 {
 	this->m_CollidersInCollision = other.m_CollidersInCollision;
 	this->m_pGameObject = other.m_pGameObject;

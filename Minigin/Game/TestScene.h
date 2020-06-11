@@ -12,7 +12,7 @@ public:
 	void Update() override;
 	//void Render() const override;
 private:
-	void Initialize();
+	void Initialize() override;
 	Rius::RigidBodyComponent* m_Rigid;
 	Rius::GameObject* m_UI;
 	float m_Angle = 0;

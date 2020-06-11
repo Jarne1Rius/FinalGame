@@ -2,8 +2,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Singleton.h"
-struct SDL_Window;
-struct SDL_Renderer;
 
 namespace Rius
 {

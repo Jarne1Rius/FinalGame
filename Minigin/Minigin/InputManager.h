@@ -4,7 +4,6 @@
 #include <map>
 #include <thread>
 
-#include "../SDL2/include/SDL.h"
 #include "Command.h"
 
 #include "Extra.h"
@@ -81,7 +80,6 @@ namespace Rius
 		bool m_Buttons[m_Size];
 		Command* m_ButtonsCommand[m_Size];
 		//ControllerMap m_Controles;
-		const Uint8* m_Keyboard;
 		std::vector<int> m_Controllers;
 		bool m_Stop;
 

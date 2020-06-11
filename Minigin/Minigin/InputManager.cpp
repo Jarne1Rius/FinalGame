@@ -2,7 +2,7 @@
 #include "InputManager.h"
 #include <thread>
 Rius::InputManager::InputManager()
-	:m_Id(1)
+	:m_Id(1),m_CurrentState(),m_Controllers(),m_ButtonsCommand{},m_Stop(),m_Buttons{},m_Threads()
 {
 	m_ButtonsCommand[int(ControllerButton::ButtonA)] = new JumpCommand{};
 	m_ButtonsCommand[int(ControllerButton::LeftStick)] = new MoveLeft{};
@@ -57,19 +57,6 @@ bool Rius::InputManager::ProcessInput()
 		XInputGetState(m_Id, &m_CurrentState[i]);
 	}
 
-	m_Keyboard = SDL_GetKeyboardState(NULL);
-	SDL_Event e;
-	while (SDL_PollEvent(&e)) {
-		if (e.type == SDL_QUIT) {
-			return false;
-		}
-		if (e.type == SDL_KEYDOWN) {
-
-		}
-		if (e.type == SDL_MOUSEBUTTONDOWN) {
-
-		}
-	}
 
 	return true;
 }

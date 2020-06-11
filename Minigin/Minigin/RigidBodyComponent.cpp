@@ -46,20 +46,20 @@ void Rius::RigidBodyComponent::AddForce(glm::vec2 force)
 
 void Rius::RigidBodyComponent::Bounce(float multiply)
 {
-	//if (!m_OnGround)
-	//{
-	glm::vec2 previous = m_Velocity;
-	m_Velocity *= 0;
-
-	if (previous.y < 0 && abs(m_Velocity.y) < 0.001f)
+	if (!m_OnGround)
 	{
-		m_OnGround = true;
-		m_Velocity.y = 0;
+		glm::vec2 previous = m_Velocity;
+		m_Velocity *= m_BounceMulti;
+
+		if (previous.y < 0 && abs(m_Velocity.y) < 0.001f)
+		{
+			m_OnGround = true;
+			m_Velocity.y = 0;
+		}
+		m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
 	}
-	m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
-	//}
-	//else
-	//	m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
+	else
+		m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
 }
 
 void Rius::RigidBodyComponent::Initialize()

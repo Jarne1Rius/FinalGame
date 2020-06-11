@@ -3,8 +3,8 @@
 #include "TextureMaterial.h"
 #include "SpriteRenderer.h"
 #include "GameObject.h"
-Rius::WallComponent::WallComponent(bool border, glm::vec2 texCoordinateOffset, TextureMaterial* material, const Rectangle2D& startPos, float width, float height)
-	:m_pSprite(), m_PMat(material), m_Border(border), m_Offset(texCoordinateOffset), m_StartPos(startPos), m_Width(width), m_Height(height)
+Rius::WallComponent::WallComponent( glm::vec2 texCoordinateOffset, TextureMaterial* material, const Rectangle2D& startPos, float width, float height)
+	:m_pSprite(), m_PMat(material), m_Offset(texCoordinateOffset), m_StartPos(startPos), m_Width(width), m_Height(height)
 {
 }
 

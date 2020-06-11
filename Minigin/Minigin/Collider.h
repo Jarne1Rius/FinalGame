@@ -4,6 +4,13 @@
 
 namespace Rius
 {
+	enum CollisionGroup
+	{
+		Group0,
+		Group1,
+		Group2,
+		Group3,
+	};
 	class CircleCollider3D;
 	class BoxCollider3D;
 	class BoxCollider2D;
@@ -11,7 +18,7 @@ namespace Rius
 	class Collider : public BaseComponent
 	{
 	public:
-		Collider(bool isTrigger);
+		Collider(bool isTrigger, CollisionGroup collisionGroup);
 		~Collider();
 		Collider(const Collider& other) = default;
 		Collider(Collider&& other) noexcept = default;
@@ -32,10 +39,15 @@ namespace Rius
 		virtual BaseComponent* Clone() override = 0;
 		virtual void SetComponent(BaseComponent* comp) override = 0;
 		void SetStatic(bool isStatic) { m_Static = isStatic; }
-		bool GetStatic() { return m_Static; }
+		bool GetStatic() const { return m_Static; }
 		void SetCollisions();
 		void ChangeTrigger(bool isTrigger);
 		static std::vector<Collider*> m_AllColliders;
+		void SetIgnore(bool ignore = true);
+		void SetIgnoreGroups(CollisionGroup group, bool ignore);
+		void SetIgnoreGroups(bool ignore[Group3 + 1]);
+		void SetCollisionGroup(CollisionGroup group);
+		CollisionGroup GetCurrentCollisionGroup() const { return m_CurrentCollisionGroup; }
 	private:
 
 		static void AddColliderToAllColliders(Collider* collider);
@@ -43,6 +55,9 @@ namespace Rius
 		static void RemoveColliderOfAllColliders(Collider* collider);
 
 	protected:
+		bool m_IgnoreGroups[(CollisionGroup::Group3 + 1)] = { false, false, false, false };
+		bool m_IgnoreCollisionGroup;
+		CollisionGroup m_CurrentCollisionGroup;
 		bool m_Static = false;
 		glm::vec3 m_PreviousPos;
 		bool m_Trigger;

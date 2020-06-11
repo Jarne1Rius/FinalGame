@@ -9,6 +9,7 @@
 int Rius::GameObject::m_CurrentID = 0;
 Rius::GameObject::GameObject()
 	:m_pComponents(), m_pChildren(), m_pParentObject(), m_Tag(), m_Static(), m_Transform(), m_pParentScene(), m_pRigidBodyComponent(nullptr)
+,m_Id(),m_Active(),m_pPlayerComponent(),m_Subject(),m_PreviousPos()
 {
 	m_Id = m_CurrentID;
 	m_CurrentID++;
@@ -54,18 +55,21 @@ Rius::BaseComponent* Rius::GameObject::GetComponentById(int id)
 
 void Rius::GameObject::Update()
 {
+	if (!m_Active) return;
 	for (BaseComponent* comp : m_pComponents)
 		comp->Update();
 }
 
 void Rius::GameObject::LateUpdate()
 {
+	if (!m_Active) return;
 	for (BaseComponent* comp : m_pComponents)
 		comp->LateUpdate();
 }
 
 void Rius::GameObject::Render() const
 {
+	if (!m_Active) return;
 	for (BaseComponent* comp : m_pComponents)
 		comp->Render();
 	//const auto pos = m_Transform.GetPosition();

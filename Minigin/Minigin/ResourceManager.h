@@ -8,7 +8,6 @@
 
 namespace Rius
 {
-	class Font;
 	class ResourceManager 
 	{
 	public:

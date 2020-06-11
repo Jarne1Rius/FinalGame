@@ -21,76 +21,38 @@
 #include "HealthComponent.h"
 #include "UI.h"
 #include "WallComponent.h"
+#include "LevelManager.h"
 #include "AI.h"
 using namespace Rius;
 TestScene::TestScene()
 	:Scene("TestScene")
 {
-	Initialize();
+	//Initialize();
 }
-UndoSystem systemm;
 void TestScene::Initialize()
 {
+	LevelManager::GetInstance().LoadLevels("Resources/FixedLevelData.dat", "Resources/BigBlocks/Big_", "Resources/SmallBlocks/small_",this);
+	LevelManager::GetInstance().SetLevel(0,nullptr);
+	LevelManager::GetInstance().NextLevel(nullptr);
+	
 	TextureMaterial* mat = new TextureMaterial{ "Resources/awesomeface.png", "Sprite","Background",true };
-	GameObject* p = new GameObject{};
-	
-	/*
-	player1 = new GameObject();
-	pHealthComponent = new HealthComponent{ 3,false };
-	p1.pPlayer = player1;
-	p1.m_Health = pHealthComponent;
-	p1.m_color = { 0,0,1 };
-	UI::GetInstance().AddPlayer(p1);
-	player1->AddComponent(pHealthComponent);*/
-//	Add(player1);
-	//Init UI
-
-
-	
-	mat = new TextureMaterial{ "Resources/awesomeface.png", "Sprite","Background",true };
 	MaterialManager::AddMaterial(mat, 20);
 	SpriteSheetComponent* sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false, 6, 4, 1);
 	m_UI = new GameObject{};
 	//TextMaterial* mat2 = new TextMaterial{ "Text",{1,0,0} };
 	//HealthComponent* text = new HealthComponent{3,false};
 	m_Rigid = new RigidBodyComponent(0.1f);
-	Ai* tes = new Ai{};
+	Ai* tes = new Ai{ 10,{2,3},false };
 	m_UI->AddComponent(tes);
 	//glm::vec2 force{ -0.1f,0 };
 	m_UI->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 50, 50)));
 	m_UI->AddComponent(m_Rigid);
 	m_UI->AddComponent(sprite);
 	//m_UI->AddComponent(text);
-	m_UI->GetTransform().SetPosition(200, 300, 0);
+	m_UI->GetTransform().SetPosition(0, 0, 0);
 
 	Add(m_UI);
-
-	////m_Rigid->AddForce(force);
-	////rigid->SetKinematic(true);
-	LevelReader reader;
-	std::vector<Rectangle2D> level = reader.ReadFromObjFile("Resources/FixedLevelData.dat")[10];
-	WallComponent* obj;
-	GameObject* ground = new GameObject();
-	float width = float(Minigin::m_Width);
-	width /= 32.f;
-	float height = float(Minigin::m_Height);
-	height /= 25.f;
-	TextureMaterial* mat2 = new TextureMaterial{ "Resources/awesomeface.png", "Back","Background",true };
-	for (Rectangle2D rectangle2D : level)
-	{
-		obj = new WallComponent(false, { 0,0 }, mat2, rectangle2D, width,height);
-		BoxCollider2D* box = new BoxCollider2D(rectangle2D);
-		box->SetStatic(true);
-		ground->AddComponent(box);
-		ground->AddComponent(obj);
-
-		//obj->SetTexture(texture);
-		//ground->GetTransform().SetPosition(640, 0, 0);
-		ground->SetStatic(true);
-	}
-	Add(ground);
-
-
+	
 	GameObject* player1 = new GameObject();
 	HealthComponent* pHealthComponent = new HealthComponent{ 2,true };
 	Player p1;
@@ -101,12 +63,21 @@ void TestScene::Initialize()
 	player1->AddComponent(pHealthComponent);
 	Add(player1);
 
-	mat = new TextureMaterial{ "Resources/awesomeface.png", "Sprite","Background",true };
-	//sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false, 6, 4, 1);
-	//mat = new TextureMaterial{ "Resources/awesomeface.png", "Sprite","Background",true };
-	//GameObject* test = new GameObject{};
-	//test->AddComponent(sprite);
-	//Add(test);
+	GameObject* border = new GameObject;
+	border->SetTag(Tag::Ground);
+	BoxCollider2D* box = new BoxCollider2D{ {-10,10,9,float(Minigin::m_Height - Minigin::m_TileHeight * 3)}, false, Group3 };
+	box->SetStatic(true);
+	border->AddComponent(box);
+	box = new BoxCollider2D{ {float(Minigin::m_Width + 1),0,9,float(Minigin::m_Height - Minigin::m_TileHeight*3)}, false, Group3 };
+	box->SetStatic(true);
+	border->AddComponent(box);
+	box = new BoxCollider2D{ {0,-11,(float)Minigin::m_Width, 9}, false, Group3 };
+	box->SetStatic(true);
+	border->AddComponent(box);
+	box = new BoxCollider2D{ {0,float(Minigin::m_Height + 10 - Minigin::m_TileHeight * 3),float(Minigin::m_Width),10}, false, Group3 };
+	box->SetStatic(true);
+	border->AddComponent(box);
+	Add(border);
 
 }
 

@@ -23,7 +23,9 @@ namespace Rius
 		glm::vec3& GetVelocity() { return m_Velocity; }
 		bool IsOnGround();
 		void MoveTo(const glm::vec3& location);
+		void SetBounceMulti(const float amount) { m_BounceMulti = amount; }
 	private:
+		bool m_BounceMulti = 0;
 		float m_Mass;
 		glm::vec2 m_AccelerationForce;
 		glm::vec3 m_Velocity;

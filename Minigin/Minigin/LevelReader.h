@@ -10,8 +10,9 @@ namespace Rius
 	class LevelReader
 	{
 	public:
-		std::vector<std::vector<Rectangle2D>> ReadFromObjFile(const std::string filename);
-		std::vector<Rectangle2D> LoadLevel(std::bitset<800000>& a, int offset = 0);
+		static std::vector<std::vector<Rectangle2D>> ReadFromObjFile(const std::string filename);
+	private:
+		static std::vector<Rectangle2D> LoadLevel(std::bitset<800000>& a, int offset = 0);
 	};
 	
 	inline void BinaryRead(std::ifstream& stream, std::string& value)

@@ -46,7 +46,8 @@ void Rius::TextRenderer::Render() const
 
 void Rius::TextRenderer::RenderText(const glm::vec2& pos, std::string text, float scale, glm::vec3 color) const
 {	// activate corresponding render state
-	m_TextMaterial->SetColor(color);
+	if(color.r != -1)
+		m_TextMaterial->SetColor(color);
 	m_TextMaterial->UpdateVariables();
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(m_VAO);

@@ -8,7 +8,7 @@ namespace Rius
 	class BoxCollider3D : public Collider
 	{
 	public:
-		BoxCollider3D(Rectangle3D rectangle, bool isTrigger = false);
+		BoxCollider3D(Rectangle3D rectangle, bool isTrigger = false, CollisionGroup collisionGroup = Group0);
 		~BoxCollider3D();
 		BoxCollider3D(const BoxCollider3D& other);
 		BoxCollider3D(BoxCollider3D&& other) noexcept = default;

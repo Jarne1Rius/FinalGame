@@ -27,10 +27,19 @@ void Rius::SceneManager::AddScene(Scene* newScene)
 {
 	m_ActiveScene = int(m_Scenes.size());
 	m_Scenes.push_back(newScene);
+	newScene->Initialize();
 }
 
 Rius::Scene* Rius::SceneManager::GetCurrentScene()
 {
 	if (m_ActiveScene == -1)return nullptr;
 	return m_Scenes[m_ActiveScene];
+}
+
+void Rius::SceneManager::CleanUp()
+{
+	for (int i = 0; i <int(m_Scenes.size()); ++i)
+	{
+		delete m_Scenes[i];
+	}
 }

@@ -1,10 +1,6 @@
 #pragma once
-struct SDL_Texture;
 namespace Rius
 {
-	/**
-	 * Simple RAII wrapper for an SDL_Texture
-	 */
 	class Texture2D
 	{
     public:

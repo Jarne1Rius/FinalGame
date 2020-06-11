@@ -10,6 +10,7 @@ namespace Rius
 	public:
 		void AddScene(Scene* newScene);
 		static Scene* GetCurrentScene();
+		static void CleanUp();
 		void Update();
 		void Render();
 		void LateUpdate();

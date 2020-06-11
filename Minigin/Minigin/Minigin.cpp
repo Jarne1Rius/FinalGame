@@ -11,7 +11,6 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <SDL_mixer.h>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -25,10 +24,10 @@
 
 using namespace std;
 using namespace std::chrono;
-int Rius::Minigin::m_Height = 720;
-float Rius::Minigin::m_TileHeight = 720.f / 32.f;
-float Rius::Minigin::m_TileWidth = 1280.f / 32.f;
-int Rius::Minigin::m_Width = 1280;
+int Rius::Minigin::m_Height = 672;
+float Rius::Minigin::m_TileHeight = 672 / 33.f;
+float Rius::Minigin::m_TileWidth = 768 / 33.f;
+int Rius::Minigin::m_Width = 768;
 //Rius::FiniteStateMachine* Rius::Minigin::m_FSM = new Rius::FiniteStateMachine{};
 Rius::UndoSystem  Rius::Minigin::m_UndoSystem{};
 struct Character {
@@ -39,7 +38,7 @@ struct Character {
 };
 
 unsigned int VAO, VBO;
- 
+
 void Rius::Minigin::Initialize()
 {
 	Rius::Renderer::GetInstance().Init(m_Width, m_Height);
@@ -53,18 +52,20 @@ void Rius::Minigin::Initialize()
 
 void Rius::Minigin::Cleanup()
 {
-//	delete m_Sprite;
+	//	delete m_Sprite;
 	Renderer::GetInstance().Destroy();
 	ResourceManager::Clear();
 	MaterialManager::Clear();
+	UI::GetInstance().Cleanup();
 	//ImGui_ImplOpenGL3_Shutdown();
 	//ImGui_ImplGlfw_Shutdown();
 	//ImGui::DestroyContext();
-	Mix_Quit();
+	//Mix_Quit();
 }
 
 void Rius::Minigin::Run()
 {
+
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
@@ -96,11 +97,11 @@ void Rius::Minigin::Run()
 		//m_Sprite->Update();
 		sceneManager.LateUpdate();
 		Time::UpdateTimer(deltaTime);
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0,0,0, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		sceneManager.Render();
 		/*
-		
+
 		bool show_demo_window = true;
 		bool show_another_window = false;
 		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);*/
@@ -108,6 +109,7 @@ void Rius::Minigin::Run()
 		Renderer::GetInstance().Render();
 
 	}
+	sceneManager.CleanUp();
 	Cleanup();
 }
 void Rius::Minigin::StartViewEngine()
@@ -165,6 +167,6 @@ void Rius::Minigin::ShowAllComponents()
 	ImGui::MenuItem("RigidBody", nullptr, &rigidBody);
 	ImGui::MenuItem("SpriteRenderer", nullptr, &spriteRenderer);
 	ImGui::MenuItem("SpriteSheet", nullptr, &spriteSheet);
-	
+
 }
 

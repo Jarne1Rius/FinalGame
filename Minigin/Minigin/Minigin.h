@@ -3,7 +3,6 @@
 #include "UndoSystem.h"
 #include "FiniteStateMachine.h"
 #include "UI.h"
-struct SDL_Window;
 namespace Rius
 {
 	class Minigin

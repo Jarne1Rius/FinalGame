@@ -9,8 +9,8 @@ namespace Rius
 	public:
 		virtual  ~Command() = default;
 		virtual void Execute(const GameObject* actor, float hit){}
-		bool m_Pressed;
-		TypePress m_Type;
+		bool m_Pressed = false;
+		TypePress m_Type = TypePress::hold;
 		bool CheckHit(bool hit) const
 		{
 			switch (m_Type)

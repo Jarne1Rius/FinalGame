@@ -1,6 +1,5 @@
 #include "MiniginPCH.h"
 #include "Renderer.h"
-#include <SDL.h>
 
 #include "SceneManager.h"
 #include "Texture2D.h"
@@ -76,7 +75,7 @@ Rius::Renderer::~Renderer()
 void Rius::Renderer::Destroy()
 {
 	
-	glfwTerminate();
+	//glfwTerminate();
 }
 void Rius::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {

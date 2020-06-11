@@ -28,7 +28,7 @@ namespace Rius
 		GameObject& operator=(GameObject&& other) = delete;
 
 		void AddComponent(BaseComponent* component);
-		
+
 		RigidBodyComponent* GetRigidBodyComponent() const { return m_pRigidBodyComponent; }
 		void AddComponent(RigidBodyComponent* rigid);
 		PlayerComponent* GetPlayerComponent() const { return m_pPlayerComponent; }
@@ -44,7 +44,8 @@ namespace Rius
 		void SetStatic(bool isStatic) { m_Static = isStatic; }
 		int GetId() const { return m_Id; }
 		Subject* GetSubject() const { return m_Subject; }
-		
+		void SetActive(bool active = false) { m_Active = active; }
+		bool GetActive()const { return m_Active; }
 		BaseComponent* GetComponentById(int id);
 		template <class  T>
 		T* GetComponent()
@@ -75,7 +76,7 @@ namespace Rius
 			}
 			return  nullptr;
 		}
-		
+
 		glm::vec3 m_PreviousPos;
 	private:
 		Transform m_Transform;
@@ -85,6 +86,7 @@ namespace Rius
 		std::vector<GameObject*> m_pChildren{};
 		Tag m_Tag{};
 		bool m_Static;
+		bool m_Active = true;
 		int m_Id;
 		class GameScene* m_pParentScene;
 		GameObject* m_pParentObject;

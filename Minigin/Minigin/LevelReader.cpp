@@ -37,7 +37,7 @@ std::vector<Rius::Rectangle2D> Rius::LevelReader::LoadLevel(std::bitset<800000>&
 	float width = float(Minigin::m_Width);
 	width /= 32.f;
 	float height = float(Minigin::m_Height);
-	height /= 25.f;
+	height /= 27.f;
 	std::vector<Rectangle2D> L1;
 
 	bool prev = false;
@@ -53,7 +53,7 @@ std::vector<Rius::Rectangle2D> Rius::LevelReader::LoadLevel(std::bitset<800000>&
 			}
 			else
 			{
-				glm::vec2 pos{ (width * (k % 32)),Minigin::m_Height - (height * int(k / 32) + height) };
+				glm::vec2 pos{ (width * (k % 32)),Minigin::m_Height - (height * int(k / 32) + height *3) };
 				Rectangle2D rect{ pos, (width),(height) };
 				L1.push_back(rect);
 			}

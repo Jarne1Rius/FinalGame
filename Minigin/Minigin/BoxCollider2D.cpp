@@ -6,8 +6,8 @@
 #include "ExtraMathFiles.h"
 #include "RigidBodyComponent.h"
 
-Rius::BoxCollider2D::BoxCollider2D(Rectangle2D rectangle, bool isTrigger)
-	:Collider(isTrigger),m_Rectangle(rectangle)
+Rius::BoxCollider2D::BoxCollider2D(Rectangle2D rectangle, bool isTrigger, CollisionGroup collisionGroup )
+	:Collider(isTrigger, collisionGroup),m_Rectangle(rectangle)
 {
 }
 
@@ -16,7 +16,7 @@ Rius::BoxCollider2D::~BoxCollider2D()
 }
 
 Rius::BoxCollider2D::BoxCollider2D(const BoxCollider2D& other)
-	: Collider(other.m_Trigger), m_Rectangle(0,0,0,0)
+	: Collider(other.m_Trigger, other.m_CurrentCollisionGroup), m_Rectangle(0,0,0,0)
 {
 	this->m_CollidersInCollision = other.m_CollidersInCollision;
 	this->m_pGameObject = other.m_pGameObject;
@@ -32,14 +32,16 @@ void Rius::BoxCollider2D::Initialize()
 
 void Rius::BoxCollider2D::Update()
 {
-	if(!m_Static)
+	if (!m_Static && m_CurrentCollisionGroup != Group3)
+	{
 		m_Rectangle.pos = m_pGameObject->GetTransform().GetPosition();
-	m_Rectangle.pos.y *= -1;
+		m_Rectangle.pos.y *= -1;
+	}
 	bool anyHit{false};
 	if (this->m_Static) return;
 	for (Collider* collider : m_AllColliders)
 	{
-		if (collider == this) continue;
+		if (collider == this || m_IgnoreGroups[collider->GetCurrentCollisionGroup()]) continue;
 		//if(collider->GetStatic() == true)continue;
 		bool newHit = collider->CheckCollision(this);
 		if(newHit)
@@ -49,32 +51,7 @@ void Rius::BoxCollider2D::Update()
 			
 			else OnCollisionEnter(collider);
 		}
-		//std::map<Collider*, bool>::iterator it = m_CollidersInCollision.find(collider);
-		//bool hit = it->second;
-		//if (newHit != hit && hit)
-		//{
-		//	//exit collider
-		//	if (m_Trigger) OnTriggerExit(collider);
-		//	else OnCollisionExit(collider);
-		//}
-		//else if (newHit == hit && hit)
-		//{
-		//	//exit collider
-		//	if (m_Trigger) OnTriggerStay(collider);
-		//	else OnCollisionStay(collider);
-		//}
-		//else if (newHit != hit && hit == false)
-		//{
-		//	//exit collider
-		//	if (m_Trigger) OnTriggerEnter(collider);
-		//	else OnCollisionEnter(collider);
-		//}
-		//else
-		//{
-		//	continue;
-		//}
-		//if (newHit) anyHit = newHit;
-		//it->second = newHit;
+	
 	}
 	//if (anyHit) GetGameObject()->GetTransform().SetPosition(m_PreviousPos);
 	//m_PreviousPos = GetGameObject()->GetTransform().GetPosition();

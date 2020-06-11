@@ -7,7 +7,7 @@ namespace Rius
 	class BoxCollider2D : public Collider
 	{
 	public:
-		BoxCollider2D(Rectangle2D rectangle, bool isTrigger = false);
+		BoxCollider2D(Rectangle2D rectangle, bool isTrigger = false, CollisionGroup collisionGroup = Group0);
 		~BoxCollider2D();
 		BoxCollider2D(const BoxCollider2D& other);
 		BoxCollider2D(BoxCollider2D&& other) noexcept = default;

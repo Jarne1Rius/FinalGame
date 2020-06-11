@@ -16,8 +16,10 @@ int main()
 #ifdef ProjectTest
 	auto Scene = new TestScene();
 	Rius::SceneManager::GetInstance().AddScene(Scene);
+
 #endif
-	//engine->Run();
-	delete Scene;
+	engine->Run();
+	//delete Scene;
+	//engine->Cleanup();
 	delete engine;
 } 

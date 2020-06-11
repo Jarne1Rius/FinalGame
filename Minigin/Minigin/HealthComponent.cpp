@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "HealthComponent.h"
 #include "GameObject.h"
+#include "MaterialManager.h"
 #include "Minigin.h"
 #include "TextureMaterial.h"
 
@@ -8,6 +9,7 @@ Rius::HealthComponent::HealthComponent(int health, bool leftSide)
 	:m_LeftSide(leftSide), m_Health(health),m_OriginalHealth(health)
 {
 	m_pMat = new TextureMaterial{ "../Data/SpriteSheet.png","Health","Health",true };
+	
 }
 
 Rius::HealthComponent::~HealthComponent()
@@ -16,6 +18,7 @@ Rius::HealthComponent::~HealthComponent()
 	{
 		delete m_Sprites[i];
 	}
+	delete m_pMat;
 }
 
 void Rius::HealthComponent::Initialize()

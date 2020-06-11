@@ -22,7 +22,7 @@ void Rius::Player::RemoveHealth()
 void Rius::UI::Initialize()
 {
 	TextMaterial* mat = new TextMaterial{"text",{0,1,1}};
-	MaterialManager::AddMaterial(mat,102);
+	MaterialManager::AddMaterial(mat);
 	m_TextRenderer = new TextRenderer{ {0,0},mat,"" };
 }
 
@@ -42,6 +42,11 @@ void Rius::UI::Render()
 	{
 		player.Render(m_TextRenderer, { 100,20 });
 	}
+}
+
+void Rius::UI::Cleanup()
+{
+	delete m_TextRenderer;
 }
 
 Rius::Player& Rius::UI::GetPlayer(int playerId)

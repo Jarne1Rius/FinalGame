@@ -4,12 +4,17 @@
 #include "RigidBodyComponent.h"
 #include "Time.h"
 #include <glm/gtc/random.hpp>
-Rius::Ai::Ai()
+#include "BoxCollider2D.h"
+#include "Logger.h"
+
+Rius::Ai::Ai(float durationWalking, const glm::vec2& randomRangeWalking, bool target)
+	:m_Sec(), m_SecWalking(durationWalking), m_Radius(), m_RandomRangeWalking(randomRangeWalking), m_Rigid(), m_pFSM(), m_CurrentTarget()
 {
 }
 
 Rius::Ai::~Ai()
 {
+	delete m_pFSM;
 }
 
 void Rius::Ai::Initialize()
@@ -38,16 +43,16 @@ void Rius::Ai::Initialize()
 	};
 	auto isDead = [this]()->bool
 	{
-		return m_Lives < 0;
+		return m_Lives <= 0;
 	};
 	auto walkToLeft = [this]()->bool
 	{
-		return true;
-		//return m_Sec > glm::linearRand(2, 5);
+		//return false;
+		return m_Sec > glm::linearRand(2, 5) && m_Rigid->IsOnGround();
 	};
 	auto tryToJump = [this]()->bool
 	{
-		return m_Sec > glm::linearRand(2, 4);
+		return m_Sec > glm::linearRand(m_RandomRangeWalking.x, m_RandomRangeWalking.y);
 	};
 	auto StopJumping = [this]()->bool
 	{
@@ -56,7 +61,6 @@ void Rius::Ai::Initialize()
 	};
 	auto StopWalking = [this]()->bool
 	{
-		;
 		return m_Sec < 0;
 	};
 	wander->SetTransition(startFollowing, follow);
@@ -69,22 +73,20 @@ void Rius::Ai::Initialize()
 	WalkingL->SetTransition(StopWalking, wander);
 	WalkingR->SetTransition(StopWalking, wander);
 	jumping->SetTransition(StopJumping, wander);
-	
-	m_pFSM->AddTransitionsTo(isDead, { wander,WalkingR,WalkingL,jumping, follow },death);
+
+	m_pFSM->AddTransitionsTo(isDead, { wander,WalkingR,WalkingL,jumping, follow }, death);
 
 	//Actions
 	auto UpdateSecLeftDuraion = [this]()->void
 	{
-		m_Sec -= Time::m_DeltaTime;
-		//std::cout << "Left\n";
-		m_Rigid->MoveTo(m_pGameObject->GetTransform().GetPosition() + glm::vec3{-0.2f,0,0});
-		//m_Rigid->AddForce(glm::vec2{ -0.2f * Time::m_DeltaTime,0.f });
-		//update to left
+		m_Sec -= (Time::m_DeltaTime);
+		m_Rigid->MoveTo(m_pGameObject->GetTransform().GetPosition() + glm::vec3{ -0.2f,0,0 });
 	};
 	auto UpdateSecRightDuraion = [this]()->void
 	{
 		m_Sec -= Time::m_DeltaTime;
-		m_Rigid->AddForce(glm::vec2{ 0.2f * Time::m_DeltaTime,0.f });
+		m_Rigid->MoveTo(m_pGameObject->GetTransform().GetPosition() + glm::vec3{ 0.2f,0,0 });
+		//m_Rigid->AddForce(glm::vec2{ 0.2f * Time::m_DeltaTime,0.f });
 		//update to left
 	};
 	auto UpdateSecWanderDuraion = [this]()->void
@@ -95,19 +97,38 @@ void Rius::Ai::Initialize()
 	};
 	auto StartWalking = [this]()->void
 	{
-		m_Sec = 0;
+		m_Sec = m_SecWalking;
 	};
 	auto Jump = [this]()->void
 	{
-		std::cout << "jump\n";
-		m_Rigid->AddForce(glm::vec2{ 0,1.f });
+		m_Lives = 0;
+		//m_Rigid->AddForce(glm::vec2{ 0,1.f });
+		m_Sec = 0;
+	};
+	auto justDied = [this]()->void
+	{
+		//m_pCollider
+		bool t[4] = { true, true, true, false };
+ 		m_pCollider->SetIgnoreGroups(t);
+		m_Rigid->SetBounceMulti(1);
+		m_Rigid->SetKinematic(true);
+		m_Rigid->AddForce(glm::vec2{1,1 });//glm::linearRand(3,5), glm::linearRand(3,5) });
 	};
 	jumping->SetActionStart(Jump);
 	WalkingL->SetAction(UpdateSecLeftDuraion);
 	WalkingR->SetAction(UpdateSecRightDuraion);
 	wander->SetAction(UpdateSecWanderDuraion);
-	wander->SetActionEnd(StartWalking);
-	
+	WalkingL->SetActionStart(StartWalking);
+	WalkingR->SetActionStart(StartWalking);
+	death->SetActionStart(justDied);
+
+	//Collider check
+	m_pCollider = m_pGameObject->GetComponent<BoxCollider2D>();
+	if (m_pCollider == nullptr)
+	{
+		Logger::LogError("No Collider detected");
+		assert(m_pCollider != nullptr);
+	}
 }
 
 void Rius::Ai::Render() const
@@ -175,15 +196,3 @@ void Rius::Ai::OnCollisionEnter(Collider* collider)
 	if (!GetGameObject()->GetRigidBodyComponent()->IsOnGround())m_Direction *= -1;
 }
 
-void Rius::Ai::Wander()
-{
-	switch (m_Movement)
-	{
-	case Movement::jumping:
-		break;
-	case Movement::running:
-		m_Sec += Time::m_DeltaTime;
-		if (m_Sec < m_DurationRunning)
-			break;
-	}
-}

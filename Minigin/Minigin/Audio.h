@@ -1,5 +1,4 @@
 #pragma once
-#include "SDL_audio.h"
 #include  "SDL_mixer.h"
 
 namespace Rius

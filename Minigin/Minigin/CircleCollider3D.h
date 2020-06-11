@@ -7,7 +7,7 @@ namespace Rius
 	class CircleCollider3D : public Collider
 	{
 	public:
-		CircleCollider3D(Circle3D circle, bool IsTrigger = false);
+		CircleCollider3D(Circle3D circle, bool IsTrigger = false, CollisionGroup collisionGroup = Group0);
 		~CircleCollider3D();
 		CircleCollider3D(const CircleCollider3D& other);
 		CircleCollider3D(CircleCollider3D&& other) noexcept = default;

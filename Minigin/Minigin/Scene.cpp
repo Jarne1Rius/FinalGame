@@ -6,7 +6,7 @@ using namespace Rius;
 
 unsigned int Scene::m_IdCounter = 0;
 std::vector<GameObject*> Rius::Scene::m_pObjects;
-Scene::Scene(const std::string& name) : m_Name(name)
+Scene::Scene(const std::string& name) : m_Name(name), m_Pool(30)
 {
 	UI::GetInstance().Initialize();
 }
@@ -21,19 +21,51 @@ Scene::~Scene()
 void Scene::Add(GameObject* object)
 {
 	m_pObjects.push_back(object);
-	for (auto& object : m_pObjects)
+	//for (auto& object : m_pObjects)
 	{
 		object->Initialize();
 	}
 }
 
+void Scene::Remove(GameObject* object)
+{
+	auto it = std::find(m_pObjects.begin(), m_pObjects.end(), object);
+	m_pObjects.erase(it);
+	delete object;
+}
+
 void Scene::UpdateObjects()
 {
-	UI::GetInstance().Update();
-	for (auto& object : m_pObjects)
+	for (auto && pObject : m_pObjects)
 	{
-		object->Update();
+		pObject->Update();
+		//m_Pool.enqueue([&pObject] {pObject->Update(); });	
 	}
+	//std::vector<std::future<void>> results;
+	//const int size{ 10 };
+	//GameObject* pUpdate[size];
+	//for (int i = 0; i < m_pObjects.size(); ++i)
+	//{
+	//	if ((i % size == 0 && i != 0) || i == m_pObjects.size() - 1)
+	//	{
+	//		results.emplace_back(m_Pool.enqueue([&pUpdate, i]
+	//			{
+	//				for (int k = 0; k < (i % 10)+1; ++k)
+	//				{
+	//					pUpdate[k]->Update();
+	//				}
+	//			}));
+	//		pUpdate[0] = m_pObjects[i];
+	//	}
+	//	else
+	//	{
+	//		pUpdate[i % size] = m_pObjects[i];
+	//	}
+	//}
+
+	//for (auto&& result : results)
+	//	result.get();
+	UI::GetInstance().Update();
 }
 
 void Scene::LateUpdateObjects()
@@ -46,10 +78,14 @@ void Scene::LateUpdateObjects()
 
 void Scene::Render() const
 {
-	UI::GetInstance().Render();
 	for (const auto& object : m_pObjects)
 	{
 		object->Render();
 	}
+	UI::GetInstance().Render();
+}
+
+void Scene::Initialize()
+{
 }
 

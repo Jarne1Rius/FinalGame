@@ -8,7 +8,7 @@
 Rius::FPSComponent::FPSComponent(glm::vec3 color, const std::string& font)
 {
 	m_pMat = new TextMaterial{"FPS",color};
-	MaterialManager::AddMaterial(m_pMat, 100);
+	MaterialManager::AddMaterial(m_pMat);
 	m_pTextRenderer = new TextRenderer{ {0, Minigin::m_Height},m_pMat,"test",font};
 }
 

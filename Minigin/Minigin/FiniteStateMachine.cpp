@@ -13,6 +13,7 @@ Rius::FiniteStateMachine::~FiniteStateMachine()
 	{
 		delete m_States[i];
 	}
+	m_States.clear();
 }
 
 void Rius::FiniteStateMachine::UpdateState()

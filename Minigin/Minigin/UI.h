@@ -25,6 +25,7 @@ namespace Rius
 		void Update();
 		void AddPlayer(const Player& player);
 		void Render();
+		void Cleanup();
 		Player& GetPlayer(int playerId);
 		Player& GetPlayer(const GameObject* player);
 	private:
