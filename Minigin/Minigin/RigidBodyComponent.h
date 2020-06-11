@@ -24,6 +24,8 @@ namespace Rius
 		bool IsOnGround();
 		void MoveTo(const glm::vec3& location);
 		void SetBounceMulti(const float amount) { m_BounceMulti = amount; }
+
+		void OnCollisionEnter(Collider* collider) override;
 	private:
 		bool m_BounceMulti = 0;
 		float m_Mass;

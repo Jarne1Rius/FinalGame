@@ -204,6 +204,22 @@ void Rius::SpriteSheetComponent::SetComponent(BaseComponent* comp)
 	this->m_Sec = component->m_Sec;
 }
 
+void Rius::SpriteSheetComponent::ResetSpriteSheet(Material* material, const Rectangle2D& destRectangle, bool isStatic,
+	int rows, int colms, std::vector<SpriteTotal> totalAnimations)
+{
+	m_Rectangle2D = destRectangle;
+	m_Static = isStatic;
+	m_Colms = colms;
+	m_Rows = rows;
+	m_CurrentFrame = totalAnimations[0].m_FirstFrame;
+	m_TextCoord = { 0,0,1,1 };
+	m_SrcRect = { 0,0,1,1 };
+	m_TotalAnimations = totalAnimations;
+	SetIndicesAndVertices();
+	m_CurrentAnimation = 0;
+	
+}
+
 void Rius::SpriteSheetComponent::SetIndicesAndVertices()
 {
 	m_Vertices.clear();

@@ -44,6 +44,7 @@ namespace Rius
 		BaseComponent* Clone() override;
 		void SetComponent(BaseComponent* comp) override;
 		Rectangle2D GetRectangle() const { return m_Rectangle2D; }
+		void ResetSpriteSheet(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, std::vector<SpriteTotal> totalAnimations);
 	private:
 		Material* m_pMaterial;
 		bool m_Static;

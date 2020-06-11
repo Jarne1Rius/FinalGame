@@ -6,8 +6,8 @@
 #include "ExtraMathFiles.h"
 #include "RigidBodyComponent.h"
 
-Rius::BoxCollider2D::BoxCollider2D(Rectangle2D rectangle, bool isTrigger, CollisionGroup collisionGroup )
-	:Collider(isTrigger, collisionGroup),m_Rectangle(rectangle)
+Rius::BoxCollider2D::BoxCollider2D(Rectangle2D rectangle, bool isTrigger, CollisionGroup collisionGroup)
+	:Collider(isTrigger, collisionGroup), m_Rectangle(rectangle)
 {
 }
 
@@ -16,7 +16,7 @@ Rius::BoxCollider2D::~BoxCollider2D()
 }
 
 Rius::BoxCollider2D::BoxCollider2D(const BoxCollider2D& other)
-	: Collider(other.m_Trigger, other.m_CurrentCollisionGroup), m_Rectangle(0,0,0,0)
+	: Collider(other.m_Trigger, other.m_CurrentCollisionGroup), m_Rectangle(0, 0, 0, 0)
 {
 	this->m_CollidersInCollision = other.m_CollidersInCollision;
 	this->m_pGameObject = other.m_pGameObject;
@@ -27,7 +27,7 @@ Rius::BoxCollider2D::BoxCollider2D(const BoxCollider2D& other)
 
 void Rius::BoxCollider2D::Initialize()
 {
-	
+
 }
 
 void Rius::BoxCollider2D::Update()
@@ -37,21 +37,28 @@ void Rius::BoxCollider2D::Update()
 		m_Rectangle.pos = m_pGameObject->GetTransform().GetPosition();
 		m_Rectangle.pos.y *= -1;
 	}
-	bool anyHit{false};
+	bool anyHit{ false };
 	if (this->m_Static) return;
 	for (Collider* collider : m_AllColliders)
 	{
 		if (collider == this || m_IgnoreGroups[collider->GetCurrentCollisionGroup()]) continue;
 		//if(collider->GetStatic() == true)continue;
 		bool newHit = collider->CheckCollision(this);
-		if(newHit)
+		if (newHit)
 		{
 			anyHit = true;
-			if (m_Trigger) OnTriggerEnter(collider);
-			
-			else OnCollisionEnter(collider);
+			if (m_Trigger)
+			{
+				m_pGameObject->OnTriggerEnter(collider);
+				collider->GetGameObject()->OnTriggerEnter(collider);
+			}
+			else
+			{
+				m_pGameObject->OnCollisionEnter(collider);
+				collider->GetGameObject()->OnCollisionEnter(collider);
+			}
 		}
-	
+
 	}
 	//if (anyHit) GetGameObject()->GetTransform().SetPosition(m_PreviousPos);
 	//m_PreviousPos = GetGameObject()->GetTransform().GetPosition();
@@ -75,8 +82,8 @@ bool Rius::BoxCollider2D::CheckCollision(BoxCollider2D* collider)
 {
 	glm::vec3 vel{ 0,0,0 };
 	RigidBodyComponent* com = collider->m_pGameObject->GetRigidBodyComponent();
-	if(com)
-		return Collision(this->m_Rectangle, collider->m_Rectangle,vel, com->GetVelocity());
+	if (com)
+		return Collision(this->m_Rectangle, collider->m_Rectangle, vel, com->GetVelocity());
 	else
 		return Collision(this->m_Rectangle, collider->m_Rectangle, vel, vel);
 }

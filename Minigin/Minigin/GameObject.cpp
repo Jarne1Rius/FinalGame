@@ -9,7 +9,7 @@
 int Rius::GameObject::m_CurrentID = 0;
 Rius::GameObject::GameObject()
 	:m_pComponents(), m_pChildren(), m_pParentObject(), m_Tag(), m_Static(), m_Transform(), m_pParentScene(), m_pRigidBodyComponent(nullptr)
-,m_Id(),m_Active(),m_pPlayerComponent(),m_Subject(),m_PreviousPos()
+	, m_Id(), m_Active(true), m_pPlayerComponent(), m_Subject(), m_PreviousPos()
 {
 	m_Id = m_CurrentID;
 	m_CurrentID++;
@@ -44,6 +44,22 @@ void Rius::GameObject::AddComponent(PlayerComponent* playerComponent)
 	playerComponent->m_pGameObject = this;
 	m_pPlayerComponent = playerComponent;
 	m_pComponents.push_back(playerComponent);
+}
+
+void Rius::GameObject::OnTriggerEnter(Collider* other)
+{
+	for (BaseComponent* baseComponent : m_pComponents)
+	{
+		baseComponent->OnTriggerEnter(other);
+	}
+}
+
+void Rius::GameObject::OnCollisionEnter(Collider* other)
+{
+	for (BaseComponent* baseComponent : m_pComponents)
+	{
+		baseComponent->OnCollisionEnter(other);
+	}
 }
 
 Rius::BaseComponent* Rius::GameObject::GetComponentById(int id)

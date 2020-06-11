@@ -11,7 +11,6 @@ namespace Rius
 		closest, furthest
 	};
 
-
 	class Ai : public BaseComponent
 	{
 	public:
@@ -25,6 +24,7 @@ namespace Rius
 		GameObject* GetCurrentTarget() const { return m_CurrentTarget; }
 		void SetCurrentTarget(GameObject* currentTarget);
 		void OnCollisionEnter(Collider* collider) override;
+		void OnTriggerEnter(Collider* collider) override;
 	private:
 		Collider* m_pCollider;
 		std::vector<GameObject*> m_Targets;
@@ -40,6 +40,7 @@ namespace Rius
 		float m_Sec;
 		float m_SecWalking;
 		glm::vec2 m_RandomRangeWalking;
+		int m_Value;
 	};
 }
 

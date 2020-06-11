@@ -107,6 +107,12 @@ void Rius::RigidBodyComponent::MoveTo(const glm::vec3& location)
 
 }
 
+void Rius::RigidBodyComponent::OnCollisionEnter(Collider* collider)
+{
+	if(!m_pGameObject->GetStatic() || !m_Kinematic)
+		Bounce(1.f);
+}
+
 Rius::BaseComponent* Rius::RigidBodyComponent::Clone()
 {
 	return new RigidBodyComponent{ *this };

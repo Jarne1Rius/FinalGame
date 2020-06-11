@@ -6,9 +6,11 @@
 #include <glm/gtc/random.hpp>
 #include "BoxCollider2D.h"
 #include "Logger.h"
+#include "SpriteSheetComponent.h"
+#include "UI.h"
 
 Rius::Ai::Ai(float durationWalking, const glm::vec2& randomRangeWalking, bool target)
-	:m_Sec(), m_SecWalking(durationWalking), m_Radius(), m_RandomRangeWalking(randomRangeWalking), m_Rigid(), m_pFSM(), m_CurrentTarget()
+	:m_Sec(), m_SecWalking(durationWalking), m_Radius(), m_RandomRangeWalking(randomRangeWalking), m_Rigid(), m_pFSM(), m_CurrentTarget(),m_Value(100)
 {
 }
 
@@ -27,7 +29,8 @@ void Rius::Ai::Initialize()
 	State* WalkingR = new State{ "WalkingR" };
 	State* death = new State{ "Death" };
 	State* idle = new State{ "Idle" };
-	m_pFSM = new FiniteStateMachine{ {follow, wander, death, idle,jumping,WalkingL,WalkingR} };
+	State* AfterDeath = new State{ "AfterDeath" };
+	m_pFSM = new FiniteStateMachine{ {follow, wander, death, idle,jumping,WalkingL,WalkingR, AfterDeath} };
 	m_pFSM->m_CurrentState = wander;
 	auto toWander = [this]()->bool
 	{
@@ -63,6 +66,10 @@ void Rius::Ai::Initialize()
 	{
 		return m_Sec < 0;
 	};
+	auto transformToFood = [this]()->bool
+	{
+		return (m_Sec > 3);
+	};
 	wander->SetTransition(startFollowing, follow);
 	idle->SetTransition(startFollowing, follow);
 	follow->SetTransition(toWander, wander);
@@ -73,6 +80,7 @@ void Rius::Ai::Initialize()
 	WalkingL->SetTransition(StopWalking, wander);
 	WalkingR->SetTransition(StopWalking, wander);
 	jumping->SetTransition(StopJumping, wander);
+	death->SetTransition(transformToFood, AfterDeath);
 
 	m_pFSM->AddTransitionsTo(isDead, { wander,WalkingR,WalkingL,jumping, follow }, death);
 
@@ -107,6 +115,7 @@ void Rius::Ai::Initialize()
 	};
 	auto justDied = [this]()->void
 	{
+		m_Sec = 0;
 		//m_pCollider
 		bool t[4] = { true, true, true, false };
  		m_pCollider->SetIgnoreGroups(t);
@@ -114,6 +123,17 @@ void Rius::Ai::Initialize()
 		m_Rigid->SetKinematic(true);
 		m_Rigid->AddForce(glm::vec2{1,1 });//glm::linearRand(3,5), glm::linearRand(3,5) });
 	};
+	auto updateDeath = [this]()->void
+	{
+		m_Sec += Time::m_DeltaTime;
+	};
+	auto transformSpriteToFood = [this]()->void
+	{
+
+		//TODO change this spriteSheetcom
+		//m_pGameObject->GetComponent<SpriteSheetComponent>()
+	};
+	
 	jumping->SetActionStart(Jump);
 	WalkingL->SetAction(UpdateSecLeftDuraion);
 	WalkingR->SetAction(UpdateSecRightDuraion);
@@ -121,7 +141,7 @@ void Rius::Ai::Initialize()
 	WalkingL->SetActionStart(StartWalking);
 	WalkingR->SetActionStart(StartWalking);
 	death->SetActionStart(justDied);
-
+	death->SetAction(updateDeath);
 	//Collider check
 	m_pCollider = m_pGameObject->GetComponent<BoxCollider2D>();
 	if (m_pCollider == nullptr)
@@ -144,36 +164,36 @@ void Rius::Ai::LateUpdate()
 	m_pFSM->UpdateState();
 	GameObject* closest = nullptr;
 	float minDistance = FLT_MAX;
-	switch (m_TypeChase)
-	{
-	case ChaseEnemyType::closest:
-		for (GameObject* target : m_Targets)
-		{
-			float distance = glm::distance(target->GetTransform().GetPosition(), GetGameObject()->GetTransform().GetPosition());
-			if (distance < minDistance)
-			{
-				minDistance = distance;
-				closest = target;
-			}
-		}
-		break;
-	case ChaseEnemyType::furthest:
-		for (GameObject* target : m_Targets)
-		{
-			float distance = glm::distance(target->GetTransform().GetPosition(), GetGameObject()->GetTransform().GetPosition());
-			if (distance > minDistance)
-			{
-				minDistance = distance;
-				closest = target;
-			}
-		}
-		break;
-	default:;
-	}
-	if (closest != nullptr)
-	{
-		m_CurrentTarget = closest;
-	}
+	//switch (m_TypeChase)
+	//{
+	//case ChaseEnemyType::closest:
+	//	for (GameObject* target : m_Targets)
+	//	{
+	//		float distance = glm::distance(target->GetTransform().GetPosition(), GetGameObject()->GetTransform().GetPosition());
+	//		if (distance < minDistance)
+	//		{
+	//			minDistance = distance;
+	//			closest = target;
+	//		}
+	//	}
+	//	break;
+	//case ChaseEnemyType::furthest:
+	//	for (GameObject* target : m_Targets)
+	//	{
+	//		float distance = glm::distance(target->GetTransform().GetPosition(), GetGameObject()->GetTransform().GetPosition());
+	//		if (distance > minDistance)
+	//		{
+	//			minDistance = distance;
+	//			closest = target;
+	//		}
+	//	}
+	//	break;
+	//default:;
+	//}
+	//if (closest != nullptr)
+	//{
+	//	m_CurrentTarget = closest;
+	//}
 
 }
 
@@ -192,7 +212,12 @@ void Rius::Ai::SetCurrentTarget(GameObject* currentTarget)
 
 void Rius::Ai::OnCollisionEnter(Collider* collider)
 {
-	GetGameObject()->GetRigidBodyComponent()->Bounce(0);
-	if (!GetGameObject()->GetRigidBodyComponent()->IsOnGround())m_Direction *= -1;
+	if(m_pFSM->m_CurrentState->GetName() == "AfterDeath" && collider->GetGameObject()->GetTag() == Tag::Player)
+	{
+		UI::GetInstance().GetPlayer(collider->GetGameObject()).score += m_Value;
+	}
 }
 
+void Rius::Ai::OnTriggerEnter(Collider* collider)
+{
+}

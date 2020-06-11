@@ -25,5 +25,10 @@ void Rius::WallComponent::Render() const
 
 void Rius::WallComponent::Update()
 {
-	m_pSprite->Update();
+//	m_pSprite->Update();
+}
+
+void Rius::WallComponent::LateUpdate()
+{
+	m_pSprite->LateUpdate();
 }

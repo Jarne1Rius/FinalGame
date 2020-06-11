@@ -13,6 +13,7 @@ namespace Rius
 		void Initialize() override;
 		void Render() const override;
 		void Update() override;
+		void LateUpdate() override;
 	private:
 		SpriteRenderer* m_pSprite;
 		TextureMaterial* m_PMat;

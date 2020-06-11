@@ -50,7 +50,7 @@ namespace Rius
 		float width = 10;
 		float height = 10;
 	};
-	inline Rectangle2D ConvertToUVCoordinatess(Rectangle2D rectangle, Texture2D* texture)
+	inline Rectangle2D ConvertToUVCoordinates(Rectangle2D rectangle, Texture2D* texture)
 	{
 		float width{ float(texture->Width) }, height{ float(texture->Height) };
 		return { rectangle.pos.x / width, rectangle.pos.y / height, rectangle.width / width, rectangle.height / height };

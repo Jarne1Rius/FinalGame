@@ -2,10 +2,11 @@
 #include "PlayerComponent.h"
 #include "InputManager.h"
 #include "GameObject.h"
-#include "time.h"
-
-Rius::PlayerComponent::PlayerComponent(int idInput)
-	:m_FSM(), m_MovementSpeed(), m_GamepadID(), m_Lives(3), m_IdInput(idInput),m_Moving(1.f),m_Jump(),m_Sprite(),m_Attack(),m_Rigid()
+#include "SpriteComponent.h"
+#include "SceneManager.h"
+#include "Scene.h"
+Rius::PlayerComponent::PlayerComponent(int idInput, std::vector<SpriteComponent*> prefabBullets)
+	:m_FSM(), m_MovementSpeed(), m_GamepadID(), m_Lives(3), m_IdInput(idInput),m_Moving(1.f),m_Jump(),m_Sprite(),m_Attack(),m_Rigid(),m_BulletsPrefabs(prefabBullets)
 {
 }
 
@@ -102,6 +103,12 @@ void Rius::PlayerComponent::Initialize()
 	m_FSM = new FiniteStateMachine{ {running,idle,menu,jumping,attack,defeat} };
 	m_FSM->m_CurrentState = idle;
 
+	auto StartFiring = [this]()->void
+	{
+		GameObject* pBullet = new GameObject{};
+		pBullet->AddComponent(m_BulletsPrefabs[0]->Cloning());
+		SceneManager::GetCurrentScene()->Add(pBullet);
+	};
 	m_Rigid = m_pGameObject->GetRigidBodyComponent();
 }
 

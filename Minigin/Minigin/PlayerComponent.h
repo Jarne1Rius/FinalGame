@@ -5,10 +5,12 @@
 #include "SpriteSheetComponent.h"
 namespace Rius
 {
+	class SpriteComponent;
+
 	class PlayerComponent :	public BaseComponent
 	{
 	public:
-		PlayerComponent(int idInput);
+		PlayerComponent(int idInput, std::vector<SpriteComponent*> pPrefabBullet);
 		~PlayerComponent();
 		PlayerComponent(const PlayerComponent& other);
 		PlayerComponent(PlayerComponent&& other) noexcept = default;
@@ -30,6 +32,7 @@ namespace Rius
 		int m_GamepadID;
 		FiniteStateMachine* m_FSM;
 		SpriteSheetComponent* m_Sprite;
+		std::vector<SpriteComponent*> m_BulletsPrefabs;
 		int m_IdInput;
 		bool m_Jump;
 		bool m_Attack;

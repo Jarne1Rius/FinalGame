@@ -33,6 +33,11 @@ namespace Rius
 		void AddComponent(RigidBodyComponent* rigid);
 		PlayerComponent* GetPlayerComponent() const { return m_pPlayerComponent; }
 		void AddComponent(PlayerComponent* playerComponent);
+
+		void OnTriggerEnter(Collider* other);
+		void OnCollisionEnter(Collider* other);
+		
+		
 		//getters
 		std::vector<GameObject*> GetAllChildren() const { return m_pChildren; }
 		std::vector<BaseComponent*> GetAllComponents() const { return m_pComponents; }

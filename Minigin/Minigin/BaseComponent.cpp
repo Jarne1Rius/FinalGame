@@ -30,12 +30,6 @@ void Rius::BaseComponent::OnTriggerStay(Collider* collider)
 
 void Rius::BaseComponent::OnCollisionEnter(Collider* collider)
 {
-	RigidBodyComponent* com = m_pGameObject->GetRigidBodyComponent();
-
-	if (com)
-	{
-		com->Bounce(1.f);
-	}
 }
 
 void Rius::BaseComponent::OnTriggerExit(Collider* collider)

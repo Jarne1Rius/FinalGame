@@ -198,13 +198,19 @@
     <ClInclude Include="ThreadPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LevelManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TextRenderer.h">
       <Filter>Source Files\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="TextComponent.h">
+      <Filter>Source Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager.h">
+      <Filter>Source Files\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -356,13 +362,19 @@
     <ClCompile Include="WallComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="LevelManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TextRenderer.cpp">
       <Filter>Source Files\Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Source Files\Helpers</Filter>
+    </ClCompile>
     <ClCompile Include="TextComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
