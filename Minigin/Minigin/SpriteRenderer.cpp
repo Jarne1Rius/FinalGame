@@ -60,8 +60,9 @@ void Rius::SpriteRenderer::Update()
 {
 }
 
-void Rius::SpriteRenderer::LateUpdate()
+void Rius::SpriteRenderer::LateUpdate(const glm::vec3& pos)
 {
+	m_Pos = pos;
 	if (!m_Static)
 	{
 		m_ModelSpace = glm::mat4();

@@ -101,7 +101,7 @@ void Rius::Minigin::Run()
 		//m_Sprite->Update();
 		sceneManager.LateUpdate();
 		Time::UpdateTimer(deltaTime);
-		glClearColor(0,1,0, 1.0f);
+		glClearColor(0,0,0, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		sceneManager.Render();
 		/*

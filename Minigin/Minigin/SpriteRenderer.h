@@ -24,7 +24,7 @@ namespace Rius
 
 		void Initialize();
 		void Update();
-		void LateUpdate();
+		void LateUpdate(const glm::vec3& pos);
 		void Render() const;
 		Rectangle2D GetRectangle()const { return m_Rectangle2D; };
 	private:

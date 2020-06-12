@@ -33,6 +33,7 @@ namespace Rius
 		FiniteStateMachine* m_FSM;
 		SpriteSheetComponent* m_Sprite;
 		GameObject* m_BulletsPrefabs;
+		Collider* m_pCollider;
 		int m_IdInput;
 		bool m_Jump;
 		bool m_Attack;

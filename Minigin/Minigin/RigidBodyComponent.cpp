@@ -64,6 +64,7 @@ void Rius::RigidBodyComponent::Bounce(float multiply)
 
 void Rius::RigidBodyComponent::Initialize()
 {
+	m_pGameObject->m_PreviousPos = m_pGameObject->GetTransform().GetPosition();
 }
 
 void Rius::RigidBodyComponent::Update(float deltaT)

@@ -11,6 +11,7 @@
 #include "Scene.h"
 
 #include "TextComponent.h"
+#include "HealthComponent.h"
 
 Rius::Level::Level(std::vector<Rectangle2D> walls, int levelID, TextureMaterial* materialSmall, TextureMaterial* materialBig, std::string locationBigTexture, std::string locationSmallTexture)
 	:m_StartPos({ 0,0 }), m_pBackGround(), m_Walls(walls), m_LevelID(), m_AI(), m_MaterialSmall(materialSmall), m_MaterialBig(materialBig), m_BigTexture(locationBigTexture), m_SmallTexture(locationSmallTexture)
@@ -42,10 +43,12 @@ void Rius::Level::StartLevel(GameObject* pPlayer)
 		m_pBackGround->AddComponent(wall);
 		m_pBackGround->AddComponent(collider);
 	}
+	//HealthComponent* c = new HealthComponent{ 3,false };
+	//m_pBackGround->AddComponent(c);
 	wall = new WallComponent({ 0.f,0 }, m_MaterialBig, { 0,0,width * 2, float(Minigin::m_Height - height * 2) }, width, height);
-	m_pBackGround->AddComponent(wall);
+	//m_pBackGround->AddComponent(wall);
 	wall = new WallComponent({ 0.f,0 }, m_MaterialBig, { float(Minigin::m_Width - width * 2),0,width * 2, float(Minigin::m_Height - height * 2) }, width, height);
-	m_pBackGround->AddComponent(wall);
+	//m_pBackGround->AddComponent(wall);
 	TextComponent* ptext = new TextComponent{ std::to_string(m_LevelID + 1),{0,0,0},{0,height * 3} };
 	m_pBackGround->AddComponent(ptext);
 	m_pBackGround->SetActive(true);

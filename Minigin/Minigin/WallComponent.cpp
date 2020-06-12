@@ -30,5 +30,5 @@ void Rius::WallComponent::Update(float deltaT)
 
 void Rius::WallComponent::LateUpdate()
 {
-	m_pSprite->LateUpdate();
+	m_pSprite->LateUpdate(m_pGameObject->GetTransform().GetPosition());
 }

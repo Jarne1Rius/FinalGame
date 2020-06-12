@@ -17,12 +17,12 @@ Rius::SpriteComponent::~SpriteComponent()
 
 void Rius::SpriteComponent::Initialize()
 {
-	m_Sprite = new SpriteRenderer{ m_pGameObject->GetTransform().GetPosition(),m_PMat,{0,0,1,1},false,ConvertToUVCoordinates(m_TexCoord, m_PMat->GetTexture2D())};
+	m_Sprite = new SpriteRenderer{ m_pGameObject->GetTransform().GetPosition(),m_PMat,{0,0,100,100},false,{0,0,1,1} };//ConvertToUVCoordinates(m_TexCoord, m_PMat->GetTexture2D())};
 }
 
 void Rius::SpriteComponent::Update(float deltaT)
 {
-	m_Sprite->LateUpdate();
+	m_Sprite->LateUpdate(m_pGameObject->GetTransform().GetPosition());
 }
 
 void Rius::SpriteComponent::Render() const

@@ -9,7 +9,7 @@ Rius::HealthComponent::HealthComponent(int health, bool leftSide)
 	:m_LeftSide(leftSide), m_Health(health),m_OriginalHealth(health)
 {
 	m_pMat = new TextureMaterial{ "../Data/SpriteSheet.png","Health","Health",true };
-	
+	MaterialManager::AddMaterial(m_pMat);
 }
 
 Rius::HealthComponent::~HealthComponent()
@@ -18,13 +18,13 @@ Rius::HealthComponent::~HealthComponent()
 	{
 		delete m_Sprites[i];
 	}
-	delete m_pMat;
+//delete m_pMat;
 }
 
 void Rius::HealthComponent::Initialize()
 {
 	float scale{ 30 };
-	glm::vec2 startPos =(m_LeftSide)? glm::vec2{ 100,100 } : glm::vec2{Minigin::m_Width - scale,100};
+	glm::vec2 startPos =(m_LeftSide)? glm::vec2{ 0,0 } : glm::vec2{Minigin::m_Width - scale,100};
 
 	for (int i = 0; i < m_Health; ++i)
 	{
@@ -40,8 +40,12 @@ void Rius::HealthComponent::Update(float deltaT)
 {
 	for (int i = 0; i < m_Health; ++i)
 	{
-		m_Sprites[i]->LateUpdate();
+		m_Sprites[i]->LateUpdate(m_pGameObject->GetTransform().GetPosition());
 	}
+}
+
+void Rius::HealthComponent::LateUpdate()
+{
 }
 
 void Rius::HealthComponent::Render() const

@@ -1,5 +1,7 @@
 #include "MiniginPCH.h"
 #include "PlayerComponent.h"
+
+#include "BoxCollider2D.h"
 #include "InputManager.h"
 #include "GameObject.h"
 #include "SpriteComponent.h"
@@ -103,10 +105,17 @@ void Rius::PlayerComponent::Initialize()
 	m_FSM = new FiniteStateMachine{ {running,idle,menu,jumping,attack,defeat} };
 	m_FSM->m_CurrentState = idle;
 
+	auto checkCollisionWhileGoingUp = [this]()->void
+	{
+		if (m_Rigid->GetVelocity().y < 0)m_pCollider->SetIgnoreGroups(Group0, true);	
+		else m_pCollider->SetIgnoreGroups(Group0, false);
+	};
 	auto StartFiring = [this]()->void
 	{
-	//	SceneManager::GetCurrentScene()->Add(m_BulletsPrefabs[0].Clone());
+		//	SceneManager::GetCurrentScene()->Add(m_BulletsPrefabs[0].Clone());
 	};
+	m_FSM->AddActionTo(checkCollisionWhileGoingUp, { jumping,running,idle,attack });
+	m_pCollider = m_pGameObject->GetComponent<BoxCollider2D>();
 	m_Rigid = m_pGameObject->GetRigidBodyComponent();
 	attack->SetActionStart(StartFiring);
 }
@@ -118,8 +127,7 @@ void Rius::PlayerComponent::Update(float deltaT)
 	std::string name = m_FSM->m_CurrentState->GetName();
 	if (name == "running" || name == "jumping")
 	{
-		//	m_Rigid->MoveTo(this->GetGameObject()->GetTransform().GetPosition() + glm::vec3{ 10.f * m_Moving * Time::m_DeltaTime,0,0 });
-			//m_Rigid->AddForce(glm::vec2{ 0.001f * m_Moving * Time::m_DeltaTime,0 }); 
+		m_Rigid->MoveTo(this->GetGameObject()->GetTransform().GetPosition() + glm::vec3{ 0.001f * m_Moving * deltaT,0,0 });
 	}
 }
 
