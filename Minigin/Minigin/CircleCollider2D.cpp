@@ -26,7 +26,7 @@ void Rius::CircleCollider2D::Initialize()
 {
 }
 
-void Rius::CircleCollider2D::Update()
+void Rius::CircleCollider2D::Update(float deltaT)
 {
 	for (Collider* collider : m_AllColliders)
 	{

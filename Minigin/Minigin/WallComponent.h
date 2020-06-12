@@ -12,7 +12,7 @@ namespace Rius
 		~WallComponent();
 		void Initialize() override;
 		void Render() const override;
-		void Update() override;
+		void Update(float deltaT) override;
 		void LateUpdate() override;
 	private:
 		SpriteRenderer* m_pSprite;

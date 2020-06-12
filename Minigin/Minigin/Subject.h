@@ -1,17 +1,19 @@
 #pragma once
 #include "Observer.h"
-#define MAx_Observer  10
+
+#define MAX_Observer  10
 namespace Rius
 {
 	class Subject
 	{
 	public:
 		Subject();
-		void AddObserver(Observer* observer);
-		void RemoveObserver(Observer* observer);
-		void Notify(const GameObject* gameobject, Event event);
+		virtual ~Subject();
+		virtual void AddObserver(Observer* observer);
+		virtual void RemoveObserver(Observer* observer);
+		virtual void Notify(const GameObject* gameobject, Event event);
 	private:
-		Observer* m_pObservers[MAx_Observer];
-		int m_NumOfObservers = 2;
+		Observer* m_pObservers[MAX_Observer];
+		int m_NumOfObservers = 0;
 	};
 }

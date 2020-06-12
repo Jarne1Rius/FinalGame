@@ -9,7 +9,7 @@ class TestScene : public Rius::Scene
 {
 public:
 	TestScene();
-	void Update() override;
+	void Update(float deltaT) override;
 	//void Render() const override;
 private:
 	void Initialize() override;

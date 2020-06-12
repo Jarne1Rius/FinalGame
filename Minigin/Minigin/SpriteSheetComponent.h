@@ -39,7 +39,7 @@ namespace Rius
 		void SetAnimation(std::string name);
 		void Initialize() override;
 		void Render() const override;
-		void Update() override;
+		void Update(float deltaT) override;
 		void LateUpdate() override;
 		BaseComponent* Clone() override;
 		void SetComponent(BaseComponent* comp) override;

@@ -17,7 +17,7 @@ Rius::FPSComponent::~FPSComponent()
 	delete m_pTextRenderer;
 }
 
-void Rius::FPSComponent::Update()
+void Rius::FPSComponent::Update(float deltaT)
 {
 	
 }

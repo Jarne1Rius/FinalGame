@@ -5,10 +5,18 @@ Rius::Subject::Subject()
 {
 }
 
+Rius::Subject::~Subject()
+{
+	for (int i = 0; i < m_NumOfObservers; ++i)
+	{
+		delete m_pObservers[i];
+	}
+}
+
 void Rius::Subject::AddObserver(Observer* observer)
 {
-	m_NumOfObservers++;
 	m_pObservers[m_NumOfObservers] = observer;
+	m_NumOfObservers++;
 }
 
 void Rius::Subject::RemoveObserver(Observer* observer)

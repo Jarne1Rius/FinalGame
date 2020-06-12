@@ -30,7 +30,7 @@ void Rius::BoxCollider2D::Initialize()
 
 }
 
-void Rius::BoxCollider2D::Update()
+void Rius::BoxCollider2D::Update(float deltaT)
 {
 	if (!m_Static && m_CurrentCollisionGroup != Group3)
 	{

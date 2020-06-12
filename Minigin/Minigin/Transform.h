@@ -20,7 +20,7 @@ namespace Rius
 		BaseComponent* Clone() override;
 		void SetComponent(BaseComponent * comp) override;
 		void Initialize() override ;
-		void Update() override;
+		void Update(float deltaT) override;
 		void Render() const override;
 
 		

@@ -1,10 +1,19 @@
 #include "MiniginPCH.h"
 #include "Observer.h"
 #include "UI.h"
-Rius::GUISystem::GUISystem(UI* ui)
-	:m_MainUI(ui)
+
+
+Rius::Observer::Observer()
 {
-	
+}
+
+void Rius::Observer::OnNotify(const GameObject* object, Event event)
+{
+}
+
+Rius::GUISystem::GUISystem( GameObject* pObject)
+{
+	pObject->AddObserver(this);
 }
 
 void Rius::GUISystem::OnNotify(const GameObject* object, Event event)
@@ -12,10 +21,10 @@ void Rius::GUISystem::OnNotify(const GameObject* object, Event event)
 	switch (event)
 	{
 	case Event::hit:
-		m_MainUI->GetPlayer(object).RemoveHealth();
+		UI::GetInstance().GetPlayer(object).RemoveHealth();
 		break;
 	case Event::addscore:
-		m_MainUI->GetPlayer(object).score += 10;
+		UI::GetInstance().GetPlayer(object).score += 10;
 		break;
 	}
 }

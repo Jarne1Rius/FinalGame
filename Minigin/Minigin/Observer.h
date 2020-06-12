@@ -15,16 +15,15 @@ namespace Rius
 	{
 	public:
 		Observer();
-		virtual ~Observer() {};
+		virtual ~Observer() = default;;
 		virtual void OnNotify(const GameObject* object, Event event) ;
 	};
 	class GUISystem : public Observer
 	{
 	public:
-		GUISystem(UI* ui);
+		GUISystem( GameObject* pObject);
 		void OnNotify(const GameObject* object, Event event) override;
 	private:
-		UI* m_MainUI;
 	};
 }
 

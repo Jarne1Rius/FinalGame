@@ -10,7 +10,7 @@ namespace Rius
 		HealthComponent(int health,bool leftSide);
 		~HealthComponent();
 		void Initialize() override;
-		void Update() override;
+		void Update(float deltatT) override;
 		void Render() const override;
 		void RemoveHealth() { m_Health--; }
 		void ResetHealth() { m_Health = m_OriginalHealth; }

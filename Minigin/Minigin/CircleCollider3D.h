@@ -17,7 +17,7 @@ namespace Rius
 		void SetComponent(BaseComponent* comp) override;
 		
 		void Initialize() override;
-		void Update() override;
+		void Update(float deltaT) override;
 		void Render() const override;
 		glm::vec2 GetCenter() override;
 		const Circle3D GetCircle3D()const { return m_Circle3D; }

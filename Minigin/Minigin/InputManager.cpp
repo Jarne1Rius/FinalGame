@@ -1,10 +1,14 @@
 #include "MiniginPCH.h"
 #include "InputManager.h"
 #include <thread>
+
+#include "Logger.h"
+#include "UI.h"
 Rius::InputManager::InputManager()
-	:m_Id(1),m_CurrentState(),m_Controllers(),m_ButtonsCommand{},m_Stop(),m_Buttons{},m_Threads()
+	:m_Id(1), m_CurrentState(), m_Controllers(), m_ButtonsCommand{}, m_Stop(), m_Buttons{}
 {
 	m_ButtonsCommand[int(ControllerButton::ButtonA)] = new JumpCommand{};
+	m_ButtonsCommand[int(ControllerButton::ButtonB)] = new FireCommand{};
 	m_ButtonsCommand[int(ControllerButton::LeftStick)] = new MoveLeft{};
 	m_ButtonsCommand[int(ControllerButton::RightStick)] = new MoveRight{};
 	for (int i = 0; i < m_Size; ++i)
@@ -12,31 +16,13 @@ Rius::InputManager::InputManager()
 		if (m_ButtonsCommand[i] == nullptr)
 			m_ButtonsCommand[i] = new Command();
 	}
-
-	for (int i{ 0 }; i < XUSER_MAX_COUNT; i++)
+	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i)
 	{
 		XINPUT_STATE state;
 		ZeroMemory(&state, sizeof(XINPUT_STATE));
-
-		// Simply get the state of the controller from XInput.
-		DWORD dwResult = XInputGetState(i, &state);
-
-		if (dwResult == ERROR_SUCCESS)
-		{
-			m_Id = i;
-			for (int k = 0; k <int(m_Controllers.size()); k++)
-			{
-				if (k == i) i = -1;
-			};  // Connected
-			if (i != -1)
-			{
-				m_CurrentState.push_back(state);
-				m_Controllers.push_back(i);
-				//m_Threads.push_back(std::thread(&InputManager::ProcessInputt, this, m_Controllers[i]));
-			}
-		}
+		const DWORD dwResult = XInputGetState(i, &state);
+		m_Connected[i] = (dwResult == ERROR_SUCCESS);
 	}
-
 }
 
 Rius::InputManager::~InputManager()
@@ -48,51 +34,21 @@ Rius::InputManager::~InputManager()
 	}
 }
 
-bool Rius::InputManager::ProcessInput()
+void Rius::InputManager::ProcessInputt(GameObject* gameObject, int id, int playerid)
 {
-	for (int i = 0; i <int( m_Controllers.size()); i++)
-	{
-		ZeroMemory(&m_CurrentState[i], sizeof(XINPUT_STATE));
-
-		XInputGetState(m_Id, &m_CurrentState[i]);
-	}
-
-
-	return true;
+	m_ButtonsCommand[id]->Execute(gameObject, IsPressed(ControllerButton(id), playerid));
 }
 
-void Rius::InputManager::ProcessInputt(GameObject* gameObject, int id)
+void Rius::InputManager::Test()
 {
-
-	//while (m_Stop)
+	UpdateGamepadState();
+	for (int i = 0; i < UI::GetInstance().AmountOfPlayers(); ++i)
 	{
-		m_ButtonsCommand[id]->Execute(gameObject, IsPressed(ControllerButton(id), 0));
+		for (int a{}; a < m_Size; a++)
+		{
+			ProcessInputt(UI::GetInstance().GetPlayer(i).pPlayer, a, UI::GetInstance().GetPlayer(i).IdController);
+		}
 	}
-
-}
-
-void Rius::InputManager::Test(GameObject* gameObject)
-{
-	for (int a{}; a < m_Size; a++)
-	{
-		ProcessInputt(gameObject, a);
-		/*if(IsPressed(ControllerButton(a)) && !m_Buttons[a]->m_Pressed)
-			m_Buttons[a]->Execute(actor);
-		m_Buttons[a]->m_Pressed = IsPressed(ControllerButton(a));*/
-	}
-	//ProcessInputt(0);
-	//std::thread threads[m_Size];
-	//for (int a{}; a < m_Size; a++)
-	//{
-	//	
-	//	threads[a] = std::thread{ &InputManager::ProcessInputt, this, gameObject,m_Id };
-	//	//m_Threads.push_back(std::thread(&InputManager::ProcessInputt, this, m_Controllers[i]));
-	//	//m_ButtonsCommand[a]->Execute(gameObject, IsPressed(ControllerButton(a), 0));
-	//}
-	//for (int i = 0; i < m_Size; ++i)
-	//{
-	//	threads[i].join();
-	//}
 }
 
 
@@ -102,7 +58,45 @@ float Rius::InputManager::IsPressed(ControllerButton button, int id) const
 		return RightStickX(id);
 	else if (button == ControllerButton::LeftStick)
 		return LeftStickX(id);
-	return float((m_CurrentState[id].Gamepad.wButtons & XINPUT_Buttons[int(button)])? 1:0);
+	return float((m_CurrentState[id].Gamepad.wButtons & XINPUT_Buttons[int(button)]) ? 1 : 0);
+}
+
+void Rius::InputManager::ChangeCommand(ControllerButton button, Command* newCommand)
+{
+	delete m_ButtonsCommand[int(button)];
+	m_ButtonsCommand[int(button)] = newCommand;
+
+}
+
+void Rius::InputManager::UpdateGamepadState()
+{
+	for (DWORD i = 0; i < XUSER_MAX_COUNT; ++i)
+	{
+		if (!m_Connected[i])
+			return;
+
+		const DWORD dwResult = XInputGetState(i, &m_CurrentState[i]);
+		m_Connected[i] = (dwResult == ERROR_SUCCESS);
+	}
+}
+
+int Rius::InputManager::GetGamepadId()
+{
+	for (int k = 0; k < 4; ++k)
+	{
+		bool avail{ true };
+		for (int i = 0; i < UI::GetInstance().AmountOfPlayers(); ++i)
+		{
+
+			if (UI::GetInstance().GetPlayer(i).IdController == k) avail = false;
+		}
+		if (m_Connected[k] && avail)
+		{
+			return k;
+		}
+	}
+	Logger::LogError("NoNewGamePadConnected");
+	return  -1;
 }
 
 glm::vec2 Rius::InputManager::GetAxisGamePad(KeyFunctions button, int id) const

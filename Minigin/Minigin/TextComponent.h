@@ -11,7 +11,7 @@ namespace Rius
 		TextComponent(const std::string& text,const glm::vec3& color, const glm::vec2& offset, float size = 1);
 		~TextComponent();
 		void Initialize() override;
-		void Update() override;
+		void Update(float deltaT) override;
 		void Render() const override;
 
 		void ChangeText(const std::string& text);

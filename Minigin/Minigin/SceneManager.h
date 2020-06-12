@@ -11,7 +11,7 @@ namespace Rius
 		void AddScene(Scene* newScene);
 		static Scene* GetCurrentScene();
 		static void CleanUp();
-		void Update();
+		void Update(float deltaT);
 		void Render();
 		void LateUpdate();
 	private:

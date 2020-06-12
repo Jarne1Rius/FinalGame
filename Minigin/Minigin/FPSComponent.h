@@ -15,7 +15,7 @@ namespace Rius
 	public:
 		explicit FPSComponent(glm::vec3 color = { 0,0,0 }, const std::string& font = "Resources/Lingua.otf");
 		virtual ~FPSComponent();
-		void Update() override;
+		void Update(float deltaT) override;
 		void Initialize() override;
 		void Render() const override;
 		void SetComponent(BaseComponent* comp) override ;

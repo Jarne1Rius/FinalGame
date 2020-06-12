@@ -5,14 +5,14 @@
 #include "SpriteComponent.h"
 #include "SceneManager.h"
 #include "Scene.h"
-Rius::PlayerComponent::PlayerComponent(int idInput, std::vector<SpriteComponent*> prefabBullets)
-	:m_FSM(), m_MovementSpeed(), m_GamepadID(), m_Lives(3), m_IdInput(idInput),m_Moving(1.f),m_Jump(),m_Sprite(),m_Attack(),m_Rigid(),m_BulletsPrefabs(prefabBullets)
+Rius::PlayerComponent::PlayerComponent(int idInput, GameObject* prefabBullets)
+	:m_FSM(), m_MovementSpeed(), m_GamepadID(), m_Lives(3), m_IdInput(idInput), m_Moving(1.f), m_Jump(), m_Sprite(), m_Attack(), m_Rigid(), m_BulletsPrefabs(prefabBullets)
 {
 }
 
 Rius::PlayerComponent::~PlayerComponent()
 {
-	
+
 	delete m_FSM;
 }
 
@@ -86,16 +86,16 @@ void Rius::PlayerComponent::Initialize()
 	running->SetTransition(isDeadLambda, defeat);
 	running->SetTransition(jump, jumping);
 	running->SetTransition(attacking, attack);
-	
+
 	idle->SetTransition(isDeadLambda, defeat);
 	idle->SetTransition(jump, jumping);
 	idle->SetTransition(attacking, attack);
 	idle->SetTransition(moving, running);
-	
+
 	jumping->SetTransition(isDeadLambda, defeat);
 	jumping->SetTransition(attacking, attack);
 	jumping->SetTransition(stopJump, idle);
-	
+
 	attack->SetTransition(isDeadLambda, defeat);
 	attack->SetTransition(stopAttacking, idle);
 	attack->SetTransition(jump, jumping);
@@ -105,22 +105,21 @@ void Rius::PlayerComponent::Initialize()
 
 	auto StartFiring = [this]()->void
 	{
-		GameObject* pBullet = new GameObject{};
-		pBullet->AddComponent(m_BulletsPrefabs[0]->Cloning());
-		SceneManager::GetCurrentScene()->Add(pBullet);
+	//	SceneManager::GetCurrentScene()->Add(m_BulletsPrefabs[0].Clone());
 	};
 	m_Rigid = m_pGameObject->GetRigidBodyComponent();
+	attack->SetActionStart(StartFiring);
 }
 
-void Rius::PlayerComponent::Update()
+void Rius::PlayerComponent::Update(float deltaT)
 {
 	if (m_Rigid == nullptr) m_Rigid = m_pGameObject->GetRigidBodyComponent();
 	m_FSM->UpdateState();
 	std::string name = m_FSM->m_CurrentState->GetName();
 	if (name == "running" || name == "jumping")
 	{
-	//	m_Rigid->MoveTo(this->GetGameObject()->GetTransform().GetPosition() + glm::vec3{ 10.f * m_Moving * Time::m_DeltaTime,0,0 });
-		//m_Rigid->AddForce(glm::vec2{ 0.001f * m_Moving * Time::m_DeltaTime,0 }); 
+		//	m_Rigid->MoveTo(this->GetGameObject()->GetTransform().GetPosition() + glm::vec3{ 10.f * m_Moving * Time::m_DeltaTime,0,0 });
+			//m_Rigid->AddForce(glm::vec2{ 0.001f * m_Moving * Time::m_DeltaTime,0 }); 
 	}
 }
 
@@ -147,6 +146,7 @@ void Rius::PlayerComponent::Move(float value)
 
 void Rius::PlayerComponent::Fire(float value)
 {
+	std::cout << "test\n";
 	std::string name = m_FSM->m_CurrentState->GetName();
 	if (name != "Menu" || name != "Defeat")
 		m_Attack = true;

@@ -23,7 +23,7 @@ void Rius::WallComponent::Render() const
 	m_pSprite->Render();
 }
 
-void Rius::WallComponent::Update()
+void Rius::WallComponent::Update(float deltaT)
 {
 //	m_pSprite->Update();
 }

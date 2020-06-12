@@ -52,13 +52,13 @@ namespace Rius
 	public:
 		InputManager();
 		~InputManager();
-		bool ProcessInput();
-		void ProcessInputt(GameObject* gameObject,int id);
-		void Test(GameObject* gameObject);
-		//void ChangeKey(KeyFunctions function, ControllerButton GamepadKeys);
-		//void ChangeKey(KeyFunctions function, SDL_Scancode Keys);
-		//ControllerMap GetControls() const { return m_Controles; }
+		//bool ProcessInput();
+		void ProcessInputt(GameObject* gameObject,int id, int playerId);
+		void Test();
 		float IsPressed(ControllerButton button, int id) const;
+		void ChangeCommand(ControllerButton button, Command* newCommand);
+		void UpdateGamepadState();
+		int GetGamepadId();
 		glm::vec2 GetAxisGamePad(KeyFunctions button, int id) const;
 		float LeftStickY(int id) const;
 		float LeftStickX(int id) const;
@@ -74,8 +74,8 @@ namespace Rius
 		bool LStickInDeadZone(int id) const;
 		bool RStickInDeadZone(int id) const;
 		const static int m_Size{ 14 };
-		std::vector <std::thread> m_Threads;
-		std::vector<XINPUT_STATE> m_CurrentState{};
+		XINPUT_STATE m_CurrentState[4]{};
+		bool m_Connected[4]{};
 		int m_Id;
 		bool m_Buttons[m_Size];
 		Command* m_ButtonsCommand[m_Size];

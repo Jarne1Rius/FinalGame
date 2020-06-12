@@ -12,8 +12,8 @@ namespace Rius
 		void Remove(GameObject* object);
 		explicit Scene(const std::string& name);
 
-		virtual void Update() = 0;
-		void UpdateObjects();
+		virtual void Update(float deltaT) = 0;
+		void UpdateObjects(float deltaT);
 		void LateUpdateObjects();
 		virtual void Render() const;
 		virtual void Initialize();

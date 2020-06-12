@@ -17,7 +17,7 @@ namespace Rius
 		void AddForce(glm::vec2 force);
 		void Bounce(float multiply);
 		void Initialize() override;
-		void Update() override;
+		void Update(float deltaT) override;
 		void Render() const override;
 		void SetKinematic(bool kinematic);
 		glm::vec3& GetVelocity() { return m_Velocity; }

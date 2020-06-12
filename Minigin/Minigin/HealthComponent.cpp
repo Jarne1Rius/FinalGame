@@ -24,11 +24,11 @@ Rius::HealthComponent::~HealthComponent()
 void Rius::HealthComponent::Initialize()
 {
 	float scale{ 30 };
-	glm::vec2 startPos =(m_LeftSide)? glm::vec2{ 0,0 } : glm::vec2{Minigin::m_Width - scale,0};
+	glm::vec2 startPos =(m_LeftSide)? glm::vec2{ 100,100 } : glm::vec2{Minigin::m_Width - scale,100};
 
 	for (int i = 0; i < m_Health; ++i)
 	{
-		SpriteRenderer* sprite = new SpriteRenderer{ m_pGameObject->GetTransform().GetPosition(),m_pMat,{startPos,scale,scale},true,ConvertToUVCoordinates(((m_LeftSide) ? Rectangle2D{601,830,10,10} : Rectangle2D{613,830,10,10}),m_pMat->GetTexture2D()) };
+		SpriteRenderer* sprite = new SpriteRenderer{ m_pGameObject->GetTransform().GetPosition(),m_pMat,{startPos,scale,scale},false,ConvertToUVCoordinates(((m_LeftSide) ? Rectangle2D{601,830,10,10} : Rectangle2D{613,830,10,10}),m_pMat->GetTexture2D()) };
 		m_Sprites[i] = sprite;
 
 		
@@ -36,11 +36,11 @@ void Rius::HealthComponent::Initialize()
 	}
 }
 
-void Rius::HealthComponent::Update()
+void Rius::HealthComponent::Update(float deltaT)
 {
 	for (int i = 0; i < m_Health; ++i)
 	{
-		m_Sprites[i]->Update();
+		m_Sprites[i]->LateUpdate();
 	}
 }
 

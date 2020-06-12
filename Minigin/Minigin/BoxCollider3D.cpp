@@ -41,7 +41,7 @@ void Rius::BoxCollider3D::Initialize()
 {
 }
 
-void Rius::BoxCollider3D::Update()
+void Rius::BoxCollider3D::Update(float deltaT)
 {
 	for (Collider* collider : m_AllColliders)
 	{

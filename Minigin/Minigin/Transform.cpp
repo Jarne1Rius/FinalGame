@@ -59,7 +59,7 @@ void Rius::Transform::Initialize()
 {
 }
 
-void Rius::Transform::Update()
+void Rius::Transform::Update(float deltaT)
 {
 }
 

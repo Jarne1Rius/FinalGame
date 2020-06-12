@@ -14,7 +14,7 @@ namespace Rius
 		BoxCollider2D& operator= (const BoxCollider2D& other) = default;
 		BoxCollider2D& operator= (BoxCollider2D&& other) = default;
 		void Initialize() override;
-		void Update() override;
+		void Update(float deltaT) override;
 		void Render() const override;
 		glm::vec2 GetCenter() override;
 		const Rectangle2D GetRectangle() const { return m_Rectangle; }

@@ -18,7 +18,7 @@ namespace Rius
 		~Ai();
 		void Initialize() override;
 		void Render() const override;
-		void Update() override;
+		void Update(float deltaT) override;
 		void LateUpdate() override;
 		void SetTarget(const std::vector<GameObject*>& targets) { m_Targets = targets; }
 		GameObject* GetCurrentTarget() const { return m_CurrentTarget; }

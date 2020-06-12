@@ -2,21 +2,21 @@
 #include "Transform.h"
 #include "BaseComponent.h"
 #include "Extra.h"
-
+#include "Subject.h"
 namespace Rius
 {
 	class PlayerComponent;
 	class RigidBodyComponent;
 	class Texture2D;
 	class Subject;
-	class GameObject final
+	class GameObject : public Subject
 	{
 	public:
-		void Update();
-		void LateUpdate();
-		void Render() const;
-		void Initialize();
-
+		virtual void Update(float deltaT);
+		virtual void LateUpdate();
+		virtual void Render() const;
+		virtual void Initialize();
+		virtual GameObject* Clone();
 		//void SetTexture(const std::string& filename);
 		void SetPosition(float x, float y);
 
@@ -34,8 +34,8 @@ namespace Rius
 		PlayerComponent* GetPlayerComponent() const { return m_pPlayerComponent; }
 		void AddComponent(PlayerComponent* playerComponent);
 
-		void OnTriggerEnter(Collider* other);
-		void OnCollisionEnter(Collider* other);
+		virtual void OnTriggerEnter(Collider* other);
+		virtual void OnCollisionEnter(Collider* other);
 		
 		
 		//getters
@@ -48,7 +48,7 @@ namespace Rius
 		bool GetStatic() const { return m_Static; }
 		void SetStatic(bool isStatic) { m_Static = isStatic; }
 		int GetId() const { return m_Id; }
-		Subject* GetSubject() const { return m_Subject; }
+		//Subject* GetSubject() const { return m_Subject; }
 		void SetActive(bool active = false) { m_Active = active; }
 		bool GetActive()const { return m_Active; }
 		BaseComponent* GetComponentById(int id);
@@ -95,7 +95,7 @@ namespace Rius
 		int m_Id;
 		class GameScene* m_pParentScene;
 		GameObject* m_pParentObject;
-		Subject* m_Subject;
+		//Subject* m_Subject;
 		static int m_CurrentID;
 	};
 }

@@ -34,11 +34,11 @@ void Scene::Remove(GameObject* object)
 	delete object;
 }
 
-void Scene::UpdateObjects()
+void Scene::UpdateObjects(float deltaT)
 {
 	for (auto && pObject : m_pObjects)
 	{
-		pObject->Update();
+		pObject->Update(deltaT);
 		//m_Pool.enqueue([&pObject] {pObject->Update(); });	
 	}
 	//std::vector<std::future<void>> results;

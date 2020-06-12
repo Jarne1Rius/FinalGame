@@ -66,7 +66,7 @@ void Rius::RigidBodyComponent::Initialize()
 {
 }
 
-void Rius::RigidBodyComponent::Update()
+void Rius::RigidBodyComponent::Update(float deltaT)
 {
 	if (abs(m_Velocity.y) > 0.01f)
 	{

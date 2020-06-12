@@ -16,7 +16,7 @@ namespace Rius
 		CircleCollider2D& operator= (const CircleCollider2D& other) = default;
 		CircleCollider2D& operator= (CircleCollider2D&& other) = default;
 		void Initialize() override;
-		void Update() override;
+		void Update(float deltaT) override;
 		void Render() const override;
 		glm::vec2 GetCenter() override;
 		const Circle2D GetCircle2D()const { return m_Circle2D; }

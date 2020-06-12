@@ -12,7 +12,7 @@ namespace Rius
 		SpriteComponent(TextureMaterial* textureBullet, const Rectangle2D& texCoordSizeOfTexture);
 		~SpriteComponent();
 		void Initialize() override;
-		void Update() override;
+		void Update(float deltaT) override;
 		void Render() const override;
 		SpriteComponent* Cloning();
 	private:

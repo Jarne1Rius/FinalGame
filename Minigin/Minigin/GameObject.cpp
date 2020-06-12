@@ -9,7 +9,7 @@
 int Rius::GameObject::m_CurrentID = 0;
 Rius::GameObject::GameObject()
 	:m_pComponents(), m_pChildren(), m_pParentObject(), m_Tag(), m_Static(), m_Transform(), m_pParentScene(), m_pRigidBodyComponent(nullptr)
-	, m_Id(), m_Active(true), m_pPlayerComponent(), m_Subject(), m_PreviousPos()
+	, m_Id(), m_Active(true), m_pPlayerComponent(), m_PreviousPos()
 {
 	m_Id = m_CurrentID;
 	m_CurrentID++;
@@ -17,7 +17,7 @@ Rius::GameObject::GameObject()
 
 Rius::GameObject::~GameObject()
 {
-	for (int i{}; i < int(m_pComponents.size()); i++)
+	for (int i{}; i < int(m_pComponents.size()) ;i++)
 	{
 		delete m_pComponents[i];
 	}
@@ -69,11 +69,11 @@ Rius::BaseComponent* Rius::GameObject::GetComponentById(int id)
 	return nullptr;
 }
 
-void Rius::GameObject::Update()
+void Rius::GameObject::Update(float deltaT)
 {
 	if (!m_Active) return;
 	for (BaseComponent* comp : m_pComponents)
-		comp->Update();
+		comp->Update(deltaT);
 }
 
 void Rius::GameObject::LateUpdate()
@@ -96,6 +96,11 @@ void Rius::GameObject::Initialize()
 {
 	for (BaseComponent* comp : m_pComponents)
 		comp->Initialize();
+}
+
+Rius::GameObject* Rius::GameObject::Clone()
+{
+	return this;
 }
 
 

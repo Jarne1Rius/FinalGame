@@ -27,7 +27,7 @@ namespace Rius
 
 
 		void Initialize() override = 0;
-		void Update() override = 0;
+		void Update(float deltaT) override = 0;
 		void Render() const override = 0;
 		virtual glm::vec2 GetCenter() = 0;
 		virtual bool CheckCollision(BoxCollider2D* collider) = 0;

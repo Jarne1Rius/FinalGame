@@ -12,6 +12,7 @@ Rius::SpriteComponent::SpriteComponent(TextureMaterial* textureBullet, const Rec
 
 Rius::SpriteComponent::~SpriteComponent()
 {
+	delete m_Sprite;
 }
 
 void Rius::SpriteComponent::Initialize()
@@ -19,8 +20,9 @@ void Rius::SpriteComponent::Initialize()
 	m_Sprite = new SpriteRenderer{ m_pGameObject->GetTransform().GetPosition(),m_PMat,{0,0,1,1},false,ConvertToUVCoordinates(m_TexCoord, m_PMat->GetTexture2D())};
 }
 
-void Rius::SpriteComponent::Update()
+void Rius::SpriteComponent::Update(float deltaT)
 {
+	m_Sprite->LateUpdate();
 }
 
 void Rius::SpriteComponent::Render() const

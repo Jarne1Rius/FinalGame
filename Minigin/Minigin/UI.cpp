@@ -6,11 +6,16 @@
 #include "TextMaterial.h"
 #include "HealthComponent.h"
 #include "TextRenderer.h"
+#include "InputManager.h"
+Rius::Player::Player()
+	:IdController(InputManager::GetInstance().GetGamepadId())
+{
+}
 
 void Rius::Player::Render(TextRenderer* textRenderer, glm::vec2 pos) const
 {
-	pos.y = float(Minigin::m_Height) ;
-	textRenderer->RenderText(pos, std::to_string(score), 1, m_color);
+	//pos.y = float(Minigin::m_Height) ;
+	//textRenderer->RenderText(pos, std::to_string(score), 1, m_color);
 	//pPlayer->Render();
 }
 

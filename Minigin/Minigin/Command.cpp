@@ -7,15 +7,19 @@ void Rius::JumpCommand::Execute(const GameObject* actor, float hit)
 	//std::cout << "Jump";
 
 	if (actor->GetPlayerComponent() == nullptr) return;
+	//if (hit == 1) std::cout << "ahah";
 	switch (m_Type)
 	{
 	case pressed:
+		//std::cout << "test\n";
 		if (!m_Pressed && (hit == 1))actor->GetPlayerComponent()->Jump(hit);
 			break;
 	case release:
+		//std::cout << "test\n";
 		if (m_Pressed && (hit == 0))actor->GetPlayerComponent()->Jump(hit);
 		break;
 	case hold:
+		//std::cout << "test\n";
 		if (m_Pressed && (hit == 1))actor->GetPlayerComponent()->Jump(hit);
 		break;
 	}
@@ -24,6 +28,24 @@ void Rius::JumpCommand::Execute(const GameObject* actor, float hit)
 
 void Rius::FireCommand::Execute(const GameObject* actor, float hit)
 {
+	if (actor->GetPlayerComponent() == nullptr) return;
+	//if (hit == 1) std::cout << "ahah";
+	switch (m_Type)
+	{
+	case pressed:
+		//std::cout << "test\n";
+		if (!m_Pressed && (hit == 1))actor->GetPlayerComponent()->Fire(hit);
+		break;
+	case release:
+		//std::cout << "test\n";
+		if (m_Pressed && (hit == 0))actor->GetPlayerComponent()->Fire(hit);
+		break;
+	case hold:
+		//std::cout << "test\n";
+		if (m_Pressed && (hit == 1))actor->GetPlayerComponent()->Fire(hit);
+		break;
+	}
+	m_Pressed = (hit == 1);
 }
 
 void Rius::MoveLeft::Execute(const GameObject* actor, float hit)

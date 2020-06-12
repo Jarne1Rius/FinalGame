@@ -18,7 +18,7 @@ namespace Rius
 		void SetComponent(BaseComponent* comp) override;
 		
 		void Initialize() override;
-		void Update() override;
+		void Update(float deltaT) override;
 		void Render() const override;
 		glm::vec2 GetCenter() override;
 		const Rectangle3D GetRectangle() const { return m_Rectangle; }

@@ -155,7 +155,7 @@ void Rius::Ai::Render() const
 {
 }
 
-void Rius::Ai::Update()
+void Rius::Ai::Update(float deltaT)
 {
 }
 
@@ -214,7 +214,7 @@ void Rius::Ai::OnCollisionEnter(Collider* collider)
 {
 	if(m_pFSM->m_CurrentState->GetName() == "AfterDeath" && collider->GetGameObject()->GetTag() == Tag::Player)
 	{
-		UI::GetInstance().GetPlayer(collider->GetGameObject()).score += m_Value;
+		
 	}
 }
 

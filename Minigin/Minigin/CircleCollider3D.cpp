@@ -41,7 +41,7 @@ void Rius::CircleCollider3D::Initialize()
 {
 }
 
-void Rius::CircleCollider3D::Update()
+void Rius::CircleCollider3D::Update(float deltaT)
 {
 	//TODO Can try to change it to the collider.h file but problem with checkCollisiion
 	for (Collider* collider : m_AllColliders)

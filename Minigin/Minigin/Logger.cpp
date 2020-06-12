@@ -5,6 +5,7 @@
 HANDLE Rius::Logger::m_HConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 Rius::Logger::Logger()
 {
+	SetConsoleTextAttribute(m_HConsole, 7);
 }
 
 void Rius::Logger::LogInfo(std::string info)
@@ -45,7 +46,6 @@ void Rius::Logger::LogError(glm::vec2& position)
 
 void Rius::Logger::LogInfo()
 {
-
 	SetConsoleTextAttribute(m_HConsole, 7);
 	LogTime();
 	std::cout << "-INFO: ";
@@ -57,6 +57,7 @@ void Rius::Logger::LogError()
 	LogTime();
 	//system("Color 1A");
 	std::cout << "-ERROR: ";
+	SetConsoleTextAttribute(m_HConsole, 7);
 }
 
 void Rius::Logger::LogTime()

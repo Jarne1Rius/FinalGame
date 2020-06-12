@@ -143,7 +143,7 @@ void Rius::SpriteSheetComponent::Render() const
 	glBindVertexArray(0);
 }
 
-void Rius::SpriteSheetComponent::Update()
+void Rius::SpriteSheetComponent::Update(float deltaT)
 {
 	
 

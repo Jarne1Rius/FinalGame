@@ -4,10 +4,10 @@
 
 std::vector<Rius::Scene*> Rius::SceneManager::m_Scenes;
 int Rius::SceneManager::m_ActiveScene = -1;
-void Rius::SceneManager::Update()
+void Rius::SceneManager::Update(float deltaT)
 {
-	m_Scenes[m_ActiveScene]->Update();
-	m_Scenes[m_ActiveScene]->UpdateObjects();
+	m_Scenes[m_ActiveScene]->Update(deltaT);
+	m_Scenes[m_ActiveScene]->UpdateObjects(deltaT);
 
 }
 

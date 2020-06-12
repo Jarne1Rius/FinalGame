@@ -10,7 +10,7 @@ namespace Rius
 	class PlayerComponent :	public BaseComponent
 	{
 	public:
-		PlayerComponent(int idInput, std::vector<SpriteComponent*> pPrefabBullet);
+		PlayerComponent(int idInput, GameObject* pPrefabBullet);
 		~PlayerComponent();
 		PlayerComponent(const PlayerComponent& other);
 		PlayerComponent(PlayerComponent&& other) noexcept = default;
@@ -19,7 +19,7 @@ namespace Rius
 		void SetComponent(BaseComponent * comp) override;
 		BaseComponent* Clone() override;
 		void Initialize() override;
-		void Update() override;
+		void Update(float deltaT) override;
 		void Render() const override;
 		void TakeDamage(int amount);
 		void Jump(float value);
@@ -32,7 +32,7 @@ namespace Rius
 		int m_GamepadID;
 		FiniteStateMachine* m_FSM;
 		SpriteSheetComponent* m_Sprite;
-		std::vector<SpriteComponent*> m_BulletsPrefabs;
+		GameObject* m_BulletsPrefabs;
 		int m_IdInput;
 		bool m_Jump;
 		bool m_Attack;
