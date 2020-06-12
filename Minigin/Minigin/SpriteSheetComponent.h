@@ -12,11 +12,14 @@ namespace Rius
 {
 	class Shader;
 
-	struct SpriteTotal
+	struct Animation
 	{
+		Animation(Rectangle2D texCoord, std::string name, int totalFrams, float timenext, int colms, int rows, int  firstframe = 0)
+			:m_TexCoord(texCoord), m_Colms(colms), m_Rows(rows), m_FirstFrame(firstframe), m_TotalFrames(totalFrams), m_TimeNextFrame(timenext), m_Name(name)
+		{};
+		Rectangle2D m_TexCoord = {0,0,0,0};
 		std::string m_Name = "";
 		int m_TotalFrames = 0;
-		int m_StartFrame = 0;
 		float m_TimeNextFrame = 0;
 		int m_Colms = 1;
 		int m_Rows = 1;
@@ -26,9 +29,7 @@ namespace Rius
 	class SpriteSheetComponent : public BaseComponent
 	{
 	public:
-		SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, std::vector<SpriteTotal> totalAnimations);
-		SpriteSheetComponent(Material* material,  const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, float timeNextFrame = 10, int firstFrame = 0, int totalFrames = 0);
-		SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, float widthColms, float heightOfRows,glm::vec2& startPosition, float timeNextFrame = 10, int firstFrame = 0, int totalFrames = 0);
+		SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic, std::vector<Animation> totalAnimations);
 		~SpriteSheetComponent();
 		SpriteSheetComponent(const SpriteSheetComponent& other);
 		SpriteSheetComponent(SpriteSheetComponent&& other) noexcept = default;
@@ -44,7 +45,8 @@ namespace Rius
 		BaseComponent* Clone() override;
 		void SetComponent(BaseComponent* comp) override;
 		Rectangle2D GetRectangle() const { return m_Rectangle2D; }
-		void ResetSpriteSheet(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, std::vector<SpriteTotal> totalAnimations);
+		void ResetSpriteSheet(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, std::vector<Animation> totalAnimations);
+		bool CheckOneCicle();
 	private:
 		Material* m_pMaterial;
 		bool m_Static;
@@ -57,14 +59,13 @@ namespace Rius
 		glm::vec4 m_Color;
 		Rectangle2D m_Rectangle2D;
 		Rectangle2D m_TextCoord;
-		int m_Colms;
-		int m_Rows;
+		float m_SecCicle;
 		int m_CurrentFrame;
 		float m_Sec;
 		float m_WidthObject;
 		float m_HeightObject;
 		Rectangle2D m_SrcRect;
-		std::vector<SpriteTotal> m_TotalAnimations;
+		std::vector<Animation> m_TotalAnimations;
 		int m_CurrentAnimation;
 		void SetIndicesAndVertices();
 	};

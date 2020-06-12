@@ -90,7 +90,7 @@ void Rius::RigidBodyComponent::Render() const
 void Rius::RigidBodyComponent::SetKinematic(bool kinematic)
 {
 	m_Kinematic = kinematic;
-	Minigin::m_UndoSystem.AddAction(this);
+	//Minigin::m_UndoSystem.AddAction(this);
 }
 
 bool Rius::RigidBodyComponent::IsOnGround()

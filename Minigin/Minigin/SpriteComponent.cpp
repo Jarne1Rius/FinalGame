@@ -4,8 +4,8 @@
 #include "TextureMaterial.h"
 #include "SpriteRenderer.h"
 
-Rius::SpriteComponent::SpriteComponent(TextureMaterial* textureBullet, const Rectangle2D& texCoordSizeOfTexture)
-	:m_Sprite(), m_PMat(textureBullet),m_TexCoord(texCoordSizeOfTexture)
+Rius::SpriteComponent::SpriteComponent(TextureMaterial* textureBullet, const Rectangle2D& texCoordSizeOfTexture, float scale)
+	:m_Sprite(), m_PMat(textureBullet),m_TexCoord(texCoordSizeOfTexture),m_Scale(scale)
 {
 	
 }
@@ -15,9 +15,14 @@ Rius::SpriteComponent::~SpriteComponent()
 	delete m_Sprite;
 }
 
+Rius::SpriteComponent::SpriteComponent(const SpriteComponent& other)
+	:m_TexCoord(other.m_TexCoord),m_Sprite(other.m_Sprite),m_PMat(other.m_PMat)
+{
+}
+
 void Rius::SpriteComponent::Initialize()
 {
-	m_Sprite = new SpriteRenderer{ m_pGameObject->GetTransform().GetPosition(),m_PMat,{0,0,100,100},false,{0,0,1,1} };//ConvertToUVCoordinates(m_TexCoord, m_PMat->GetTexture2D())};
+	m_Sprite = new SpriteRenderer{ m_pGameObject->GetTransform().GetPosition(),m_PMat,{0,0,m_Scale,m_Scale},false,ConvertToUVCoordinates(m_TexCoord, m_PMat->GetTexture2D())};
 }
 
 void Rius::SpriteComponent::Update(float deltaT)
@@ -30,7 +35,7 @@ void Rius::SpriteComponent::Render() const
 	m_Sprite->Render();
 }
 
-Rius::SpriteComponent* Rius::SpriteComponent::Cloning()
+Rius::BaseComponent* Rius::SpriteComponent::Clone()
 {
-	return new SpriteComponent{this->m_PMat,m_TexCoord};
+	return new SpriteComponent{ *this };
 }

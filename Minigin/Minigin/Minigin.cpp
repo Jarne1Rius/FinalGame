@@ -24,14 +24,10 @@
 
 using namespace std;
 using namespace std::chrono;
-//int Rius::Minigin::m_Height = 672;
-//float Rius::Minigin::m_TileHeight = 672 / 33.f;
-//float Rius::Minigin::m_TileWidth = 768 / 33.f;
-//int Rius::Minigin::m_Width = 768;
-int Rius::Minigin::m_Height = 720;
-float Rius::Minigin::m_TileHeight = 720 / 33.f;
-float Rius::Minigin::m_TileWidth = 1080 / 33.f;
-int Rius::Minigin::m_Width = 1080;
+int Rius::Minigin::m_Height = 672;
+float Rius::Minigin::m_TileHeight = 672 / 33.f;
+float Rius::Minigin::m_TileWidth = 768 / 33.f;
+int Rius::Minigin::m_Width = 768;
 //Rius::FiniteStateMachine* Rius::Minigin::m_FSM = new Rius::FiniteStateMachine{};
 Rius::UndoSystem  Rius::Minigin::m_UndoSystem{};
 struct Character {
@@ -94,7 +90,7 @@ void Rius::Minigin::Run()
 		lag *= 1000.f;
 		while (lag > MsPerFrame)
 		{
-			sceneManager.Update(MsPerFrame);
+			sceneManager.Update(MsPerFrame/100.f);
 			lag -= MsPerFrame;
 		}
 		//For LateUpdate

@@ -82,10 +82,12 @@ namespace Rius
 			return  nullptr;
 		}
 
+		//Need to change this
 		glm::vec3 m_PreviousPos;
+	protected:
+		RigidBodyComponent* m_pRigidBodyComponent;
 	private:
 		Transform m_Transform;
-		RigidBodyComponent* m_pRigidBodyComponent;
 		PlayerComponent* m_pPlayerComponent;
 		std::vector<BaseComponent*> m_pComponents{};
 		std::vector<GameObject*> m_pChildren{};

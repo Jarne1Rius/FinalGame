@@ -38,9 +38,19 @@ void TestScene::Initialize()
 	LevelManager::GetInstance().SetLevel(0, nullptr);
 	//LevelManager::GetInstance().NextLevel(nullptr);
 //
-	TextureMaterial* mat = new TextureMaterial{ "Resources/awesomeface.png", "Sprite","Background",true };
+	TextureMaterial* mat = new TextureMaterial{ "Resources/Players/GreenPlayer.png", "Sprite","Background",true };
 	MaterialManager::AddMaterial(mat, 20);
-	SpriteSheetComponent* sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false, 6, 4, 1);
+
+
+	//Animation
+	std::vector<Animation> animations{
+		{ ConvertToUVCoordinates({0,80,142,-17},mat->GetTexture2D()),"Idle",1,0.2f,7,1,0},
+		{ ConvertToUVCoordinates({142,80,168,-17},mat->GetTexture2D()),"Attack",8,0.05f,8,1,0},
+		{ ConvertToUVCoordinates({166,3,144,-17},mat->GetTexture2D()),"Death",7,0.2f,7 ,1,0},
+		{ ConvertToUVCoordinates({0,80,142,-17},mat->GetTexture2D()),"Running",7,0.2f,7,1,0}
+	};
+
+	SpriteSheetComponent* sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false,animations);
 	m_UI = new GameObject{};
 	//TextMaterial* mat2 = new TextMaterial{ "Text",{1,0,0} };
 	//HealthComponent* text = new HealthComponent{3,false};
@@ -52,7 +62,8 @@ void TestScene::Initialize()
 	PlayerComponent* playerComponent = new PlayerComponent{ 0,bullet };
 //	m_UI->AddComponent(tes);
 	//glm::vec2 force{ -0.1f,0 };
-	m_UI->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 50, 50)));
+	m_UI->GetTransform().Scale({ -1,1,1 });
+	m_UI->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 50, 50),{0.5f,0.5f}));
 	m_UI->AddComponent(m_Rigid);
 	m_UI->AddComponent(playerComponent);
 	m_UI->AddComponent(sprite);
@@ -74,21 +85,20 @@ void TestScene::Initialize()
 //	player1->AddComponent(pHealthComponent);
 	player1->AddComponent(pHealthComponent);
 	Add(player1);
-	Add(bullet);
 	GUISystem* system = new GUISystem(player1);
 
 	GameObject* border = new GameObject{};
 	border->SetTag(Tag::Ground);
-	BoxCollider2D* box = new BoxCollider2D{ {-10,10,9,float(Minigin::m_Height - Minigin::m_TileHeight * 3)}, false, Group3 };
+	BoxCollider2D* box = new BoxCollider2D{ {-10,10,9,float(Minigin::m_Height - Minigin::m_TileHeight * 3)},{0,0}, false, Group3 };
 	box->SetStatic(true);
 	border->AddComponent(box);
-	box = new BoxCollider2D{ {float(Minigin::m_Width + 1),0,9,float(Minigin::m_Height - Minigin::m_TileHeight * 3)}, false, Group3 };
+	box = new BoxCollider2D{ {float(Minigin::m_Width + 1),0,9,float(Minigin::m_Height - Minigin::m_TileHeight * 3)},{0,0}, false, Group3 };
 	box->SetStatic(true);
 	border->AddComponent(box);
-	box = new BoxCollider2D{ {0,-11,(float)Minigin::m_Width, 9}, false, Group3 };
+	box = new BoxCollider2D{ {0,-11,(float)Minigin::m_Width, 9},{0,0}, false, Group3 };
 	box->SetStatic(true);
 	border->AddComponent(box);
-	box = new BoxCollider2D{ {0,float(Minigin::m_Height + 10 - Minigin::m_TileHeight * 3),float(Minigin::m_Width),10}, false, Group3 };
+	box = new BoxCollider2D{ {0,float(Minigin::m_Height + 10 - Minigin::m_TileHeight * 3),float(Minigin::m_Width),10},{0,0}, false, Group3 };
 	box->SetStatic(true);
 	border->AddComponent(box);
 	Add(border);

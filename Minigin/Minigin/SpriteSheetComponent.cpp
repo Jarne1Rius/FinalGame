@@ -8,53 +8,15 @@
 #include "ResourceManager.h"
 #include "GameObject.h"
 
-Rius::SpriteSheetComponent::SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic,
-	int rows, int colms, std::vector<SpriteTotal> totalAnimations)
-	:m_Vertices(), m_Rectangle2D(destRectangle), m_Static(isStatic), m_QuadVAO(), m_pMaterial(material), m_Colms(colms), m_Rows(rows), m_CurrentFrame(totalAnimations[0].m_FirstFrame)
-	, m_TextCoord(0, 0, 1, 1), m_Sec(0), m_WidthObject(), m_HeightObject(), m_SrcRect(0, 0, 1, 1), m_VBO(), m_Indices(), m_ModelSpace(), m_Color(), m_EBO(),m_TotalAnimations(totalAnimations)
+Rius::SpriteSheetComponent::SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic, std::vector<Animation> totalAnimations)
+	:m_Vertices(), m_Rectangle2D(destRectangle), m_Static(isStatic), m_QuadVAO(), m_pMaterial(material), m_CurrentAnimation(totalAnimations[0].m_FirstFrame)
+	, m_TextCoord(0, 0, 1, 1), m_Sec(0), m_WidthObject(), m_HeightObject(), m_SrcRect(0, 0, 1, 1), m_VBO(), m_Indices(), m_ModelSpace(), m_Color(), m_EBO(), m_TotalAnimations(totalAnimations), m_CurrentFrame(), m_SecCicle()
 {
-	
+
 }
 
-Rius::SpriteSheetComponent::SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, float timeNextFrame, int firstFrame, int totalFrames)
-	:m_Vertices(), m_Rectangle2D(destRectangle), m_Static(isStatic), m_QuadVAO(), m_pMaterial(material),  m_Colms(colms), m_Rows(rows), m_CurrentFrame(firstFrame)
-	, m_TextCoord(0, 0, 1, 1), m_Sec(0), m_WidthObject(), m_HeightObject(), m_SrcRect(0, 0, 1, 1), m_VBO(),m_Indices(),m_ModelSpace(),m_Color(),m_EBO(),m_CurrentAnimation(),m_TotalAnimations()
-{
-	SpriteTotal first;
-	first.m_Colms = m_Colms;
-	first.m_Rows = m_Rows;
-	first.m_TimeNextFrame = timeNextFrame;
-	first.m_FirstFrame = firstFrame;
-	first.m_TotalFrames = ((totalFrames == 0) ? colms * rows : totalFrames);
-	m_TotalAnimations.push_back(first);
-	m_WidthObject = 1.f / colms;
-	m_HeightObject = 1.f / rows;
-	int colm = (m_CurrentFrame % m_Colms);
-	int row = int(m_CurrentFrame / m_Colms);
-	glm::vec2 pos{ m_WidthObject * colm, m_HeightObject * row };
-	m_TextCoord = Rectangle2D{ pos.x,pos.y,m_WidthObject,m_HeightObject };
-}
 
-Rius::SpriteSheetComponent::SpriteSheetComponent(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, float widthColms, float heightOfRows, glm::vec2& startPosition, float timeNextFrame, int firstFrame, int totalFrames)
-	:m_Vertices(), m_Rectangle2D(destRectangle), m_Static(isStatic), m_QuadVAO(), m_pMaterial(material),  m_Colms(colms), m_Rows(rows), m_CurrentFrame(firstFrame), m_TextCoord(0, 0, 1, 1)
-	, m_SrcRect(startPosition, widthColms, heightOfRows), m_Sec(0), m_WidthObject(), m_HeightObject(), m_VBO(),m_Indices(),m_ModelSpace(),m_Color(),m_EBO()
-{
-	SpriteTotal first;
-	first.m_Colms = m_Colms;
-	first.m_Rows = m_Rows;
-	first.m_TimeNextFrame = timeNextFrame;
-	first.m_FirstFrame = firstFrame;
-	first.m_TotalFrames = (totalFrames == 0) ? colms * rows : totalFrames;
 
-	m_TotalAnimations.push_back(first);
-	m_WidthObject = m_SrcRect.width / colms;
-	m_HeightObject = m_SrcRect.height / rows;
-	int colm = (m_CurrentFrame % m_Colms);
-	int row = int(m_CurrentFrame / m_Colms);
-	glm::vec2 pos{ m_WidthObject * colm, m_HeightObject * row };
-	m_TextCoord = Rectangle2D{ pos.x,pos.y,m_WidthObject,m_HeightObject };
-	//Initialize();
-}
 
 Rius::SpriteSheetComponent::~SpriteSheetComponent()
 {
@@ -69,7 +31,6 @@ Rius::SpriteSheetComponent::SpriteSheetComponent(const SpriteSheetComponent& oth
 	this->m_Vertices = other.m_Vertices;
 	this->m_Rectangle2D = other.m_Rectangle2D;
 	this->m_TextCoord = other.m_TextCoord;
-	this->m_Colms = other.m_Colms;
 	this->m_Color = other.m_Color;
 	this->m_Indices = other.m_Indices;
 	this->m_CurrentFrame = other.m_CurrentFrame;
@@ -94,10 +55,11 @@ void Rius::SpriteSheetComponent::SetAnimation(int animation)
 void Rius::SpriteSheetComponent::SetAnimation(std::string name)
 {
 	int i{};
-	for (SpriteTotal animation : m_TotalAnimations)
+	for (Animation animation : m_TotalAnimations)
 	{
-		if(name == animation.m_Name)
+		if (name == animation.m_Name)
 		{
+			m_SecCicle = 0;
 			m_Sec = 0;
 			m_CurrentAnimation = i;
 			m_CurrentFrame = animation.m_FirstFrame;
@@ -126,15 +88,15 @@ void Rius::SpriteSheetComponent::Initialize()
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	m_ModelSpace = glm::mat4();
-	m_ModelSpace = glm::translate(m_ModelSpace, m_pGameObject->GetTransform().GetPosition());
-	m_ModelSpace = glm::scale(m_ModelSpace, glm::vec3(1, 1, 1.0f));
-	m_pMaterial->SetModelSpace(m_ModelSpace);
+	//	m_ModelSpace = glm::mat4();
+	//	m_ModelSpace = glm::translate(m_ModelSpace, m_pGameObject->GetTransform().GetPosition());
+	//	m_ModelSpace = glm::scale(m_ModelSpace, glm::vec3(-1, 1, 1.0f));
+	//	m_pMaterial->SetModelSpace(m_ModelSpace);
 }
 
 void Rius::SpriteSheetComponent::Render() const
 {
-	
+
 	m_pMaterial->UpdateVariables();
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(this->m_QuadVAO);
@@ -145,34 +107,38 @@ void Rius::SpriteSheetComponent::Render() const
 
 void Rius::SpriteSheetComponent::Update(float deltaT)
 {
-	
 
 }
 
 void Rius::SpriteSheetComponent::LateUpdate()
 {
+
 	if (!m_Static)
 	{
 		m_ModelSpace = glm::mat4();
 		m_ModelSpace = glm::translate(m_ModelSpace, m_pGameObject->GetTransform().GetPosition());
-		m_ModelSpace = glm::scale(m_ModelSpace, glm::vec3(1, 1, 1.0f));
+		m_ModelSpace = glm::scale(m_ModelSpace, m_pGameObject->GetTransform().GetScale());
 		m_pMaterial->SetModelSpace(m_ModelSpace);
 	}
 
-	SpriteTotal& current = m_TotalAnimations[m_CurrentAnimation];
-	
-	
+	Animation& current = m_TotalAnimations[m_CurrentAnimation];
+
+
 	m_Sec += Time::m_DeltaTime;
+	m_SecCicle += Time::m_DeltaTime;
 	while (m_Sec >= current.m_TimeNextFrame)
 	{
 		m_Sec -= (current.m_TimeNextFrame);
 		m_CurrentFrame++;
 		m_CurrentFrame %= current.m_TotalFrames;
-		int colms = (m_CurrentFrame % current.m_Colms) + (current.m_FirstFrame % m_Colms);
-		int rows = int(m_CurrentFrame / current.m_Colms) + (current.m_FirstFrame / m_Colms);
 
-		
-		glm::vec2 pos{ m_WidthObject * colms, m_HeightObject * rows };
+		m_TextCoord.width = current.m_TexCoord.width / current.m_Colms;
+		m_TextCoord.height = current.m_TexCoord.height / current.m_Rows;
+
+		float colms = (m_CurrentFrame % current.m_Colms) * m_TextCoord.width;
+		float rows = (m_CurrentFrame / current.m_Colms) * m_TextCoord.height;
+
+		glm::vec2 pos{ colms + current.m_TexCoord.pos.x ,rows + current.m_TexCoord.pos.y };
 		m_TextCoord.pos = pos;
 		Initialize();
 	}
@@ -189,7 +155,6 @@ void Rius::SpriteSheetComponent::SetComponent(BaseComponent* comp)
 	this->m_Vertices = component->m_Vertices;
 	this->m_Rectangle2D = component->m_Rectangle2D;
 	this->m_TextCoord = component->m_TextCoord;
-	this->m_Colms = component->m_Colms;
 	this->m_Color = component->m_Color;
 	this->m_Indices = component->m_Indices;
 	this->m_CurrentFrame = component->m_CurrentFrame;
@@ -205,19 +170,22 @@ void Rius::SpriteSheetComponent::SetComponent(BaseComponent* comp)
 }
 
 void Rius::SpriteSheetComponent::ResetSpriteSheet(Material* material, const Rectangle2D& destRectangle, bool isStatic,
-	int rows, int colms, std::vector<SpriteTotal> totalAnimations)
+	int rows, int colms, std::vector<Animation> totalAnimations)
 {
 	m_Rectangle2D = destRectangle;
 	m_Static = isStatic;
-	m_Colms = colms;
-	m_Rows = rows;
 	m_CurrentFrame = totalAnimations[0].m_FirstFrame;
 	m_TextCoord = { 0,0,1,1 };
 	m_SrcRect = { 0,0,1,1 };
 	m_TotalAnimations = totalAnimations;
 	SetIndicesAndVertices();
 	m_CurrentAnimation = 0;
-	
+
+}
+
+bool Rius::SpriteSheetComponent::CheckOneCicle()
+{
+	return (m_SecCicle >= m_TotalAnimations[m_CurrentAnimation].m_TotalFrames * m_TotalAnimations[m_CurrentAnimation].m_TimeNextFrame);
 }
 
 void Rius::SpriteSheetComponent::SetIndicesAndVertices()
@@ -225,26 +193,26 @@ void Rius::SpriteSheetComponent::SetIndicesAndVertices()
 	m_Vertices.clear();
 	m_Vertices.resize(24);
 	//TopRight
-	m_Vertices[0] = (m_Rectangle2D.pos.x + m_Rectangle2D.width);
-	m_Vertices[1] = Minigin::m_Height - (m_Rectangle2D.pos.y + m_Rectangle2D.height);
+	m_Vertices[0] = (m_Rectangle2D.pos.x + m_Rectangle2D.width / 2.f);
+	m_Vertices[1] = Minigin::m_Height - (m_Rectangle2D.pos.y + m_Rectangle2D.height / 2.f);
 	m_Vertices[2] = (m_TextCoord.pos.x);
 	m_Vertices[3] = (m_TextCoord.pos.y);
 
 	//BottomRight
-	m_Vertices[4] = (m_Rectangle2D.pos.x + m_Rectangle2D.width);
-	m_Vertices[5] = Minigin::m_Height - (m_Rectangle2D.pos.y);// -m_Rectangle2D.height );
+	m_Vertices[4] = (m_Rectangle2D.pos.x + m_Rectangle2D.width / 2.f);
+	m_Vertices[5] = Minigin::m_Height - (m_Rectangle2D.pos.y - m_Rectangle2D.height / 2.f);
 	m_Vertices[6] = (m_TextCoord.pos.x);
 	m_Vertices[7] = (m_TextCoord.pos.y + m_TextCoord.height);
 
 	//BottomLeft
-	m_Vertices[8] = (m_Rectangle2D.pos.x);
-	m_Vertices[9] = Minigin::m_Height - (m_Rectangle2D.pos.y);// -m_Rectangle2D.height / 2.f);
+	m_Vertices[8] = (m_Rectangle2D.pos.x - m_Rectangle2D.width / 2.f);
+	m_Vertices[9] = Minigin::m_Height - (m_Rectangle2D.pos.y - m_Rectangle2D.height / 2.f);
 	m_Vertices[10] = (m_TextCoord.pos.x + m_TextCoord.width);
 	m_Vertices[11] = (m_TextCoord.pos.y + m_TextCoord.height);
 
 	//TopLeft
-	m_Vertices[12] = (m_Rectangle2D.pos.x);//- m_Rectangle2D.width / 2.f);
-	m_Vertices[13] = Minigin::m_Height - (m_Rectangle2D.pos.y + m_Rectangle2D.height);
+	m_Vertices[12] = (m_Rectangle2D.pos.x - m_Rectangle2D.width / 2.f);
+	m_Vertices[13] = Minigin::m_Height - (m_Rectangle2D.pos.y + m_Rectangle2D.height / 2.f);
 	m_Vertices[14] = (m_TextCoord.pos.x + m_TextCoord.width);
 	m_Vertices[15] = (m_TextCoord.pos.y);
 	m_Indices = std::vector<unsigned int>{ 0, 1, 3 ,1,2,3 };

@@ -46,9 +46,9 @@ void Rius::Level::StartLevel(GameObject* pPlayer)
 	//HealthComponent* c = new HealthComponent{ 3,false };
 	//m_pBackGround->AddComponent(c);
 	wall = new WallComponent({ 0.f,0 }, m_MaterialBig, { 0,0,width * 2, float(Minigin::m_Height - height * 2) }, width, height);
-	//m_pBackGround->AddComponent(wall);
+	m_pBackGround->AddComponent(wall);
 	wall = new WallComponent({ 0.f,0 }, m_MaterialBig, { float(Minigin::m_Width - width * 2),0,width * 2, float(Minigin::m_Height - height * 2) }, width, height);
-	//m_pBackGround->AddComponent(wall);
+	m_pBackGround->AddComponent(wall);
 	TextComponent* ptext = new TextComponent{ std::to_string(m_LevelID + 1),{0,0,0},{0,height * 3} };
 	m_pBackGround->AddComponent(ptext);
 	m_pBackGround->SetActive(true);

@@ -73,6 +73,11 @@ glm::vec3 Rius::Transform::GetPosition() const
 	return newPos;
 }
 
+glm::vec3 Rius::Transform::GetScale() const
+{
+	return m_Scale;
+}
+
 void Rius::Transform::SetPosition(const float x, const float y, const float z)
 {
 	m_Position.x = x;
@@ -109,7 +114,7 @@ void Rius::Transform::Rotate(float angle, glm::vec3 rotationAngle)
 
 void Rius::Transform::Scale(glm::vec3 scale)
 {
-	m_Scale += scale;
+	m_Scale = scale;
 }
 
 void Rius::Transform::RotateAllAngles(glm::mat4& trans) const

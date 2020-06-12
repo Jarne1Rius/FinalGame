@@ -2,6 +2,7 @@
 #include "PlayerComponent.h"
 
 #include "BoxCollider2D.h"
+#include "BulletPrefab.h"
 #include "InputManager.h"
 #include "GameObject.h"
 #include "SpriteComponent.h"
@@ -14,7 +15,7 @@ Rius::PlayerComponent::PlayerComponent(int idInput, GameObject* prefabBullets)
 
 Rius::PlayerComponent::~PlayerComponent()
 {
-
+	delete m_BulletsPrefabs;
 	delete m_FSM;
 }
 
@@ -57,14 +58,9 @@ void Rius::PlayerComponent::Initialize()
 	{
 		return this->m_Lives <= 0;
 	};
-	auto jump = [this]()->bool
+	auto ableToJump = [this]()->bool
 	{
-		if (m_Jump && this->m_Rigid->IsOnGround()) {
-			m_Jump = false;
-			m_Rigid->AddForce(glm::vec2{ 0,1.f });
-			return true;
-		}
-		return false;
+		return (m_Jump && this->m_Rigid->IsOnGround());
 	};
 	auto stopJump = [this]()->bool
 	{
@@ -77,7 +73,8 @@ void Rius::PlayerComponent::Initialize()
 	auto attacking = [this]()->bool {return m_Attack; };
 	auto stopAttacking = [this]()->bool
 	{
-		return !m_Attack;
+		m_Attack = false;
+		return m_Sprite->CheckOneCicle();
 	};
 	auto moving = [this]()->bool
 	{
@@ -85,12 +82,14 @@ void Rius::PlayerComponent::Initialize()
 			return true;
 		return false;
 	};
+	auto stopMoving = [this]()->bool {return m_Moving == 0; };
 	running->SetTransition(isDeadLambda, defeat);
-	running->SetTransition(jump, jumping);
+	running->SetTransition(ableToJump, jumping);
 	running->SetTransition(attacking, attack);
+	running->SetTransition(stopMoving, idle);
 
 	idle->SetTransition(isDeadLambda, defeat);
-	idle->SetTransition(jump, jumping);
+	idle->SetTransition(ableToJump, jumping);
 	idle->SetTransition(attacking, attack);
 	idle->SetTransition(moving, running);
 
@@ -100,24 +99,46 @@ void Rius::PlayerComponent::Initialize()
 
 	attack->SetTransition(isDeadLambda, defeat);
 	attack->SetTransition(stopAttacking, idle);
-	attack->SetTransition(jump, jumping);
+	attack->SetTransition(ableToJump, jumping);
 
 	m_FSM = new FiniteStateMachine{ {running,idle,menu,jumping,attack,defeat} };
 	m_FSM->m_CurrentState = idle;
 
 	auto checkCollisionWhileGoingUp = [this]()->void
 	{
-		if (m_Rigid->GetVelocity().y < 0)m_pCollider->SetIgnoreGroups(Group0, true);	
+		if (m_Rigid->GetVelocity().y < 0 && !m_Rigid->IsOnGround())m_pCollider->SetIgnoreGroups(Group0, true);
 		else m_pCollider->SetIgnoreGroups(Group0, false);
 	};
 	auto StartFiring = [this]()->void
 	{
-		//	SceneManager::GetCurrentScene()->Add(m_BulletsPrefabs[0].Clone());
+		BulletPrefab* bullet = static_cast<BulletPrefab*>(m_BulletsPrefabs[0].Clone());
+		bullet->GetTransform().SetPosition((m_pGameObject->GetTransform().GetScale().x > 0) ? m_pGameObject->GetTransform().GetPosition() : m_pGameObject->GetTransform().GetPosition() + glm::vec3{ -50,0,0 });
+		SceneManager::GetCurrentScene()->Add(bullet);
+		bullet->GetRigidBodyComponent()->AddForce({ (m_pGameObject->GetTransform().GetScale().x > 0) ? 0.1f : -0.1f,0 });
+		//bullet->GetTransform().Scale({ -1,-1,-1 });
 	};
-	m_FSM->AddActionTo(checkCollisionWhileGoingUp, { jumping,running,idle,attack });
+
+	auto startOfRunning = [this]()->void {m_Sprite->SetAnimation("Running"); };
+	auto startOfIdle = [this]()->void {m_Sprite->SetAnimation("Idle"); };
+	auto startOfAttack = [this]()->void {m_Sprite->SetAnimation("Attack"); };
+	auto startJumping = [this]()->void
+	{
+		m_Jump = false;
+		m_Rigid->ResetUp();
+		m_Rigid->AddForce(glm::vec2{ 0,2.f });
+	};
+
+	jumping->SetActionStart(startJumping);
+	attack->SetActionStart(StartFiring);
+	attack->SetActionStart(startOfAttack);
+	running->SetActionStart(startOfRunning);
+	idle->SetActionStart(startOfIdle);
+	jumping->SetActionStart(startOfIdle);
+
+	m_Sprite = m_pGameObject->GetComponent<SpriteSheetComponent>();
+	m_FSM->AddActionTo(checkCollisionWhileGoingUp, { jumping ,attack});
 	m_pCollider = m_pGameObject->GetComponent<BoxCollider2D>();
 	m_Rigid = m_pGameObject->GetRigidBodyComponent();
-	attack->SetActionStart(StartFiring);
 }
 
 void Rius::PlayerComponent::Update(float deltaT)
@@ -127,7 +148,9 @@ void Rius::PlayerComponent::Update(float deltaT)
 	std::string name = m_FSM->m_CurrentState->GetName();
 	if (name == "running" || name == "jumping")
 	{
-		m_Rigid->MoveTo(this->GetGameObject()->GetTransform().GetPosition() + glm::vec3{ 0.001f * m_Moving * deltaT,0,0 });
+		if (m_Moving < 0) m_pGameObject->GetTransform().Scale({ -1,1 ,1 });
+		else if (m_Moving > 0) m_pGameObject->GetTransform().Scale({ 1,1 ,1 });
+		m_Rigid->MoveTo(this->GetGameObject()->GetTransform().GetPosition() + glm::vec3{ 0.1f * m_Moving * deltaT,0,0 });
 	}
 }
 
@@ -143,7 +166,7 @@ void Rius::PlayerComponent::TakeDamage(int amount)
 void Rius::PlayerComponent::Jump(float value)
 {
 	std::string name = m_FSM->m_CurrentState->GetName();
-	if (name != "Menu" || name != "Defeat")
+	if (name != "Menu" || name != "Defeat" || name != "Attack")
 		m_Jump = true;
 }
 
