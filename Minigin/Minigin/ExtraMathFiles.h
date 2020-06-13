@@ -18,11 +18,22 @@ namespace Rius
 	{
 		return pos1.x * pos2.x + pos2.y * pos2.y;
 	}
+	inline float MagnitudeSqrt(const glm::vec2& vec)
+	{
+		return vec.x * vec.x + vec.y * vec.y;
+;	}
 	inline bool Collision(const Rectangle2D& rect1, const Rectangle2D& rect2, glm::vec3& velocityRect1, glm::vec3& velocityRect2)
 	{
 		bool hit = false;
-		if (rect1.pos.x + rect1.width + velocityRect1.x > rect2.pos.x + velocityRect2.x &&
-			rect1.pos.x + velocityRect1.x < rect2.pos.x + rect2.width + velocityRect2.x &&
+
+		glm::vec3 velR1 = velocityRect1;
+		if (MagnitudeSqrt(velR1) > 0)
+			velR1 = glm::normalize(velocityRect1);
+		glm::vec3 velR2 = velocityRect2;
+		if (MagnitudeSqrt(velR2) > 0)
+			velR2 = glm::normalize(velocityRect2);
+		if (rect1.pos.x + rect1.width + velR1.x > rect2.pos.x + velR2.x &&
+			rect1.pos.x + velR1.x < rect2.pos.x + rect2.width + velR2.x &&
 			rect1.pos.y + rect1.height > rect2.pos.y &&
 			rect1.pos.y < rect2.pos.y + rect2.height)
 		{
@@ -32,8 +43,8 @@ namespace Rius
 		}
 		if (rect1.pos.x + rect1.width > rect2.pos.x &&
 			rect1.pos.x < rect2.pos.x + rect2.width &&
-			rect1.pos.y + rect1.height - velocityRect1.y > rect2.pos.y - velocityRect2.y &&
-			rect1.pos.y - velocityRect1.y < rect2.pos.y + rect2.height - velocityRect2.y)
+			rect1.pos.y + rect1.height - velR1.y > rect2.pos.y - velR2.y &&
+			rect1.pos.y - velR1.y < rect2.pos.y + rect2.height - velR2.y)
 		{
 			velocityRect1.y *= -1;
 			velocityRect2.y *= -1;

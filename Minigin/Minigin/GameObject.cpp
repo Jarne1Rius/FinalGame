@@ -73,7 +73,12 @@ void Rius::GameObject::Update(float deltaT)
 {
 	if (!m_Active) return;
 	for (BaseComponent* comp : m_pComponents)
-		comp->Update(deltaT);
+	{
+		if(comp != m_pRigidBodyComponent)
+			comp->Update(deltaT);
+	}
+	if (m_pRigidBodyComponent != nullptr)
+		m_pRigidBodyComponent->Update(deltaT);
 }
 
 void Rius::GameObject::LateUpdate()

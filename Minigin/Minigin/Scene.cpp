@@ -1,5 +1,7 @@
 #include "MiniginPCH.h"
 #include "Scene.h"
+
+#include "GameInstance.h"
 #include "GameObject.h"
 
 using namespace Rius;
@@ -16,6 +18,29 @@ Scene::~Scene()
 {
 	for (int i{}; i < int(m_pObjects.size()); i++)
 		delete m_pObjects[i];
+	delete m_pBackground;
+}
+
+void Scene::Remove()
+{
+	for (int i = 0; i < int(m_ReadyToRemove.size()); ++i)
+	{
+		auto it = std::find(m_pObjects.begin(), m_pObjects.end(), m_ReadyToRemove[i]);
+		if (it != m_pObjects.end())
+		{
+			m_pObjects.erase(it);
+			break;
+		}
+		//if (m_pBackground == m_ReadyToRemove[i]) delete m_ReadyToRemove[i];
+		delete m_ReadyToRemove[i];
+	}
+	m_ReadyToRemove.clear();
+}
+
+void Scene::AddBackGround(GameObject* pBackground)
+{
+	m_pBackground = pBackground;
+	m_pBackground->Initialize();
 }
 
 void Scene::Add(GameObject* object)
@@ -29,9 +54,8 @@ void Scene::Add(GameObject* object)
 
 void Scene::Remove(GameObject* object)
 {
-	auto it = std::find(m_pObjects.begin(), m_pObjects.end(), object);
-	m_pObjects.erase(it);
-	delete object;
+	object->SetActive(false);
+	m_ReadyToRemove.push_back(object);
 }
 
 void Scene::UpdateObjects(float deltaT)
@@ -40,30 +64,7 @@ void Scene::UpdateObjects(float deltaT)
 	{
 		m_pObjects[i]->Update(deltaT);
 	}
-	//std::vector<std::future<void>> results;
-	//const int size{ 10 };
-	//GameObject* pUpdate[size];
-	//for (int i = 0; i < m_pObjects.size(); ++i)
-	//{
-	//	if ((i % size == 0 && i != 0) || i == m_pObjects.size() - 1)
-	//	{
-	//		results.emplace_back(m_Pool.enqueue([&pUpdate, i]
-	//			{
-	//				for (int k = 0; k < (i % 10)+1; ++k)
-	//				{
-	//					pUpdate[k]->Update();
-	//				}
-	//			}));
-	//		pUpdate[0] = m_pObjects[i];
-	//	}
-	//	else
-	//	{
-	//		pUpdate[i % size] = m_pObjects[i];
-	//	}
-	//}
-
-	//for (auto&& result : results)
-	//	result.get();
+	Remove();
 	UI::GetInstance().Update();
 }
 
@@ -73,10 +74,12 @@ void Scene::LateUpdateObjects()
 	{
 		object->LateUpdate();
 	}
+	Remove();
 }
 
 void Scene::Render() const
 {
+	if (m_pBackground != nullptr) m_pBackground->Render();
 	for (const auto& object : m_pObjects)
 	{
 		object->Render();

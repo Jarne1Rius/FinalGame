@@ -11,7 +11,7 @@ namespace Rius
 		virtual ~Subject();
 		virtual void AddObserver(Observer* observer);
 		virtual void RemoveObserver(Observer* observer);
-		virtual void Notify(const GameObject* gameobject, Event event);
+		virtual void Notify(GameObject* gameobject, Event event);
 	private:
 		Observer* m_pObservers[MAX_Observer];
 		int m_NumOfObservers = 0;

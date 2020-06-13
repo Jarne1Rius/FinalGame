@@ -7,7 +7,7 @@
 #include "Command.h"
 
 #include "Extra.h"
-
+#include "ThreadPool.h"
 
 namespace Rius
 {
@@ -82,7 +82,7 @@ namespace Rius
 		//ControllerMap m_Controles;
 		std::vector<int> m_Controllers;
 		bool m_Stop;
-
+		ThreadPool m_Pool;
 	};
 
 }

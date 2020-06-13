@@ -5,6 +5,9 @@ namespace Rius
 
 	enum Event
 	{
+		AddEnemy,
+		RemoveEnemy,
+		AddPlayer,
 		Falling,
 		hit,
 		addscore,
@@ -16,14 +19,20 @@ namespace Rius
 	public:
 		Observer();
 		virtual ~Observer() = default;;
-		virtual void OnNotify(const GameObject* object, Event event) ;
+		virtual void OnNotify( GameObject* object, Event event) ;
 	};
 	class GUISystem : public Observer
 	{
 	public:
 		GUISystem( GameObject* pObject);
-		void OnNotify(const GameObject* object, Event event) override;
+		void OnNotify( GameObject* object, Event event) override;
 	private:
+	};
+	class MovingObjectObserver: public Observer
+	{
+	public:
+		MovingObjectObserver(GameObject* pObject);
+		void OnNotify(GameObject* object, Event event) override;
 	};
 }
 

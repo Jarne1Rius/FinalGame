@@ -28,6 +28,11 @@ namespace Rius
 
 		void Initialize() override = 0;
 		void Update(float deltaT) override = 0;
+
+		void LateUpdate() override
+		{
+		}
+
 		void Render() const override = 0;
 		virtual glm::vec2 GetCenter() = 0;
 		virtual bool CheckCollision(BoxCollider2D* collider) = 0;
@@ -48,6 +53,9 @@ namespace Rius
 		void SetIgnoreGroups(bool ignore[Group3 + 1]);
 		void SetCollisionGroup(CollisionGroup group);
 		CollisionGroup GetCurrentCollisionGroup() const { return m_CurrentCollisionGroup; }
+		bool IsTrigger() { return m_Trigger; }
+
+		void SwitchToTrigger( bool trigger);
 	private:
 
 		static void AddColliderToAllColliders(Collider* collider);
@@ -62,6 +70,7 @@ namespace Rius
 		glm::vec3 m_PreviousPos;
 		bool m_Trigger;
 		std::map<Collider*, bool> m_CollidersInCollision;
+		bool m_PrevHit;
 	};
 
 

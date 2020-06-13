@@ -47,7 +47,9 @@ namespace Rius
 		Rectangle2D GetRectangle() const { return m_Rectangle2D; }
 		void ResetSpriteSheet(Material* material, const Rectangle2D& destRectangle, bool isStatic, int rows, int colms, std::vector<Animation> totalAnimations);
 		bool CheckOneCicle();
+		void SetFrame(int firstFrame) { m_TotalAnimations[m_CurrentAnimation].m_FirstFrame = firstFrame; m_CurrentFrame = firstFrame; };
 	private:
+	
 		Material* m_pMaterial;
 		bool m_Static;
 		GLuint m_QuadVAO;
@@ -68,5 +70,6 @@ namespace Rius
 		std::vector<Animation> m_TotalAnimations;
 		int m_CurrentAnimation;
 		void SetIndicesAndVertices();
+		void SetRightTexCoord();
 	};
 }

@@ -7,10 +7,12 @@ namespace Rius
 {
 	enum class Tag
 	{
-		Player,
+		Default,
 		Ground,
 		Interactions,
-		Static
+		Static,
+		Enemy,
+		Player
 	};
 
 	enum PositionUI

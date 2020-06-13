@@ -24,6 +24,7 @@
 #include "LevelManager.h"
 #include "AI.h"
 #include "BulletPrefab.h"
+#include "GameInstance.h"
 #include "SpriteComponent.h"
 #include "PlayerComponent.h"
 using namespace Rius;
@@ -35,7 +36,7 @@ TestScene::TestScene()
 void TestScene::Initialize()
 {
 	LevelManager::GetInstance().LoadLevels("Resources/FixedLevelData.dat", "Resources/BigBlocks/Big_", "Resources/SmallBlocks/small_", this);
-	LevelManager::GetInstance().SetLevel(0, nullptr);
+
 	//LevelManager::GetInstance().NextLevel(nullptr);
 //
 	TextureMaterial* mat = new TextureMaterial{ "Resources/Players/GreenPlayer.png", "Sprite","Background",true };
@@ -50,42 +51,55 @@ void TestScene::Initialize()
 		{ ConvertToUVCoordinates({0,80,142,-17},mat->GetTexture2D()),"Running",7,0.2f,7,1,0}
 	};
 
-	SpriteSheetComponent* sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false,animations);
-	m_UI = new GameObject{};
+	SpriteSheetComponent* sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false, animations);
+	//	SpriteSheetComponent* sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false, animations);
+	m_Player = new GameObject{};
 	//TextMaterial* mat2 = new TextMaterial{ "Text",{1,0,0} };
 	//HealthComponent* text = new HealthComponent{3,false};
 	mat = new TextureMaterial{ "../Data/SpriteSheet.png", "Bullet","Bullet", true };
 	MaterialManager::AddMaterial(mat);
-	m_Rigid = new RigidBodyComponent(0.1f);
+	m_Rigid = new RigidBodyComponent(0.5f);
 	BulletPrefab* bullet = new BulletPrefab{ mat,{415,1227,18,18} };
 	bullet->GetTransform().Translate({ 100, 300,0 });
-	PlayerComponent* playerComponent = new PlayerComponent{ 0,bullet };
-//	m_UI->AddComponent(tes);
-	//glm::vec2 force{ -0.1f,0 };
-	m_UI->GetTransform().Scale({ -1,1,1 });
-	m_UI->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 50, 50),{0.5f,0.5f}));
-	m_UI->AddComponent(m_Rigid);
-	m_UI->AddComponent(playerComponent);
-	m_UI->AddComponent(sprite);
-	//m_UI->AddComponent(text);
-	m_UI->GetTransform().SetPosition(100, 70, 0);
+	PlayerComponent* playerComponent = new PlayerComponent{ bullet };
+	//	m_UI->AddComponent(tes);
+		//glm::vec2 force{ -0.1f,0 };
+	m_Player->SetTag(Tag::Player);
+	m_Player->GetTransform().Scale({ -1,1,1 });
+	m_Player->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 50, 50), { 0.5f,0.5f }));
+	m_Player->GetComponent<BoxCollider2D>()->SetIgnoreGroups(Group2, true);
+	m_Player->AddComponent(playerComponent);
+	m_Player->AddComponent(m_Rigid);
+	m_Player->AddComponent(sprite);
+	m_Player->GetTransform().SetPosition(100, 70, 0);
+	MovingObjectObserver* observer = new MovingObjectObserver{ m_Player };
 
-	Add(m_UI);
+	Add(m_Player);
 
-	GameObject* player1 = new GameObject();
-	HealthComponent* pHealthComponent = new HealthComponent{ 2,true};
-	
-	Player p1;
-	p1.pPlayer = m_UI;
-	p1.m_Health = pHealthComponent;
-	p1.m_color = { 1,0,0 };
-	UI::GetInstance().AddPlayer(p1);
-	//player1->AddComponent()
-	//player1->GetTransform().Translate({100,-100, 0});
-//	player1->AddComponent(pHealthComponent);
-	player1->AddComponent(pHealthComponent);
-	Add(player1);
-	GUISystem* system = new GUISystem(player1);
+	mat = new TextureMaterial{ "Resources/Enemy/Enemy.png", "Enemy","Enemy",true };
+	MaterialManager::AddMaterial(mat, 21);
+	animations = std::vector<Animation>{
+		{ ConvertToUVCoordinates({0,131,65,-16},mat->GetTexture2D()), "Idle",1,0.2f,4,1,1},
+		{ ConvertToUVCoordinates({238,131,74,-16},mat->GetTexture2D()),"Death",4,0.4f,4,1,0},
+		{ ConvertToUVCoordinates({0,131,70,-16},mat->GetTexture2D()),"Running",4,0.2f,4,1,0},
+		{ ConvertToUVCoordinates({ 0 ,37,634,-37 }, mat->GetTexture2D()), "Food", 1, 0.2f, 35, 2, 1 }
+
+	};
+	sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false, animations);
+	GameObject* enemy = new GameObject{};
+	enemy->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 50, 50), { 0.5f,0.5f }));
+	enemy->SetTag(Tag::Interactions);
+	//m_UI->GetComponent<BoxCollider2D>()->SetIgnoreGroups(Group2, true);
+	m_Rigid = new RigidBodyComponent{ 1 };
+	enemy->AddComponent(m_Rigid);
+	Ai* ai = new Ai{ 1,{3,4},false };
+	enemy->AddComponent(ai);
+	//m_UI->AddComponent(playerComponent);
+	enemy->AddComponent(sprite);
+	enemy->GetTransform().Translate({ 500, 70 ,0 });
+	//system = new GUISystem(enemy);
+ observer = new MovingObjectObserver{ enemy };
+	Add(enemy);
 
 	GameObject* border = new GameObject{};
 	border->SetTag(Tag::Ground);
@@ -104,6 +118,7 @@ void TestScene::Initialize()
 	Add(border);
 	mat = new TextureMaterial{ "Resources/awesomeface.png", "Sprite3","Background3",true };
 	MaterialManager::AddMaterial(mat);
+	LevelManager::GetInstance().SetLevel(0, m_Player);
 }
 
 void TestScene::Update(float delatT)

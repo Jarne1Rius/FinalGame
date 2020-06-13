@@ -36,22 +36,22 @@ Rius::State::~State()
 	}
 }
 
-void Rius::State::SetTransition(std::function<bool()> transtionfunction, State* nextState)
+void Rius::State::AddTransition(std::function<bool()> transtionfunction, State* nextState)
 {
 	m_Transitions.push_back(new Transition{ transtionfunction,nextState });
 }
 
-void Rius::State::SetAction(std::function<void()> action)
+void Rius::State::AddAction(std::function<void()> action)
 {
 	m_Actions.push_back(action );
 }
 
-void Rius::State::SetActionEnd(std::function<void()> action)
+void Rius::State::AddActionEnd(std::function<void()> action)
 {
 	m_EndActions.push_back(action);
 }
 
-void Rius::State::SetActionStart(std::function<void()> action)
+void Rius::State::AddActionStart(std::function<void()> action)
 {
 	m_StartActions.push_back(action);
 }

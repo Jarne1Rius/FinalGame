@@ -18,10 +18,10 @@ namespace Rius
 	public:
 		State(std::string name);
 		~State();
-		void SetTransition(std::function<bool()> transtionfunction, State* nextState);
-		void SetAction(std::function<void()> action);
-		void SetActionEnd(std::function<void()> action);
-		void SetActionStart(std::function<void()> action);
+		void AddTransition(std::function<bool()> transtionfunction, State* nextState);
+		void AddAction(std::function<void()> action);
+		void AddActionEnd(std::function<void()> action);
+		void AddActionStart(std::function<void()> action);
 		State* UpdateState();
 		void StartState();
 		void EndState();

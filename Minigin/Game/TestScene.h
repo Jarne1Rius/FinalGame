@@ -14,7 +14,7 @@ public:
 private:
 	void Initialize() override;
 	Rius::RigidBodyComponent* m_Rigid;
-	Rius::GameObject* m_UI;
+	Rius::GameObject* m_Player;
 	float m_Angle = 0;
 	Rius::TextRenderer* text;
 };

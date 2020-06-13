@@ -2,10 +2,12 @@
 #include "InputManager.h"
 #include <thread>
 
+
+#include "GameInstance.h"
 #include "Logger.h"
 #include "UI.h"
 Rius::InputManager::InputManager()
-	:m_Id(1), m_CurrentState(), m_Controllers(), m_ButtonsCommand{}, m_Stop(), m_Buttons{}
+	:m_Id(1), m_CurrentState(), m_Controllers(), m_ButtonsCommand{}, m_Stop(), m_Buttons{},m_Pool(10)
 {
 	m_ButtonsCommand[int(ControllerButton::ButtonA)] = new JumpCommand{};
 	m_ButtonsCommand[int(ControllerButton::ButtonB)] = new FireCommand{};
@@ -42,12 +44,16 @@ void Rius::InputManager::ProcessInputt(GameObject* gameObject, int id, int playe
 void Rius::InputManager::Test()
 {
 	UpdateGamepadState();
-	for (int i = 0; i < UI::GetInstance().AmountOfPlayers(); ++i)
+	for (int i = 0; i < GameInstance::GetInstance().AmountOfPlayers(); ++i)
 	{
-		for (int a{}; a < m_Size; a++)
-		{
-			ProcessInputt(UI::GetInstance().GetPlayer(i).pPlayer, a, UI::GetInstance().GetPlayer(i).IdController);
-		}
+		if (GameInstance::GetInstance().GetPlayer(i).dead) continue;;
+		m_Pool.enqueue([this,i] {
+			for (int a{}; a < m_Size; a++)
+			{
+				
+				ProcessInputt(GameInstance::GetInstance().GetPlayer(i).pPlayer, a, GameInstance::GetInstance().GetPlayer(i).IdController);
+			}
+		});
 	}
 }
 
@@ -85,10 +91,10 @@ int Rius::InputManager::GetGamepadId()
 	for (int k = 0; k < 4; ++k)
 	{
 		bool avail{ true };
-		for (int i = 0; i < UI::GetInstance().AmountOfPlayers(); ++i)
+		for (int i = 0; i < GameInstance::GetInstance().AmountOfPlayers(); ++i)
 		{
 
-			if (UI::GetInstance().GetPlayer(i).IdController == k) avail = false;
+			if (GameInstance::GetInstance().GetPlayer(i).IdController == k) avail = false;
 		}
 		if (m_Connected[k] && avail)
 		{

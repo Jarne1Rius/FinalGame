@@ -3,6 +3,7 @@
 #include <vector>
 #include "FiniteStateMachine.h"
 #include "RigidBodyComponent.h"
+#include "SpriteSheetComponent.h"
 
 namespace Rius
 {
@@ -25,7 +26,9 @@ namespace Rius
 		void SetCurrentTarget(GameObject* currentTarget);
 		void OnCollisionEnter(Collider* collider) override;
 		void OnTriggerEnter(Collider* collider) override;
+		void DoDamage() { m_Lives--; }
 	private:
+		SpriteSheetComponent* m_Animation;
 		Collider* m_pCollider;
 		std::vector<GameObject*> m_Targets;
 		RigidBodyComponent* m_Rigid;
@@ -36,11 +39,12 @@ namespace Rius
 		ChaseEnemyType m_TypeChase;
 		float m_DurationRunning;
 		bool m_StartFollowing;
-		int m_Lives;
+		int m_Lives = 1;
 		float m_Sec;
 		float m_SecWalking;
 		glm::vec2 m_RandomRangeWalking;
 		int m_Value;
+		bool m_HitPlayer;
 	};
 }
 

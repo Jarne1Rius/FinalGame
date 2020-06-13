@@ -33,7 +33,7 @@ void Rius::Subject::RemoveObserver(Observer* observer)
 
 }
 
-void Rius::Subject::Notify(const GameObject* gameobject, Event event)
+void Rius::Subject::Notify( GameObject* gameobject, Event event)
 {
 	for (int i = 0; i < m_NumOfObservers; ++i)
 	{

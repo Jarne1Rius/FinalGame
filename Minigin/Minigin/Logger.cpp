@@ -14,13 +14,13 @@ void Rius::Logger::LogInfo(std::string info)
 	std::cout << info << "\n";
 }
 
-void Rius::Logger::LogInfo(glm::vec2& position)
+void Rius::Logger::LogInfo(const glm::vec2& position)
 {
 	LogInfo();
 	std::cout << "X: " << position.x << " - Y: " << position.y << "\n";
 }
 
-void Rius::Logger::LogInfo(Rectangle2D& rectangle)
+void Rius::Logger::LogInfo(const Rectangle2D& rectangle)
 {
 	LogInfo();
 	std::cout << "X: " << rectangle.pos.x << " - Y: " << rectangle.pos.y << " - Width: " << rectangle.width<< " - Height: " << rectangle.height << "\n";
@@ -32,13 +32,13 @@ void Rius::Logger::LogError(std::string info)
 	std::cout << info << "\n";
 }
 
-void Rius::Logger::LogError(Rectangle2D& rectangle)
+void Rius::Logger::LogError(const Rectangle2D& rectangle)
 {
 	LogError();
 	std::cout << "X: " << rectangle.pos.x << " - Y: " << rectangle.pos.y << " - Width: " << rectangle.width << " - Height: " << rectangle.height << "\n";
 }
 
-void Rius::Logger::LogError(glm::vec2& position)
+void Rius::Logger::LogError(const glm::vec2& position)
 {
 	LogError();
 	std::cout << "X: " << position.x << " - Y: " << position.y << "\n";

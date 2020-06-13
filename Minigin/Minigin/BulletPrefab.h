@@ -12,11 +12,12 @@ namespace Rius
 		GameObject* Clone() override;
 		void LateUpdate() override;
 		void Update(float deltaT) override;
-		void OnCollisionEnter(Collider* other) override;
+		void OnTriggerEnter(Collider* other) override;
 	private:
 		Rectangle2D m_TexCoordSizeOfTexture;
 		SpriteComponent* m_Sprite;
 		TextureMaterial* m_pMat;
+		Collider* m_pCollider;
 		float m_Sec;
 		float m_DurationBeforeHit;
 	};

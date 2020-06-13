@@ -15,6 +15,7 @@ namespace Rius
 		void Render() const override;
 		void RemoveHealth() { m_Health--; }
 		void ResetHealth() { m_Health = m_OriginalHealth; }
+		int CurrentHealth() { return m_Health; }
 	private:
 		TextureMaterial* m_pMat;
 		SpriteRenderer* m_Sprites[3];

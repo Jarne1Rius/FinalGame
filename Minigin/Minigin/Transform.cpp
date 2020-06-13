@@ -88,6 +88,7 @@ void Rius::Transform::SetPosition(const float x, const float y, const float z)
 void Rius::Transform::SetPosition(const glm::vec3& pos)
 {
 	m_Position = pos;
+	//m_Position.y *= -1;
 }
 
 glm::mat4& Rius::Transform::GetMatrix()
@@ -101,7 +102,10 @@ glm::mat4& Rius::Transform::GetMatrix()
 
 void Rius::Transform::Translate(const glm::vec3& newPos)
 {
-	m_Position += newPos;
+
+	m_Position.x += newPos.x;
+	m_Position.y += -newPos.y;
+	m_Position.z += newPos.z;
 }
 
 void Rius::Transform::Rotate(float angle, glm::vec3 rotationAngle)

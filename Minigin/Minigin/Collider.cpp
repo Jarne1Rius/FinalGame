@@ -66,6 +66,15 @@ void Rius::Collider::SetCollisionGroup(CollisionGroup group)
 }
 
 
+void Rius::Collider::SwitchToTrigger(bool trigger)
+{
+	if (trigger == true) m_Trigger = true;
+	else if (!m_PrevHit && m_Trigger)
+		m_Trigger = false;
+	else if (m_Trigger == false && trigger)
+		m_Trigger = true;
+}
+
 void Rius::Collider::AddColliderToAllColliders(Collider* collider)
 {
 	m_AllColliders.push_back(collider);
@@ -76,4 +85,8 @@ void Rius::Collider::AddColliderToAllColliders(Collider* collider)
 void Rius::Collider::RemoveColliderOfAllColliders(Collider* collider)
 {
 	m_AllColliders.erase(std::find(m_AllColliders.begin(), m_AllColliders.end(), collider));
+	for (auto && allCollider : m_AllColliders)
+	{
+		allCollider->DeleteCollider(collider);
+	}
 }

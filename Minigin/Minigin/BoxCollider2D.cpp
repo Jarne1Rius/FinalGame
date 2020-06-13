@@ -6,8 +6,8 @@
 #include "ExtraMathFiles.h"
 #include "RigidBodyComponent.h"
 
-Rius::BoxCollider2D::BoxCollider2D(Rectangle2D rectangle,const glm::vec2& center, bool isTrigger, CollisionGroup collisionGroup)
-	:Collider(isTrigger, collisionGroup), m_Rectangle(rectangle),m_Center( -rectangle.width * center.x, rectangle.height * center.y,0)
+Rius::BoxCollider2D::BoxCollider2D(Rectangle2D rectangle, const glm::vec2& center, bool isTrigger, CollisionGroup collisionGroup)
+	:Collider(isTrigger, collisionGroup), m_Rectangle(rectangle), m_Center(-rectangle.width * center.x, rectangle.height* center.y, 0)
 {
 }
 
@@ -37,6 +37,7 @@ void Rius::BoxCollider2D::Update(float deltaT)
 		m_Rectangle.pos = m_pGameObject->GetTransform().GetPosition() + m_Center;
 		m_Rectangle.pos.y *= -1;
 	}
+	//return;
 	bool anyHit{ false };
 	if (this->m_Static) return;
 	for (Collider* collider : m_AllColliders)
@@ -47,24 +48,30 @@ void Rius::BoxCollider2D::Update(float deltaT)
 		if (newHit)
 		{
 			anyHit = true;
-			if (m_Trigger)
+			if (m_Trigger || collider->IsTrigger())
 			{
 				m_pGameObject->OnTriggerEnter(collider);
-				collider->GetGameObject()->OnTriggerEnter(collider);
+				collider->GetGameObject()->OnTriggerEnter(this);
 			}
 			else
 			{
 				m_pGameObject->OnCollisionEnter(collider);
-				collider->GetGameObject()->OnCollisionEnter(collider);
+				collider->GetGameObject()->OnCollisionEnter(this);
 			}
 		}
 
 	}
+
+	m_PrevHit = anyHit;
 	//if (anyHit) GetGameObject()->GetTransform().SetPosition(m_PreviousPos);
 	//m_PreviousPos = GetGameObject()->GetTransform().GetPosition();
 }
 
 void Rius::BoxCollider2D::Render() const
+{
+}
+
+void Rius::BoxCollider2D::LateUpdate()
 {
 }
 
@@ -82,7 +89,7 @@ bool Rius::BoxCollider2D::CheckCollision(BoxCollider2D* collider)
 {
 	glm::vec3 vel{ 0,0,0 };
 	RigidBodyComponent* com = collider->m_pGameObject->GetRigidBodyComponent();
-	if (com)
+	if (com && !(collider->IsTrigger() || m_Trigger))
 		return Collision(this->m_Rectangle, collider->m_Rectangle, vel, com->GetVelocity());
 	else
 		return Collision(this->m_Rectangle, collider->m_Rectangle, vel, vel);
@@ -112,3 +119,4 @@ void Rius::BoxCollider2D::SetComponent(BaseComponent* comp)
 	this->m_Trigger = component->m_Trigger;
 	this->m_Rectangle = component->m_Rectangle;
 }
+

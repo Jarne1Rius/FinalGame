@@ -18,6 +18,8 @@
 
 #include <ft2build.h>
 
+
+#include "GameInstance.h"
 #include "MaterialManager.h"
 
 #include FT_FREETYPE_H
@@ -57,10 +59,6 @@ void Rius::Minigin::Cleanup()
 	ResourceManager::Clear();
 	MaterialManager::Clear();
 	UI::GetInstance().Cleanup();
-	//ImGui_ImplOpenGL3_Shutdown();
-	//ImGui_ImplGlfw_Shutdown();
-	//ImGui::DestroyContext();
-	//Mix_Quit();
 }
 
 void Rius::Minigin::Run()
@@ -71,7 +69,7 @@ void Rius::Minigin::Run()
 
 	bool doContinue = true;
 	auto lastTime = std::chrono::high_resolution_clock::now();
-	float lag = 0.0f;
+	double lag = 0.0f;
 
 	while (!glfwWindowShouldClose(Renderer::GetInstance().getWindow()))
 	{
@@ -79,24 +77,28 @@ void Rius::Minigin::Run()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();*/
 
-		Renderer::GetInstance().Input();
 		const auto currentTime = high_resolution_clock::now();
-		auto deltaTime = duration<float>(currentTime - lastTime).count();
+		Renderer::GetInstance().Input();
+		
+		double deltaTime = duration<double>(currentTime - lastTime).count();
 		lastTime = currentTime;
 		lag += deltaTime;
 		//doContinue = input.ProcessInput();
 		input.Test();
 		int frames{ 0 };
-		lag *= 1000.f;
-		while (lag > MsPerFrame)
+		int upd = 0;
+		while (lag >= MsPerFrame/1000.f)
 		{
-			sceneManager.Update(MsPerFrame/100.f);
-			lag -= MsPerFrame;
+			sceneManager.Update(MsPerFrame/1000.f);
+			lag -= MsPerFrame / 1000.f;
+			upd++;
 		}
 		//For LateUpdate
 		//m_Sprite->Update();
 		sceneManager.LateUpdate();
-		Time::UpdateTimer(deltaTime);
+		Time::UpdateTimer(float(deltaTime), upd);
+		GameInstance::GetInstance().Update();
+		//GameInstance::GetInstance().Update();
 		glClearColor(0,0,0, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		sceneManager.Render();

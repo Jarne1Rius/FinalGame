@@ -13,8 +13,8 @@
 #include "TextComponent.h"
 #include "HealthComponent.h"
 
-Rius::Level::Level(std::vector<Rectangle2D> walls, int levelID, TextureMaterial* materialSmall, TextureMaterial* materialBig, std::string locationBigTexture, std::string locationSmallTexture)
-	:m_StartPos({ 0,0 }), m_pBackGround(), m_Walls(walls), m_LevelID(), m_AI(), m_MaterialSmall(materialSmall), m_MaterialBig(materialBig), m_BigTexture(locationBigTexture), m_SmallTexture(locationSmallTexture)
+Rius::Level::Level(std::vector<Rectangle2D> walls, int levelID, TextureMaterial* materialSmall, TextureMaterial* materialBig, std::string locationBigTexture, std::string locationSmallTexture, const std::vector<glm::vec2>& startPos)
+	:m_StartPos(startPos), m_pBackGround(), m_Walls(walls), m_LevelID(), m_AI(), m_MaterialSmall(materialSmall), m_MaterialBig(materialBig), m_BigTexture(locationBigTexture), m_SmallTexture(locationSmallTexture)
 {
 
 }
@@ -24,6 +24,29 @@ void Rius::Level::Initialize()
 }
 
 void Rius::Level::StartLevel(GameObject* pPlayer)
+{
+	pPlayer->GetTransform().SetPosition(glm::vec3(m_StartPos[0].x, -m_StartPos[0].y, 0));
+	InitLevel();
+}
+
+void Rius::Level::StartLevel(std::vector<GameObject*> pPlayer)
+{
+	for (int i = 0; i < m_StartPos.size(); ++i)
+	{
+		if (pPlayer.size() > i) {
+			pPlayer[i]->GetTransform().SetPosition(glm::vec3(m_StartPos[i].x, -m_StartPos[i].y, 0));
+			pPlayer[i]->m_PreviousPos = glm::vec3(m_StartPos[i].x, -m_StartPos[i].y, 0);
+		}
+	}
+	InitLevel();
+}
+
+void Rius::Level::EndLevel()
+{
+	SceneManager::GetCurrentScene()->Remove(m_pBackGround);
+}
+
+void Rius::Level::InitLevel()
 {
 	m_MaterialBig->SetTexture(m_BigTexture, "BackgroundBig", false);
 	m_MaterialSmall->SetTexture(m_SmallTexture, "BackgroundSmall", false);
@@ -52,13 +75,9 @@ void Rius::Level::StartLevel(GameObject* pPlayer)
 	TextComponent* ptext = new TextComponent{ std::to_string(m_LevelID + 1),{0,0,0},{0,height * 3} };
 	m_pBackGround->AddComponent(ptext);
 	m_pBackGround->SetActive(true);
-	SceneManager::GetCurrentScene()->Add(m_pBackGround);
+	SceneManager::GetCurrentScene()->AddBackGround(m_pBackGround);
 }
-
-void Rius::Level::EndLevel()
-{
-	SceneManager::GetCurrentScene()->Remove(m_pBackGround);
-}
+//levelmanager
 
 void Rius::LevelManager::LoadLevels(const std::string& location, const std::string& locationsBigTextures, const std::string& locationSmallTextures, Scene* scene)
 {
@@ -89,8 +108,22 @@ void Rius::LevelManager::NextLevel(GameObject* pPlayer)
 	m_Levels[m_CurrentLevel]->StartLevel(pPlayer);
 }
 
+void Rius::LevelManager::NextLevel(std::vector<GameObject*> pPlayer)
+{
+	m_Levels[m_CurrentLevel]->EndLevel();
+	m_CurrentLevel++;
+	m_Levels[m_CurrentLevel]->StartLevel(pPlayer);
+}
+
+void Rius::LevelManager::ResetLevel(std::vector<GameObject*> pPlayer)
+{
+	m_Levels[m_CurrentLevel]->EndLevel();
+	m_Levels[m_CurrentLevel]->StartLevel(pPlayer);
+}
+
 void Rius::LevelManager::ResetLevel(GameObject* pPlayer)
 {
+	m_Levels[m_CurrentLevel]->EndLevel();
 	m_Levels[m_CurrentLevel]->StartLevel(pPlayer);
 }
 
@@ -100,6 +133,7 @@ void Rius::LevelManager::QuitLevel()
 }
 
 Rius::LevelManager::LevelManager()
+	:m_Levels(),m_CurrentLevel()
 {
 }
 

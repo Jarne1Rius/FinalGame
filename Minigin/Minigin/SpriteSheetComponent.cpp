@@ -12,7 +12,7 @@ Rius::SpriteSheetComponent::SpriteSheetComponent(Material* material, const Recta
 	:m_Vertices(), m_Rectangle2D(destRectangle), m_Static(isStatic), m_QuadVAO(), m_pMaterial(material), m_CurrentAnimation(totalAnimations[0].m_FirstFrame)
 	, m_TextCoord(0, 0, 1, 1), m_Sec(0), m_WidthObject(), m_HeightObject(), m_SrcRect(0, 0, 1, 1), m_VBO(), m_Indices(), m_ModelSpace(), m_Color(), m_EBO(), m_TotalAnimations(totalAnimations), m_CurrentFrame(), m_SecCicle()
 {
-
+	SetAnimation(0);
 }
 
 
@@ -50,6 +50,7 @@ void Rius::SpriteSheetComponent::SetAnimation(int animation)
 	m_Sec = 0;
 	m_CurrentAnimation = animation;
 	m_CurrentFrame = m_TotalAnimations[m_CurrentAnimation].m_FirstFrame;
+	SetRightTexCoord();
 }
 
 void Rius::SpriteSheetComponent::SetAnimation(std::string name)
@@ -129,18 +130,7 @@ void Rius::SpriteSheetComponent::LateUpdate()
 	while (m_Sec >= current.m_TimeNextFrame)
 	{
 		m_Sec -= (current.m_TimeNextFrame);
-		m_CurrentFrame++;
-		m_CurrentFrame %= current.m_TotalFrames;
-
-		m_TextCoord.width = current.m_TexCoord.width / current.m_Colms;
-		m_TextCoord.height = current.m_TexCoord.height / current.m_Rows;
-
-		float colms = (m_CurrentFrame % current.m_Colms) * m_TextCoord.width;
-		float rows = (m_CurrentFrame / current.m_Colms) * m_TextCoord.height;
-
-		glm::vec2 pos{ colms + current.m_TexCoord.pos.x ,rows + current.m_TexCoord.pos.y };
-		m_TextCoord.pos = pos;
-		Initialize();
+		SetRightTexCoord();
 	}
 }
 Rius::BaseComponent* Rius::SpriteSheetComponent::Clone()
@@ -188,6 +178,7 @@ bool Rius::SpriteSheetComponent::CheckOneCicle()
 	return (m_SecCicle >= m_TotalAnimations[m_CurrentAnimation].m_TotalFrames * m_TotalAnimations[m_CurrentAnimation].m_TimeNextFrame);
 }
 
+
 void Rius::SpriteSheetComponent::SetIndicesAndVertices()
 {
 	m_Vertices.clear();
@@ -216,4 +207,22 @@ void Rius::SpriteSheetComponent::SetIndicesAndVertices()
 	m_Vertices[14] = (m_TextCoord.pos.x + m_TextCoord.width);
 	m_Vertices[15] = (m_TextCoord.pos.y);
 	m_Indices = std::vector<unsigned int>{ 0, 1, 3 ,1,2,3 };
+}
+
+void Rius::SpriteSheetComponent::SetRightTexCoord()
+{
+	Animation& current = m_TotalAnimations[m_CurrentAnimation];
+	m_CurrentFrame++;
+	m_CurrentFrame %= current.m_TotalFrames;
+	m_CurrentFrame += current.m_FirstFrame;
+
+	m_TextCoord.width = current.m_TexCoord.width / current.m_Colms;
+	m_TextCoord.height = current.m_TexCoord.height / current.m_Rows;
+
+	float colms = (m_CurrentFrame % current.m_Colms) * m_TextCoord.width;
+	float rows = (m_CurrentFrame / current.m_Colms) * m_TextCoord.height;
+
+	glm::vec2 pos{ colms + current.m_TexCoord.pos.x ,rows + current.m_TexCoord.pos.y };
+	m_TextCoord.pos = pos;
+	Initialize();
 }

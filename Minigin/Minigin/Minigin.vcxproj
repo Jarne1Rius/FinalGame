@@ -220,6 +220,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="BoxCollider2D.h" />
     <ClInclude Include="BoxCollider3D.h" />
     <ClInclude Include="BulletPrefab.h" />
+    <ClInclude Include="GameInstance.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="CircleCollider2D.h" />
     <ClInclude Include="CircleCollider3D.h" />
@@ -278,6 +279,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="BoxCollider2D.cpp" />
     <ClCompile Include="BoxCollider3D.cpp" />
     <ClCompile Include="BulletPrefab.cpp" />
+    <ClCompile Include="GameInstance.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="CircleCollider2D.cpp" />
     <ClCompile Include="CircleCollider3D.cpp" />

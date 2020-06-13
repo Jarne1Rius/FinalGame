@@ -25,7 +25,7 @@ void Rius::FiniteStateMachine::AddTransitionsTo(std::function<bool()> trans, std
 {
 	for (auto state : states)
 	{
-		state->SetTransition(trans, toState);
+		state->AddTransition(trans, toState);
 	}
 }
 
@@ -33,7 +33,7 @@ void Rius::FiniteStateMachine::AddActionTo(std::function<void()> action, std::ve
 {
 	for (auto state : states)
 	{
-		state->SetAction(action);
+		state->AddAction(action);
 	}
 }
 
@@ -41,7 +41,7 @@ void Rius::FiniteStateMachine::AddEndActionTo(std::function<void()> endAction, s
 {
 	for (auto state : states)
 	{
-		state->SetActionEnd(endAction);
+		state->AddActionEnd(endAction);
 	}
 }
 
@@ -49,6 +49,6 @@ void Rius::FiniteStateMachine::AddStartActionTo(std::function<void()> startActio
 {
 	for (auto state : states)
 	{
-		state->SetActionStart(startAction);
+		state->AddActionStart(startAction);
 	}
 }
