@@ -17,13 +17,20 @@ Rius::GameObject::GameObject()
 
 Rius::GameObject::~GameObject()
 {
-	for (int i{}; i < int(m_pComponents.size()) ;i++)
+	for (int i{}; i < int(m_pComponents.size()); i++)
 	{
 		delete m_pComponents[i];
 	}
 	delete m_pParentObject;
 	for (int i{}; i < int(m_pChildren.size()); i++)
 		delete m_pChildren[i];
+}
+
+Rius::GameObject::GameObject(const GameObject& other)
+	:m_Id(other.m_Id), m_Transform(other.m_Transform), m_Static(other.m_Static), m_pRigidBodyComponent(other.m_pRigidBodyComponent),
+	m_pComponents(other.m_pComponents), m_pChildren(other.m_pChildren), m_Active(other.m_Active), m_pParentObject(other.m_pParentObject),
+	m_Tag(other.m_Tag), m_pParentScene(other.m_pParentScene), m_PreviousPos(other.m_PreviousPos), m_pPlayerComponent(other.m_pPlayerComponent)
+{
 }
 
 void Rius::GameObject::AddComponent(BaseComponent* component)
@@ -74,7 +81,7 @@ void Rius::GameObject::Update(float deltaT)
 	if (!m_Active) return;
 	for (BaseComponent* comp : m_pComponents)
 	{
-		if(comp != m_pRigidBodyComponent)
+		if (comp != m_pRigidBodyComponent)
 			comp->Update(deltaT);
 	}
 	if (m_pRigidBodyComponent != nullptr)
@@ -105,7 +112,7 @@ void Rius::GameObject::Initialize()
 
 Rius::GameObject* Rius::GameObject::Clone()
 {
-	return this;
+	return nullptr;
 }
 
 

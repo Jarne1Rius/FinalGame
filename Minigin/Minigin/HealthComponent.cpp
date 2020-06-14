@@ -8,7 +8,7 @@
 Rius::HealthComponent::HealthComponent(int health, bool leftSide)
 	:m_LeftSide(leftSide), m_Health(health), m_OriginalHealth(health)
 {
-	m_pMat = new TextureMaterial{ "Resources/Enemy/Enemy.png","Health","Health",true };
+	m_pMat = new TextureMaterial{ "Resources/Enemy/Enemy.png","Health" + std::to_string(MaterialManager::m_ID),"Health" + std::to_string(MaterialManager::m_ID),true };
 	MaterialManager::AddMaterial(m_pMat);
 }
 

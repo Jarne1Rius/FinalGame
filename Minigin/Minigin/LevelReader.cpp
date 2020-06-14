@@ -18,7 +18,7 @@ std::vector<std::vector<Rius::Rectangle2D>> Rius::LevelReader::ReadFromObjFile(c
 			BinaryRead(input, e);
 			for (int i = 0; i < 8; ++i)
 			{
-				if ((e & (1 << (7 - i))) >> (7 - i)) a[i + sum ] = true;
+				if ((e & (1 << (7 - i))) >> (7 - i)) a[i + sum] = true;
 			}
 			sum += 8;
 		}

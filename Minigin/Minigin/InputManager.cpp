@@ -13,6 +13,7 @@ Rius::InputManager::InputManager()
 	m_ButtonsCommand[int(ControllerButton::ButtonB)] = new FireCommand{};
 	m_ButtonsCommand[int(ControllerButton::LeftStick)] = new MoveLeft{};
 	m_ButtonsCommand[int(ControllerButton::RightStick)] = new MoveRight{};
+	m_ButtonsCommand[int(ControllerButton::ButtonY)] = new NewPlayerAdd{};
 	for (int i = 0; i < m_Size; ++i)
 	{
 		if (m_ButtonsCommand[i] == nullptr)
@@ -47,13 +48,12 @@ void Rius::InputManager::Test()
 	for (int i = 0; i < GameInstance::GetInstance().AmountOfPlayers(); ++i)
 	{
 		if (GameInstance::GetInstance().GetPlayer(i).dead) continue;;
-		m_Pool.enqueue([this,i] {
+		//m_Pool.enqueue([this,i] {
 			for (int a{}; a < m_Size; a++)
 			{
-				
 				ProcessInputt(GameInstance::GetInstance().GetPlayer(i).pPlayer, a, GameInstance::GetInstance().GetPlayer(i).IdController);
 			}
-		});
+		//});
 	}
 }
 

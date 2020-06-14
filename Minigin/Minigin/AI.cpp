@@ -125,7 +125,7 @@ void Rius::Ai::Initialize()
 	};
 	auto Jump = [this]()->void
 	{
-		m_Rigid->AddForce(glm::vec2{ 0,0.6f });
+		m_Rigid->AddForce(glm::vec2{ 0,30.6f });
 		m_Sec = 0;
 	};
 	auto justDied = [this]()->void
@@ -137,7 +137,7 @@ void Rius::Ai::Initialize()
 		m_pCollider->SetIgnoreGroups(t);
 		m_Rigid->SetBounceMulti(1);
 		m_Rigid->SetKinematic(true);
-		m_Rigid->AddForce(glm::vec2{ 10,10 });//glm::linearRand(3,5), glm::linearRand(3,5) });
+		m_Rigid->AddForce(glm::vec2{ glm::linearRand(10,10) * glm::linearRand(-1,1), glm::linearRand(10,10) * glm::linearRand(-1,1) });
 	};
 	auto updateDeath = [this]()->void
 	{
@@ -150,12 +150,6 @@ void Rius::Ai::Initialize()
 		m_Rigid->SetForce({ 0,0,0 });
 		m_Rigid->SetKinematic(false);
 		m_Rigid->SetBounceMulti(0);
-		//TODO change this spriteSheetcom
-		//m_pGameObject->GetComponent<SpriteSheetComponent>()
-		//
-		//
-		TextureMaterial* mat = new TextureMaterial{ "Resources/Enemy/Enemy.png","Food","Food", true };
-		MaterialManager::AddMaterial(mat);
 		SpriteSheetComponent* sprite = m_pGameObject->GetComponent<SpriteSheetComponent>();
 		sprite->SetAnimation("Food");
 		sprite->SetFrame(2);
@@ -247,7 +241,7 @@ void Rius::Ai::OnCollisionEnter(Collider* collider)
 void Rius::Ai::OnTriggerEnter(Collider* collider)
 {
 	std::string name = m_pFSM->m_CurrentState->GetName();
-	if(name != "AfterDeath" && collider->GetGameObject()->GetTag() == Tag::Player)
+	if(name != "AfterDeath" && collider->GetGameObject()->GetTag() == Tag::Interactions)
 	{
 		m_Lives--;
 	}

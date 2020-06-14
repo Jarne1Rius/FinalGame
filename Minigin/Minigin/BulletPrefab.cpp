@@ -20,11 +20,13 @@ Rius::BulletPrefab::BulletPrefab(TextureMaterial* mat, const Rectangle2D& texCoo
 	AddComponent(m_Sprite);
 	AddComponent(m_pCollider);
 	AddComponent(m_pRigidBodyComponent);
+	this->SetTag(Tag::Interactions);
 }
 
 
 Rius::BulletPrefab::~BulletPrefab()
 {
+	delete m_pMat;
 	//delete m_pRigidBodyComponent;
 	//delete m_Sprite;
 }
@@ -46,7 +48,6 @@ void Rius::BulletPrefab::Update(float deltaT)
 	m_Sec += deltaT;
 	if (m_Sec > 3)
 	{
-		delete m_pMat;
 		SceneManager::GetInstance().GetCurrentScene()->Remove(this);
 	}
 	else if (m_Sec > 2)
@@ -58,7 +59,7 @@ void Rius::BulletPrefab::Update(float deltaT)
 
 void Rius::BulletPrefab::OnTriggerEnter(Collider* other)
 {
-	if(other->GetGameObject()->GetTag() == Tag::Interactions)
+	if(other->GetGameObject()->GetTag() == Tag::Enemy)
 	{
 		other->GetGameObject()->GetComponent<Ai>()->DoDamage();
 		//delete m_pMat;

@@ -7,7 +7,7 @@
 #include "RigidBodyComponent.h"
 
 Rius::BoxCollider2D::BoxCollider2D(Rectangle2D rectangle, const glm::vec2& center, bool isTrigger, CollisionGroup collisionGroup)
-	:Collider(isTrigger, collisionGroup), m_Rectangle(rectangle), m_Center(-rectangle.width * center.x, rectangle.height* center.y, 0)
+	:Collider(isTrigger, collisionGroup), m_Rectangle(rectangle), m_Center(-rectangle.width * center.x, rectangle.height* center.y, 0),m_StartRectangle(rectangle.pos,0)
 {
 }
 
@@ -34,7 +34,7 @@ void Rius::BoxCollider2D::Update(float deltaT)
 {
 	if (!m_Static && m_CurrentCollisionGroup != Group3)
 	{
-		m_Rectangle.pos = m_pGameObject->GetTransform().GetPosition() + m_Center;
+		m_Rectangle.pos = m_pGameObject->GetTransform().GetPosition() + m_Center + m_StartRectangle;
 		m_Rectangle.pos.y *= -1;
 	}
 	//return;

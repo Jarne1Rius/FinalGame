@@ -19,7 +19,7 @@ namespace Rius
 		virtual void Render() const;
 		virtual void Initialize();
 
-		~Scene();
+		virtual ~Scene();
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;
 		Scene& operator=(const Scene& other) = delete;

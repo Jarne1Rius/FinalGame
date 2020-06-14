@@ -28,6 +28,7 @@ namespace Rius
 		void Check(Collider* collider);
 	private:
 		Rectangle2D m_Rectangle;
+		glm::vec3 m_StartRectangle;
 		glm::vec3 m_Center;
 	};
 

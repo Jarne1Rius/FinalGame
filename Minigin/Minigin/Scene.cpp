@@ -29,6 +29,7 @@ void Scene::Remove()
 		if (it != m_pObjects.end())
 		{
 			m_pObjects.erase(it);
+			delete m_ReadyToRemove[i];
 			break;
 		}
 		//if (m_pBackground == m_ReadyToRemove[i]) delete m_ReadyToRemove[i];

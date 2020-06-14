@@ -1,6 +1,8 @@
 #include "MiniginPCH.h"
 #include "LevelManager.h"
 
+
+#include "AI.h"
 #include "BoxCollider2D.h"
 #include "LevelReader.h"
 #include "TextureMaterial.h"
@@ -13,8 +15,8 @@
 #include "TextComponent.h"
 #include "HealthComponent.h"
 
-Rius::Level::Level(std::vector<Rectangle2D> walls, int levelID, TextureMaterial* materialSmall, TextureMaterial* materialBig, std::string locationBigTexture, std::string locationSmallTexture, const std::vector<glm::vec2>& startPos)
-	:m_StartPos(startPos), m_pBackGround(), m_Walls(walls), m_LevelID(), m_AI(), m_MaterialSmall(materialSmall), m_MaterialBig(materialBig), m_BigTexture(locationBigTexture), m_SmallTexture(locationSmallTexture)
+Rius::Level::Level(std::vector<Rectangle2D> walls, int levelID, TextureMaterial* materialSmall, TextureMaterial* materialBig, std::string locationBigTexture, std::string locationSmallTexture, const std::vector<glm::vec3>& posEnemies, const std::vector<glm::vec2>& startPos)
+	:m_StartPos(startPos), m_pBackGround(), m_Walls(walls), m_LevelID(), m_AI(posEnemies), m_MaterialSmall(materialSmall), m_MaterialBig(materialBig), m_BigTexture(locationBigTexture), m_SmallTexture(locationSmallTexture)
 {
 
 }
@@ -44,6 +46,34 @@ void Rius::Level::StartLevel(std::vector<GameObject*> pPlayer)
 void Rius::Level::EndLevel()
 {
 	SceneManager::GetCurrentScene()->Remove(m_pBackGround);
+}
+
+void Rius::Level::SetPosition(GameObject* pPlayer, int id)
+{
+	pPlayer->GetTransform().SetPosition(glm::vec3(m_StartPos[id].x, -m_StartPos[id].y, 0));
+}
+
+void Rius::Level::CreateEnemy(const glm::vec3& pos)
+{
+	TextureMaterial* mat = new TextureMaterial{ "Resources/Enemy/Enemy.png", "Enemy" + std::to_string(MaterialManager::m_ID),"Enemy" + std::to_string(MaterialManager::m_ID),true };
+	MaterialManager::AddMaterial(mat);
+	GameObject* enemy = new GameObject{};
+	std::vector<Animation>animations{
+	{ ConvertToUVCoordinates({0,131,65,-16},mat->GetTexture2D()), "Idle",1,0.2f,4,1,1},
+	{ ConvertToUVCoordinates({238,131,74,-16},mat->GetTexture2D()),"Death",4,0.4f,4,1,0},
+	{ ConvertToUVCoordinates({0,131,70,-16},mat->GetTexture2D()),"Running",4,0.2f,4,1,0},
+	{ ConvertToUVCoordinates({ 0 ,37,634,-37 }, mat->GetTexture2D()), "Food", 1, 0.2f, 35, 2, 1 }
+	};
+	SpriteSheetComponent* sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false, animations);
+	enemy->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 45, 45), { 0.5f,0.5f }));
+	enemy->SetTag(Tag::Enemy);
+	enemy->AddComponent(new RigidBodyComponent{ 0.5f});
+	Ai* ai = new Ai{ 1,{2,4},false };
+	enemy->AddComponent(ai);
+	enemy->AddComponent(sprite);
+	enemy->GetTransform().Translate(pos);
+	MovingObjectObserver* observer = new MovingObjectObserver{ enemy };
+	SceneManager::GetInstance().GetCurrentScene()->Add(enemy);
 }
 
 void Rius::Level::InitLevel()
@@ -76,6 +106,13 @@ void Rius::Level::InitLevel()
 	m_pBackGround->AddComponent(ptext);
 	m_pBackGround->SetActive(true);
 	SceneManager::GetCurrentScene()->AddBackGround(m_pBackGround);
+
+	for (auto ai : m_AI)
+	{
+		CreateEnemy(ai);
+	}
+	TextureMaterial* mat = new TextureMaterial{ "Resources/Enemy/Enemy.png", "Enemy" + std::to_string(MaterialManager::m_ID),"Enemy" + std::to_string(MaterialManager::m_ID),true };
+	MaterialManager::AddMaterial(mat);
 }
 //levelmanager
 
@@ -89,14 +126,14 @@ void Rius::LevelManager::LoadLevels(const std::string& location, const std::stri
 	for (int i = 0; i < int(levels.size()); ++i)
 	{
 		m_Levels.push_back(new Level{ levels[i],i,mat3,mat2,locationsBigTextures + ((i + 1 < 10) ? '0' + std::to_string((i + 1)) : std::to_string(i + 1)) + ".gif"
-			,locationSmallTextures + ((i + 1 < 10) ? '0' +std::to_string(i + 1) : std::to_string(i + 1)) + ".png" });
+			,locationSmallTextures + ((i + 1 < 10) ? '0' + std::to_string(i + 1) : std::to_string(i + 1)) + ".png" ,{ {90,420,0},{400,320,0}} });
 	}
 
 }
 
 void Rius::LevelManager::SetLevel(int level, GameObject* pPlayer)
 {
-//	m_Levels[m_CurrentLevel]->EndLevel();
+	//	m_Levels[m_CurrentLevel]->EndLevel();
 	m_CurrentLevel = level;
 	m_Levels[m_CurrentLevel]->StartLevel(pPlayer);
 }
@@ -132,8 +169,13 @@ void Rius::LevelManager::QuitLevel()
 	m_Levels[m_CurrentLevel]->EndLevel();
 }
 
+void Rius::LevelManager::SetPosition(GameObject* pPlayer, int id)
+{
+	m_Levels[m_CurrentLevel]->SetPosition(pPlayer, id);
+}
+
 Rius::LevelManager::LevelManager()
-	:m_Levels(),m_CurrentLevel()
+	:m_Levels(), m_CurrentLevel()
 {
 }
 

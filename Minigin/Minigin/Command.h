@@ -8,9 +8,9 @@ namespace Rius
 	{
 	public:
 		virtual  ~Command() = default;
-		virtual void Execute(const GameObject* actor, float hit){}
+		virtual void Execute( GameObject* actor, float hit){}
 		bool m_Pressed = false;
-		TypePress m_Type = TypePress::hold;
+		TypePress m_Type = TypePress::pressed;
 		bool CheckHit(bool hit) const
 		{
 			switch (m_Type)
@@ -32,22 +32,27 @@ namespace Rius
 	class JumpCommand : public Command
 	{
 	public:
-		void Execute(const GameObject* actor, float hit) override;
+		void Execute( GameObject* actor, float hit) override;
 
 	};
 	class FireCommand : public Command
 	{
 	public:
-		void Execute(const GameObject* actor, float hit) override;
+		void Execute( GameObject* actor, float hit) override;
 	};
 	class MoveLeft : public Command
 	{
 	public:
-		void Execute(const GameObject* actor, float hit) override;
+		void Execute( GameObject* actor, float hit) override;
 	};
 	class MoveRight : public Command
 	{
 	public:
-		void Execute(const GameObject* actor, float hit) override;
+		void Execute( GameObject* actor, float hit) override;
+	};
+	class NewPlayerAdd : public Command
+	{
+	public:
+		void Execute( GameObject* actor, float hit) override;
 	};
 }

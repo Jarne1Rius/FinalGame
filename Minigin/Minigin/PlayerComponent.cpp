@@ -15,7 +15,7 @@ Rius::PlayerComponent::PlayerComponent(GameObject* prefabBullets)
 
 Rius::PlayerComponent::~PlayerComponent()
 {
-	delete m_BulletsPrefabs;
+//	delete m_BulletsPrefabs;
 	delete m_FSM;
 }
 
@@ -141,7 +141,7 @@ void Rius::PlayerComponent::Initialize()
 	jumping->AddActionStart(startOfIdle);
 
 	m_Sprite = m_pGameObject->GetComponent<SpriteSheetComponent>();
-	m_FSM->AddActionTo(checkCollisionWhileGoingUp, { jumping ,attack });
+	m_FSM->AddActionTo(checkCollisionWhileGoingUp, { jumping ,attack, idle });
 	m_pCollider = m_pGameObject->GetComponent<BoxCollider2D>();
 	m_Rigid = m_pGameObject->GetRigidBodyComponent();
 
@@ -179,6 +179,7 @@ void Rius::PlayerComponent::Jump(float value)
 
 void Rius::PlayerComponent::Move(float value)
 {
+	//std::cout << value << "\n";
 	m_Moving = value;
 }
 

@@ -11,6 +11,8 @@
 
 Rius::Player& Rius::GameInstance::GetPlayer(int playerId)
 {
+	if (AmountOfPlayers() < playerId)
+		playerId = 0;
 	return m_Players[playerId];
 }
 
@@ -19,9 +21,11 @@ Rius::Player::Player()
 {
 }
 
-void Rius::Player::Render(TextRenderer* textRenderer, glm::vec2 pos) const
+void Rius::Player::Render(TextRenderer* textRenderer, glm::vec2 pos, std::string name) const
 {
-	pos.y = float(Minigin::m_Height) - 30;
+	pos.y = float(Minigin::m_Height);
+	textRenderer->RenderText(pos, name, 1, m_color);
+	pos.y -= 30;
 	textRenderer->RenderText(pos, std::to_string(score), 1, m_color);
 }
 
@@ -52,7 +56,36 @@ void Rius::GameInstance::AddPlayer(GameObject* playerGameObject)
 	player.score = 0;
 	m_Players.push_back(player);
 	SceneManager::GetInstance().GetCurrentScene()->Add(p);
+	playerGameObject->SetActive(false);
+	p->SetActive(false);
 	GUISystem* system = new GUISystem(p);
+}
+
+void Rius::GameInstance::AddPlayer()
+{
+	GameObject* player = m_pPlayerPrefab->Clone();
+	SceneManager::GetInstance().GetCurrentScene()->Add(player);
+	player->SetActive(false);
+	player->GetTransform().SetPosition(-1000, -1000, 0);
+	MovingObjectObserver* observer = new MovingObjectObserver{ player };
+	AddPlayer(player);
+}
+
+void Rius::GameInstance::SetPos(GameObject* pPlayer)
+{
+	for (int i = 0; i < m_Players.size(); ++i)
+	{
+		if (m_Players[i].pPlayer == pPlayer)
+		{
+			if (!pPlayer->GetActive())
+			{
+				m_Players[i].m_Health->GetGameObject()->SetActive(true);
+				pPlayer->SetActive(true);
+				LevelManager::GetInstance().SetPosition(pPlayer, i);
+			}
+			break;
+		}
+	}
 }
 
 Rius::Player& Rius::GameInstance::GetPlayer(const GameObject* player)

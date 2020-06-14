@@ -25,9 +25,16 @@ void Rius::UI::Update()
 
 void Rius::UI::Render()
 {
-	for (auto& player :GameInstance::GetInstance().GetPlayers())
+	glm::vec2 pos{ 0,20 };
+	std::string name{ "Player1" };
+	for (auto& player : GameInstance::GetInstance().GetPlayers())
 	{
-		player.Render(m_TextRenderer, { 100,20 });
+		if (player.pPlayer->GetActive())
+		{
+			player.Render(m_TextRenderer, pos, name);
+			pos.x = float(Minigin::m_Width) - 100;
+			name = "Player2";
+		}
 	}
 }
 

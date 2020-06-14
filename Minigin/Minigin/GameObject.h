@@ -22,7 +22,7 @@ namespace Rius
 
 		GameObject();
 		virtual ~GameObject();
-		GameObject(const GameObject& other) = delete;
+		GameObject(const GameObject& other);
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
