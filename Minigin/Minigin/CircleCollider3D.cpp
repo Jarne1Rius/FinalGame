@@ -2,9 +2,10 @@
 #include "CircleCollider3D.h"
 #include "BoxCollider3D.h"
 #include "ExtraMathFiles.h"
+#include "Logger.h"
 
 Rius::CircleCollider3D::CircleCollider3D(Circle3D circle, bool IsTrigger, CollisionGroup collisionGroup)
-	:Collider(IsTrigger, collisionGroup)
+	:Collider(IsTrigger, collisionGroup),m_StartPos(circle.pos),m_Circle3D(circle)
 {
 }
 
@@ -41,39 +42,37 @@ void Rius::CircleCollider3D::Initialize()
 {
 }
 
-void Rius::CircleCollider3D::Update(float deltaT)
+void Rius::CircleCollider3D::Update(float )
 {
-	//TODO Can try to change it to the collider.h file but problem with checkCollisiion
+	if (!m_Static && m_CurrentCollisionGroup != Group3)
+	{
+		m_Circle3D.pos = m_pGameObject->GetTransform().GetPosition() + m_StartPos;
+		m_Circle3D.pos.y *= -1;
+	}
+	bool anyHit{ false };
+	if (this->m_Static) return;
 	for (Collider* collider : m_AllColliders)
 	{
+		if (collider == this || m_IgnoreGroups[collider->GetCurrentCollisionGroup()]) continue;
 		bool newHit = collider->CheckCollision(this);
-		std::map<Collider*, bool>::iterator it = m_CollidersInCollision.find(collider);
-		bool hit = it->second;
-		if (newHit != hit && hit)
+		if (newHit)
 		{
-			//exit collider
-			if (m_Trigger) OnTriggerExit(collider);
-			else OnCollisionExit(collider);
-		}
-		else if (newHit == hit && hit)
-		{
-			//Stay collider
-			if (m_Trigger) OnTriggerStay(collider);
-			else OnCollisionStay(collider);
-		}
-		else if (newHit != hit && hit == false)
-		{
-			//Enter collider
-			if (m_Trigger) OnTriggerEnter(collider);
-			else OnCollisionEnter(collider);
-		}
-		else
-		{
-			continue;
+			anyHit = true;
+			if (m_Trigger || collider->IsTrigger())
+			{
+				m_pGameObject->OnTriggerEnter(collider);
+				collider->GetGameObject()->OnTriggerEnter(this);
+			}
+			else
+			{
+				m_pGameObject->OnCollisionEnter(collider);
+				collider->GetGameObject()->OnCollisionEnter(this);
+			}
 		}
 
-		it->second = newHit;
 	}
+
+	m_PrevHit = anyHit;
 }
 
 void Rius::CircleCollider3D::Render() const
@@ -85,16 +84,15 @@ glm::vec2 Rius::CircleCollider3D::GetCenter()
 	return m_Circle3D.pos;
 }
 
-bool Rius::CircleCollider3D::CheckCollision(CircleCollider2D* circle)
+bool Rius::CircleCollider3D::CheckCollision(CircleCollider2D* )
 {
-	//TODO Change all the errors with the gmui
-	std::cout << "Error => 3D collider tries to collide with a 2D collider\n";
+	Logger::LogError("3D collider tries to collide with a 2D collider");
 	return false;
 }
 
-bool Rius::CircleCollider3D::CheckCollision(BoxCollider2D* collider)
+bool Rius::CircleCollider3D::CheckCollision(BoxCollider2D* )
 {
-	std::cout << "Error => 3D collider tries to collide with a 2D collider\n";
+	Logger::LogError("3D collider tries to collide with a 2D collider");
 	return false;
 }
 

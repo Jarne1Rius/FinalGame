@@ -12,7 +12,7 @@ namespace Rius
 			delete pComponent;
 		}
 	};
-	struct Node
+	struct Node final
 	{
 		Node* pNext;
 		Node* pPrevious;

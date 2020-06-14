@@ -59,7 +59,7 @@ void Rius::Transform::Initialize()
 {
 }
 
-void Rius::Transform::Update(float deltaT)
+void Rius::Transform::Update(float )
 {
 }
 
@@ -88,7 +88,6 @@ void Rius::Transform::SetPosition(const float x, const float y, const float z)
 void Rius::Transform::SetPosition(const glm::vec3& pos)
 {
 	m_Position = pos;
-	//m_Position.y *= -1;
 }
 
 glm::mat4& Rius::Transform::GetMatrix()

@@ -18,13 +18,13 @@ namespace Rius
 		virtual void Initialize() = 0;
 		virtual void Update(float deltaT) = 0;
 		virtual void Render() const = 0;
-		virtual void LateUpdate();
-		virtual void OnTriggerEnter(Collider* collider);
-		virtual void OnTriggerStay(Collider* collider);
-		virtual void OnCollisionEnter(Collider* collider);
-		virtual void OnTriggerExit(Collider* collider);
-		virtual void OnCollisionStay(Collider* collider);
-		virtual void OnCollisionExit(Collider* collider);
+		virtual void LateUpdate(){};
+		virtual void OnTriggerEnter(Collider*){}
+		virtual void OnTriggerStay(Collider*){}
+		virtual void OnCollisionEnter(Collider*){}
+		virtual void OnTriggerExit(Collider*){}
+		virtual void OnCollisionStay(Collider*){}
+		virtual void OnCollisionExit(Collider*){}
 		virtual BaseComponent* Clone();
 		int GetId() { return m_Id; }
 		void setID(int id) { m_Id = id; }

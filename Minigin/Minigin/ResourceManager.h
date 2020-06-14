@@ -8,12 +8,10 @@
 
 namespace Rius
 {
-	class ResourceManager 
+	class ResourceManager final
 	{
 	public:
-		static std::map<std::string, Shader*>    m_Shaders;
-		static std::map<std::string, Texture2D*> M_Textures;
-		static glm::mat4 m_ProjectionMatrix;
+
 		static Shader* LoadShader(const GLchar* vShaderFile, const GLchar* fShaderFile, std::string name);
 		// Retrieves a stored sader
 		static Shader* GetShader(std::string name);
@@ -24,12 +22,15 @@ namespace Rius
 		// Properly de-allocates all loaded resources
 		static void Clear();
 		static void ClearTexture(Texture2D* pTexture);
-	private:		
+		static glm::mat4 m_ProjectionMatrix;
+	private:
+		static std::map<std::string, Shader*>    m_Shaders;
+		static std::map<std::string, Texture2D*> M_Textures;
 		ResourceManager() = default;
 		// Loads and generates a shader from file
 		static Shader* LoadShaderFromFile(const GLchar* vShaderFile, const GLchar* fShaderFile);
 		// Loads a single texture from file
 		static Texture2D* LoadTextureFromFile(const GLchar* file, GLboolean alpha);
-		
+
 	};
 }

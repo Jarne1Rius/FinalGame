@@ -13,7 +13,7 @@ namespace Rius
 		void Render(TextRenderer* textRenderer, glm::vec2 pos, std::string name) const;
 		void RemoveHealth(int amount);
 		GameObject* pPlayer = nullptr;
-		HealthComponent* m_Health;
+		HealthComponent* m_HealthComponent;
 		int score = 0;
 		int IdController = -1;
 		glm::vec3 m_color = { 0,1,0 };
@@ -25,9 +25,7 @@ namespace Rius
 		friend class Singleton < GameInstance>;
 		std::vector<Player> GetPlayers() const { return m_Players; };
 		void AddPlayer(GameObject* playerGameObject);
-		void AddPlayer();
 		void SetPos(GameObject* pPlayer);
-		void SetPlayerPrefab(GameObject* prefab) { m_pPlayerPrefab = prefab; }
 		Player& GetPlayer(int playerId);
 		Player& GetPlayer(const GameObject* player);
 		int AmountOfPlayers() const { return int(m_Players.size()); }
@@ -43,6 +41,5 @@ namespace Rius
 		~GameInstance() = default;
 		std::vector<Player> m_Players;
 		std::vector<GameObject*> m_Enemies;
-		GameObject* m_pPlayerPrefab;
 	};
 }

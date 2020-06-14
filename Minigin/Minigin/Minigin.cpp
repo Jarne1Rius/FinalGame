@@ -3,21 +3,20 @@
 
 
 #include <chrono>
-#include <thread>
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include "time.h"
+#include <glm/gtc/matrix_transform.hpp>
 
+#pragma warning( push )
+#pragma warning( disable : 4201)
+#include <glm/gtc/type_ptr.hpp>
+#pragma warning( pop ) 
 #include <ft2build.h>
-
+#include "Time.h"
 
 #include "GameInstance.h"
 #include "MaterialManager.h"
@@ -67,7 +66,6 @@ void Rius::Minigin::Run()
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
-	bool doContinue = true;
 	auto lastTime = std::chrono::high_resolution_clock::now();
 	double lag = 0.0f;
 
@@ -85,18 +83,15 @@ void Rius::Minigin::Run()
 		lag += deltaTime;
 		//doContinue = input.ProcessInput();
 		input.Test();
-		int frames{ 0 };
-		int upd = 0;
 		while (lag >= MsPerFrame/1000.f)
 		{
 			sceneManager.Update(MsPerFrame/1000.f);
 			lag -= MsPerFrame / 1000.f;
-			upd++;
 		}
 		//For LateUpdate
 		//m_Sprite->Update();
 		sceneManager.LateUpdate();
-		Time::UpdateTimer(float(deltaTime), upd);
+		Time::UpdateTimer(float(deltaTime));
 		GameInstance::GetInstance().Update();
 		//GameInstance::GetInstance().Update();
 		glClearColor(0,0,0, 1.0f);

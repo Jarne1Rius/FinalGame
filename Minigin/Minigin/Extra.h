@@ -47,14 +47,14 @@ namespace Rius
 		Rectangle2D() :pos{ 0,0 }, width{ 0 }, height{ 0 } {};
 		Rectangle2D(float x, float y, float widthR, float heightR) : pos(x, y), width(widthR), height(heightR) {};
 		Rectangle2D(glm::vec2 position, float widthR, float heightR) : pos(position), width(widthR), height(heightR) {};
-		bool operator==(Rectangle2D& rect) { return (pos == rect.pos && width == rect.width && height == rect.height); }
+		bool operator==(Rectangle2D& rect) const { return (pos == rect.pos && width == rect.width && height == rect.height); }
 		glm::vec2 pos;
 		float width = 10;
 		float height = 10;
 	};
 	inline Rectangle2D ConvertToUVCoordinates(Rectangle2D rectangle, Texture2D* texture)
 	{
-		float width{ float(texture->Width) }, height{ float(texture->Height) };
+		float width{ float(texture->m_Width) }, height{ float(texture->m_Height) };
 		return { rectangle.pos.x / width, rectangle.pos.y / height, rectangle.width / width, rectangle.height / height };
 	}
 	struct Rectangle3D

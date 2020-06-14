@@ -4,6 +4,7 @@
 #include "CircleCollider2D.h"
 #include "GameObject.h"
 #include "ExtraMathFiles.h"
+#include "Logger.h"
 #include "RigidBodyComponent.h"
 
 Rius::BoxCollider2D::BoxCollider2D(Rectangle2D rectangle, const glm::vec2& center, bool isTrigger, CollisionGroup collisionGroup)
@@ -30,20 +31,18 @@ void Rius::BoxCollider2D::Initialize()
 
 }
 
-void Rius::BoxCollider2D::Update(float deltaT)
+void Rius::BoxCollider2D::Update(float )
 {
 	if (!m_Static && m_CurrentCollisionGroup != Group3)
 	{
 		m_Rectangle.pos = m_pGameObject->GetTransform().GetPosition() + m_Center + m_StartRectangle;
 		m_Rectangle.pos.y *= -1;
 	}
-	//return;
 	bool anyHit{ false };
 	if (this->m_Static) return;
 	for (Collider* collider : m_AllColliders)
 	{
 		if (collider == this || m_IgnoreGroups[collider->GetCurrentCollisionGroup()]) continue;
-		//if(collider->GetStatic() == true)continue;
 		bool newHit = collider->CheckCollision(this);
 		if (newHit)
 		{
@@ -63,18 +62,11 @@ void Rius::BoxCollider2D::Update(float deltaT)
 	}
 
 	m_PrevHit = anyHit;
-	//if (anyHit) GetGameObject()->GetTransform().SetPosition(m_PreviousPos);
-	//m_PreviousPos = GetGameObject()->GetTransform().GetPosition();
 }
 
 void Rius::BoxCollider2D::Render() const
 {
 }
-
-void Rius::BoxCollider2D::LateUpdate()
-{
-}
-
 glm::vec2 Rius::BoxCollider2D::GetCenter()
 {
 	return m_Rectangle.pos;
@@ -95,13 +87,15 @@ bool Rius::BoxCollider2D::CheckCollision(BoxCollider2D* collider)
 		return Collision(this->m_Rectangle, collider->m_Rectangle, vel, vel);
 }
 
-bool Rius::BoxCollider2D::CheckCollision(CircleCollider3D* circle)
+bool Rius::BoxCollider2D::CheckCollision(CircleCollider3D* )
 {
+	Logger::LogError("3D collider tries to collide with a 2D collider");
 	return false;
 }
 
-bool Rius::BoxCollider2D::CheckCollision(BoxCollider3D* collider)
+bool Rius::BoxCollider2D::CheckCollision(BoxCollider3D* )
 {
+	Logger::LogError("3D collider tries to collide with a 2D collider");
 	return false;
 }
 

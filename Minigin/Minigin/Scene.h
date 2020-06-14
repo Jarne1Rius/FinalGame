@@ -1,7 +1,6 @@
 #pragma once
 #include "SceneManager.h"
 #include "UI.h"
-#include "ThreadPool.h"
 namespace Rius
 {
 	class GameObject;
@@ -28,7 +27,6 @@ namespace Rius
 	private: 
 		void Remove();
 		std::string m_Name;
-		ThreadPool m_Pool;
 		std::vector<GameObject*> m_ReadyToRemove;
 		GameObject* m_pBackground;
 		static unsigned int m_IdCounter; 

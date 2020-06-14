@@ -13,10 +13,9 @@
 #include "Scene.h"
 
 #include "TextComponent.h"
-#include "HealthComponent.h"
 
 Rius::Level::Level(std::vector<Rectangle2D> walls, int levelID, TextureMaterial* materialSmall, TextureMaterial* materialBig, std::string locationBigTexture, std::string locationSmallTexture, const std::vector<glm::vec3>& posEnemies, const std::vector<glm::vec2>& startPos)
-	:m_StartPos(startPos), m_pBackGround(), m_Walls(walls), m_LevelID(), m_AI(posEnemies), m_MaterialSmall(materialSmall), m_MaterialBig(materialBig), m_BigTexture(locationBigTexture), m_SmallTexture(locationSmallTexture)
+	:m_StartPos(startPos), m_pBackGround(), m_Walls(walls), m_LevelID(levelID), m_AI(posEnemies), m_MaterialSmall(materialSmall), m_MaterialBig(materialBig), m_BigTexture(locationBigTexture), m_SmallTexture(locationSmallTexture)
 {
 
 }
@@ -33,11 +32,11 @@ void Rius::Level::StartLevel(GameObject* pPlayer)
 
 void Rius::Level::StartLevel(std::vector<GameObject*> pPlayer)
 {
-	for (int i = 0; i < m_StartPos.size(); ++i)
+	for (int i = 0; i < int(m_StartPos.size()); ++i)
 	{
-		if (pPlayer.size() > i) {
+		if (int(pPlayer.size()) > i) {
 			pPlayer[i]->GetTransform().SetPosition(glm::vec3(m_StartPos[i].x, -m_StartPos[i].y, 0));
-			pPlayer[i]->m_PreviousPos = glm::vec3(m_StartPos[i].x, -m_StartPos[i].y, 0);
+			pPlayer[i]->SetPreviousPos(glm::vec3(m_StartPos[i].x, -m_StartPos[i].y, 0));
 		}
 	}
 	InitLevel();
@@ -59,20 +58,20 @@ void Rius::Level::CreateEnemy(const glm::vec3& pos)
 	MaterialManager::AddMaterial(mat);
 	GameObject* enemy = new GameObject{};
 	std::vector<Animation>animations{
-	{ ConvertToUVCoordinates({0,131,65,-16},mat->GetTexture2D()), "Idle",1,0.2f,4,1,1},
-	{ ConvertToUVCoordinates({238,131,74,-16},mat->GetTexture2D()),"Death",4,0.4f,4,1,0},
-	{ ConvertToUVCoordinates({0,131,70,-16},mat->GetTexture2D()),"Running",4,0.2f,4,1,0},
-	{ ConvertToUVCoordinates({ 0 ,37,634,-37 }, mat->GetTexture2D()), "Food", 1, 0.2f, 35, 2, 1 }
+	{ ConvertToUVCoordinates({0,117,65,16},mat->GetTexture2D()), "Idle",1,0.2f,4,1,1},
+	{ ConvertToUVCoordinates({238,117,74,16},mat->GetTexture2D()),"Death",4,0.4f,4,1,0},
+	{ ConvertToUVCoordinates({0,117,70,16},mat->GetTexture2D()),"Running",4,0.2f,4,1,0},
+	{ ConvertToUVCoordinates({ 0 ,0,634,37 }, mat->GetTexture2D()), "Food", 1, 0.2f, 35, 2, 1 }
 	};
 	SpriteSheetComponent* sprite = new SpriteSheetComponent(mat, Rectangle2D(0, 0, 50, 50), false, animations);
 	enemy->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 45, 45), { 0.5f,0.5f }));
 	enemy->SetTag(Tag::Enemy);
-	enemy->AddComponent(new RigidBodyComponent{ 0.5f});
-	Ai* ai = new Ai{ 1,{2,4},false };
+	enemy->AddComponent(new RigidBodyComponent{ 0.5f });
+	Ai* ai = new Ai{ 1,{2,4},false ,3 };
 	enemy->AddComponent(ai);
 	enemy->AddComponent(sprite);
 	enemy->GetTransform().Translate(pos);
-	MovingObjectObserver* observer = new MovingObjectObserver{ enemy };
+	new MovingObjectObserver{ enemy };
 	SceneManager::GetInstance().GetCurrentScene()->Add(enemy);
 }
 
@@ -96,8 +95,6 @@ void Rius::Level::InitLevel()
 		m_pBackGround->AddComponent(wall);
 		m_pBackGround->AddComponent(collider);
 	}
-	//HealthComponent* c = new HealthComponent{ 3,false };
-	//m_pBackGround->AddComponent(c);
 	wall = new WallComponent({ 0.f,0 }, m_MaterialBig, { 0,0,width * 2, float(Minigin::m_Height - height * 2) }, width, height);
 	m_pBackGround->AddComponent(wall);
 	wall = new WallComponent({ 0.f,0 }, m_MaterialBig, { float(Minigin::m_Width - width * 2),0,width * 2, float(Minigin::m_Height - height * 2) }, width, height);
@@ -116,24 +113,23 @@ void Rius::Level::InitLevel()
 }
 //levelmanager
 
-void Rius::LevelManager::LoadLevels(const std::string& location, const std::string& locationsBigTextures, const std::string& locationSmallTextures, Scene* scene)
+void Rius::LevelManager::LoadLevels(const std::string& location, const std::string& locationsBigTextures, const std::string& locationSmallTextures, Scene*)
 {
 	TextureMaterial* mat2 = new TextureMaterial{ "Resources/BigBlocks/Big_02.gif", "Back0","BackgroundBig",false };
 	TextureMaterial* mat3 = new TextureMaterial{ "Resources/SmallBlocks/small_02.png", "Back1","BackgroundSmall",false };
 	MaterialManager::AddMaterial(mat2);
 	MaterialManager::AddMaterial(mat3);
 	std::vector<std::vector<Rectangle2D>> levels = LevelReader::ReadFromObjFile(location);
+	std::vector<glm::vec3> enemies{ {90,420,0},{400,320,0} };
 	for (int i = 0; i < int(levels.size()); ++i)
 	{
 		m_Levels.push_back(new Level{ levels[i],i,mat3,mat2,locationsBigTextures + ((i + 1 < 10) ? '0' + std::to_string((i + 1)) : std::to_string(i + 1)) + ".gif"
-			,locationSmallTextures + ((i + 1 < 10) ? '0' + std::to_string(i + 1) : std::to_string(i + 1)) + ".png" ,{ {90,420,0},{400,320,0}} });
+			,locationSmallTextures + ((i + 1 < 10) ? '0' + std::to_string(i + 1) : std::to_string(i + 1)) + ".png" ,enemies });
 	}
-
 }
 
 void Rius::LevelManager::SetLevel(int level, GameObject* pPlayer)
 {
-	//	m_Levels[m_CurrentLevel]->EndLevel();
 	m_CurrentLevel = level;
 	m_Levels[m_CurrentLevel]->StartLevel(pPlayer);
 }

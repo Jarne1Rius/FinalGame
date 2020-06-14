@@ -5,10 +5,10 @@ namespace Rius
 {
 	class CircleCollider3D;
 
-	class BoxCollider3D : public Collider
+	class BoxCollider3D final : public Collider
 	{
 	public:
-		BoxCollider3D(Rectangle3D rectangle, bool isTrigger = false, CollisionGroup collisionGroup = Group0);
+		BoxCollider3D(Rectangle3D rectangle, const glm::vec3& center = {0,0,0}, bool isTrigger = false, CollisionGroup collisionGroup = Group0);
 		~BoxCollider3D();
 		BoxCollider3D(const BoxCollider3D& other);
 		BoxCollider3D(BoxCollider3D&& other) noexcept = default;
@@ -28,6 +28,8 @@ namespace Rius
 		bool CheckCollision(BoxCollider3D* collider) override;
 	private:
 		Rectangle3D m_Rectangle;
+		glm::vec3 m_StartRectangle;
+		glm::vec3 m_Center;
 	};
 }
 

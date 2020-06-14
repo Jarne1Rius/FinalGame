@@ -3,11 +3,11 @@
 namespace Rius
 {
 	class BoxCollider2D;
-	class TriggersEndScreen : public GameObject
+	class ColliderEndScreen final : public GameObject
 	{
 	public:
-		TriggersEndScreen(const Rectangle2D& bottom, const Rectangle2D& top);
-		~TriggersEndScreen();
+		ColliderEndScreen(const Rectangle2D& bottom, const Rectangle2D& top);
+		~ColliderEndScreen();
 
 		GameObject* Clone() override;
 		void OnCollisionEnter(Collider* other) override;

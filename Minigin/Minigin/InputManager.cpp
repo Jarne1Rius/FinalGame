@@ -5,14 +5,12 @@
 
 #include "GameInstance.h"
 #include "Logger.h"
-#include "UI.h"
 Rius::InputManager::InputManager()
 	:m_Id(1), m_CurrentState(), m_Controllers(), m_ButtonsCommand{}, m_Stop(), m_Buttons{},m_Pool(10)
 {
 	m_ButtonsCommand[int(ControllerButton::ButtonA)] = new JumpCommand{};
 	m_ButtonsCommand[int(ControllerButton::ButtonB)] = new FireCommand{};
-	m_ButtonsCommand[int(ControllerButton::LeftStick)] = new MoveLeft{};
-	m_ButtonsCommand[int(ControllerButton::RightStick)] = new MoveRight{};
+	m_ButtonsCommand[int(ControllerButton::LeftStick)] = new Move{};
 	m_ButtonsCommand[int(ControllerButton::ButtonY)] = new NewPlayerAdd{};
 	for (int i = 0; i < m_Size; ++i)
 	{
@@ -39,6 +37,7 @@ Rius::InputManager::~InputManager()
 
 void Rius::InputManager::ProcessInputt(GameObject* gameObject, int id, int playerid)
 {
+	if (playerid == -1)return;
 	m_ButtonsCommand[id]->Execute(gameObject, IsPressed(ControllerButton(id), playerid));
 }
 
@@ -105,7 +104,7 @@ int Rius::InputManager::GetGamepadId()
 	return  -1;
 }
 
-glm::vec2 Rius::InputManager::GetAxisGamePad(KeyFunctions button, int id) const
+glm::vec2 Rius::InputManager::GetAxisGamePad(KeyFunctions, int ) const
 {
 	/*if (m_CurrentState.size() >= id)return { 0,0 };
 	ControllerMap::const_iterator a = m_Controles.find(button);
@@ -192,8 +191,8 @@ void Rius::InputManager::SetRumble(float left, float right) const
 	int left_motor = int(left * 65535.0f);
 	int right_motor = int(right * 65535.0f);
 
-	rumble.wLeftMotorSpeed = left_motor;
-	rumble.wRightMotorSpeed = right_motor;
+	rumble.wLeftMotorSpeed = WORD(left_motor);
+	rumble.wRightMotorSpeed = WORD(right_motor);
 
 	// Apply vibration
 	XInputSetState(m_Id, &rumble);

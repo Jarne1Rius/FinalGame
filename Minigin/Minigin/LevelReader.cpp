@@ -3,7 +3,7 @@
 #include "Minigin.h"
 std::vector<std::vector<Rius::Rectangle2D>> Rius::LevelReader::ReadFromObjFile(const std::string fileName)
 {
-	
+
 	std::ifstream input;
 	input.open(fileName, std::ios::in | std::ios::binary);
 	std::bitset<800000> a{};
@@ -12,13 +12,13 @@ std::vector<std::vector<Rius::Rectangle2D>> Rius::LevelReader::ReadFromObjFile(c
 	if (input.is_open())
 	{
 		int sum{  };
-		
+
 		for (int k = 0; k < 10000; ++k)
 		{
 			BinaryRead(input, e);
 			for (int i = 0; i < 8; ++i)
 			{
-				if ((e & (1 << (7 - i))) >> (7 - i)) a[i + sum] = true;
+				if ((e & (1 << (7 - i))) >> (7 - i)) a[sum + i] = true;
 			}
 			sum += 8;
 		}
@@ -44,7 +44,7 @@ std::vector<Rius::Rectangle2D> Rius::LevelReader::LoadLevel(std::bitset<800000>&
 
 	for (int i = offset; i < 800 + offset; ++i)
 	{
-		int k{ i %800};
+		int k{ i % 800 };
 		if (a[i])
 		{
 			if (prev)
@@ -53,7 +53,7 @@ std::vector<Rius::Rectangle2D> Rius::LevelReader::LoadLevel(std::bitset<800000>&
 			}
 			else
 			{
-				glm::vec2 pos{ (width * (k % 32)),Minigin::m_Height - (height * int(k / 32) + height *3) };
+				glm::vec2 pos{ (width * (k % 32)),Minigin::m_Height - (height * int(k / 32) + height * 3) };
 				Rectangle2D rect{ pos, (width),(height) };
 				L1.push_back(rect);
 			}

@@ -5,39 +5,35 @@
 #include "Minigin.h"
 #include "Time.h"
 
-Rius::FPSComponent::FPSComponent(glm::vec3 color, const std::string& font)
+Rius::FpsComponent::FpsComponent(glm::vec3 color, const std::string& font)
 {
 	m_pMat = new TextMaterial{"FPS",color};
 	MaterialManager::AddMaterial(m_pMat);
-	m_pTextRenderer = new TextRenderer{ {0, Minigin::m_Height},m_pMat,"test",font};
+	m_pTextRenderer = new TextRenderer{ {0, Minigin::m_Height},m_pMat,"",font};
 }
 
-Rius::FPSComponent::~FPSComponent()
+Rius::FpsComponent::~FpsComponent()
 {
 	delete m_pTextRenderer;
 }
 
-void Rius::FPSComponent::Update(float deltaT)
-{
-	
-}
 
-void Rius::FPSComponent::Initialize()
+void Rius::FpsComponent::Initialize()
 {
 
 }
 
-void Rius::FPSComponent::Render() const
+void Rius::FpsComponent::Render() const
 {
 	m_pTextRenderer->ChangeText(std::to_string(Time::m_CurrentFrames));
 	m_pTextRenderer->Render();
 }
 
-void Rius::FPSComponent::SetComponent(BaseComponent* comp)
+void Rius::FpsComponent::SetComponent(BaseComponent* )
 {
 }
 
-Rius::BaseComponent* Rius::FPSComponent::Clone()
+Rius::BaseComponent* Rius::FpsComponent::Clone()
 {
 	return nullptr;
 }

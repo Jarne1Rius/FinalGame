@@ -17,7 +17,7 @@ namespace Rius
 		glm::ivec2   Bearing = {0,0};  
 		unsigned int Advance;  
 	};
-	class TextRenderer 
+	class TextRenderer final
 	{
 	public:
 		TextRenderer(const glm::vec2& localPos,TextMaterial* material, std::string text, std::string font = "Resources/Lingua.otf", int size = 24, float scale = 1);

@@ -17,7 +17,7 @@ Rius::Player& Rius::GameInstance::GetPlayer(int playerId)
 }
 
 Rius::Player::Player()
-	:IdController(InputManager::GetInstance().GetGamepadId())
+	:IdController(InputManager::GetInstance().GetGamepadId()),m_HealthComponent(),m_color()
 {
 }
 
@@ -31,8 +31,8 @@ void Rius::Player::Render(TextRenderer* textRenderer, glm::vec2 pos, std::string
 
 void Rius::Player::RemoveHealth(int amount)
 {
-	m_Health->RemoveHealth();
-	if (m_Health->CurrentHealth() <= 0)
+	m_HealthComponent->RemoveHealth();
+	if (m_HealthComponent->CurrentHealth() <= 0)
 	{
 		dead = true;
 
@@ -52,34 +52,26 @@ void Rius::GameInstance::AddPlayer(GameObject* playerGameObject)
 	p->AddComponent(new HealthComponent{ 3,(m_Players.size() < 1) });
 	Player player;
 	player.pPlayer = playerGameObject;
-	player.m_Health = p->GetComponent < HealthComponent>();
+	player.m_HealthComponent = p->GetComponent < HealthComponent>();
 	player.score = 0;
+	player.m_color = (m_Players.size() == 0) ? glm::vec3{0, 1, 0} : glm::vec3{0, 0, 1};
 	m_Players.push_back(player);
 	SceneManager::GetInstance().GetCurrentScene()->Add(p);
 	playerGameObject->SetActive(false);
 	p->SetActive(false);
-	GUISystem* system = new GUISystem(p);
+	 new GUISystem(p);
 }
 
-void Rius::GameInstance::AddPlayer()
-{
-	GameObject* player = m_pPlayerPrefab->Clone();
-	SceneManager::GetInstance().GetCurrentScene()->Add(player);
-	player->SetActive(false);
-	player->GetTransform().SetPosition(-1000, -1000, 0);
-	MovingObjectObserver* observer = new MovingObjectObserver{ player };
-	AddPlayer(player);
-}
 
 void Rius::GameInstance::SetPos(GameObject* pPlayer)
 {
-	for (int i = 0; i < m_Players.size(); ++i)
+	for (int i = 0; i < int(m_Players.size()); ++i)
 	{
 		if (m_Players[i].pPlayer == pPlayer)
 		{
 			if (!pPlayer->GetActive())
 			{
-				m_Players[i].m_Health->GetGameObject()->SetActive(true);
+				m_Players[i].m_HealthComponent->GetGameObject()->SetActive(true);
 				pPlayer->SetActive(true);
 				LevelManager::GetInstance().SetPosition(pPlayer, i);
 			}
@@ -132,8 +124,12 @@ void Rius::GameInstance::Update()
 			{
 				player.score = 0;
 				player.dead = false;
-				player.m_Health->ResetHealth();
+				player.m_HealthComponent->ResetHealth();
 				players.push_back(player.pPlayer);
+			}
+			for (GameObject* enemy : m_Enemies)
+			{
+				SceneManager::GetInstance().GetCurrentScene()->Remove(enemy);
 			}
 			LevelManager::GetInstance().ResetLevel(players);
 		}
@@ -144,7 +140,7 @@ void Rius::GameInstance::AddEnemy(GameObject* Enemy)
 {
 	m_Enemies.push_back(Enemy);
 
-	GUISystem* system = new GUISystem(Enemy);
+	 new GUISystem(Enemy);
 }
 
 void Rius::GameInstance::AddEnemy(std::vector<GameObject*> Enemy)

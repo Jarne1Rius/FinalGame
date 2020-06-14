@@ -5,19 +5,18 @@
 #include "BaseComponent.h"
 #include <vector>
 #include "Extra.h"
-#include "Transform.h"
 namespace Rius
 {
 	class Material;
 	class Texture2D;
 
-	class SpriteRenderer
+	class SpriteRenderer final
 	{
 	public:
 		SpriteRenderer(glm::vec2 position, Material* material, const Rectangle2D& destRectangle, bool isStatic = true, const Rectangle2D& textCoord = { 0,0,1,1 });
 		SpriteRenderer(glm::vec2 position, Material* material, const Rectangle2D& destRectangle, const float widthTile, float heightTile, bool isStatic = true);
 		~SpriteRenderer();
-		SpriteRenderer(const SpriteRenderer& other);
+		SpriteRenderer(const SpriteRenderer& other) = default;
 		SpriteRenderer(SpriteRenderer&& other) noexcept = default;
 		SpriteRenderer& operator= (const SpriteRenderer& other) = default;
 		SpriteRenderer& operator= (SpriteRenderer&& other) = default;
@@ -40,6 +39,7 @@ namespace Rius
 		GLuint m_VBO;
 		GLuint m_EBO;
 		glm::vec2 m_Pos;
+		
 		void SetIndicesAndVertices();
 	};
 }

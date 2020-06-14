@@ -9,7 +9,7 @@ namespace Rius
 	{
 
 	public:
-		CircleCollider2D(Circle2D circle, bool IsTrigger = false, CollisionGroup collisionGroup = Group0);
+		CircleCollider2D(Circle2D circle,  bool IsTrigger = false, CollisionGroup collisionGroup = Group0);
 		~CircleCollider2D();
 		CircleCollider2D(const CircleCollider2D& other);
 		CircleCollider2D(CircleCollider2D&& other) noexcept = default;
@@ -29,6 +29,6 @@ namespace Rius
 		
 	private:
 		Circle2D m_Circle2D;
-		bool m_Trigger;
+		glm::vec3 m_StartPos;
 	};
 }

@@ -16,34 +16,6 @@ void Rius::BaseComponent::SetComponent(BaseComponent* comp)
 	*this = *comp;
 }
 
-void Rius::BaseComponent::LateUpdate()
-{
-}
-
-void Rius::BaseComponent::OnTriggerEnter(Collider* collider)
-{
-}
-
-void Rius::BaseComponent::OnTriggerStay(Collider* collider)
-{
-}
-
-void Rius::BaseComponent::OnCollisionEnter(Collider* collider)
-{
-}
-
-void Rius::BaseComponent::OnTriggerExit(Collider* collider)
-{
-}
-
-void Rius::BaseComponent::OnCollisionStay(Collider* collider)
-{
-}
-
-void Rius::BaseComponent::OnCollisionExit(Collider* collider)
-{
-}
-
 Rius::BaseComponent* Rius::BaseComponent::Clone()
 {
 	return nullptr;

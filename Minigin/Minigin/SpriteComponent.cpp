@@ -16,7 +16,7 @@ Rius::SpriteComponent::~SpriteComponent()
 }
 
 Rius::SpriteComponent::SpriteComponent(const SpriteComponent& other)
-	:m_TexCoord(other.m_TexCoord),m_Sprite(other.m_Sprite),m_PMat(other.m_PMat)
+	:m_TexCoord(other.m_TexCoord),m_Sprite(other.m_Sprite),m_PMat(other.m_PMat),m_Scale(1)
 {
 }
 
@@ -25,7 +25,7 @@ void Rius::SpriteComponent::Initialize()
 	m_Sprite = new SpriteRenderer{ m_pGameObject->GetTransform().GetPosition(),m_PMat,{0,0,m_Scale,m_Scale},false,ConvertToUVCoordinates(m_TexCoord, m_PMat->GetTexture2D())};
 }
 
-void Rius::SpriteComponent::Update(float deltaT)
+void Rius::SpriteComponent::Update(float)
 {
 	m_Sprite->LateUpdate(m_pGameObject->GetTransform().GetPosition());
 }

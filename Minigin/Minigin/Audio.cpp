@@ -101,7 +101,7 @@ namespace Rius
 
 	}
 
-	void BackGroundMusic::SetVolume(int addVolume)
+	void BackGroundMusic::SetVolume(int)
 	{
 	}
 

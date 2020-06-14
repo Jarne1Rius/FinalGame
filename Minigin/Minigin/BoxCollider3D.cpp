@@ -2,9 +2,10 @@
 #include "BoxCollider3D.h"
 #include "CircleCollider3D.h"
 #include "ExtraMathFiles.h"
+#include "Logger.h"
 
-Rius::BoxCollider3D::BoxCollider3D(Rectangle3D rectangle, bool isTrigger, CollisionGroup collisionGroup )
-	:Collider(isTrigger, collisionGroup)
+Rius::BoxCollider3D::BoxCollider3D(Rectangle3D rectangle,const glm::vec3& center, bool isTrigger, CollisionGroup collisionGroup )
+	:Collider(isTrigger, collisionGroup), m_Center(-rectangle.width * center.x, rectangle.height* center.y, rectangle.depth * center.z),m_StartRectangle(center),m_Rectangle(rectangle)
 {
 }
 
@@ -13,7 +14,7 @@ Rius::BoxCollider3D::~BoxCollider3D()
 }
 
 Rius::BoxCollider3D::BoxCollider3D(const BoxCollider3D& other)
-	: Collider(other.m_Trigger, other.m_CurrentCollisionGroup), m_Rectangle()
+	: Collider(other.m_Trigger, other.m_CurrentCollisionGroup), m_Rectangle(other.m_Rectangle),m_StartRectangle(other.m_StartRectangle),m_Center(other.m_Center)
 {
 	this->m_CollidersInCollision = other.m_CollidersInCollision;
 	this->m_pGameObject = other.m_pGameObject;
@@ -41,38 +42,37 @@ void Rius::BoxCollider3D::Initialize()
 {
 }
 
-void Rius::BoxCollider3D::Update(float deltaT)
+void Rius::BoxCollider3D::Update(float )
 {
+	if (!m_Static && m_CurrentCollisionGroup != Group3)
+	{
+		m_Rectangle.pos = m_pGameObject->GetTransform().GetPosition() + m_Center + m_StartRectangle;
+		m_Rectangle.pos.y *= -1;
+	}
+	bool anyHit{ false };
+	if (this->m_Static) return;
 	for (Collider* collider : m_AllColliders)
 	{
+		if (collider == this || m_IgnoreGroups[collider->GetCurrentCollisionGroup()]) continue;
 		bool newHit = collider->CheckCollision(this);
-		std::map<Collider*, bool>::iterator it = m_CollidersInCollision.find(collider);
-		bool hit = it->second;
-		if (newHit != hit && hit)
+		if (newHit)
 		{
-			//exit collider
-			if (m_Trigger) OnTriggerExit(collider);
-			else OnCollisionExit(collider);
-		}
-		else if (newHit == hit && hit)
-		{
-			//Stay collider
-			if (m_Trigger) OnTriggerStay(collider);
-			else OnCollisionStay(collider);
-		}
-		else if (newHit != hit && hit == false)
-		{
-			//Enter collider
-			if (m_Trigger) OnTriggerEnter(collider);
-			else OnCollisionEnter(collider);
-		}
-		else
-		{
-			continue;
+			anyHit = true;
+			if (m_Trigger || collider->IsTrigger())
+			{
+				m_pGameObject->OnTriggerEnter(collider);
+				collider->GetGameObject()->OnTriggerEnter(this);
+			}
+			else
+			{
+				m_pGameObject->OnCollisionEnter(collider);
+				collider->GetGameObject()->OnCollisionEnter(this);
+			}
 		}
 
-		it->second = newHit;
 	}
+
+	m_PrevHit = anyHit;
 }
 
 void Rius::BoxCollider3D::Render() const
@@ -84,15 +84,15 @@ glm::vec2 Rius::BoxCollider3D::GetCenter()
 	return m_Rectangle.pos;
 }
 
-bool Rius::BoxCollider3D::CheckCollision(CircleCollider2D* circle)
+bool Rius::BoxCollider3D::CheckCollision(CircleCollider2D* )
 {
-	std::cout << "Error => 3D collider tries to collide with a 2D collider\n";
+	Logger::LogError("3D collider tries to collide with a 2D collider");
 	return false;
 }
 
-bool Rius::BoxCollider3D::CheckCollision(BoxCollider2D* collider)
+bool Rius::BoxCollider3D::CheckCollision(BoxCollider2D* )
 {
-	std::cout << "Error => 3D collider tries to collide with a 2D collider\n";
+	Logger::LogError("3D collider tries to collide with a 2D collider");
 	return false;
 }
 

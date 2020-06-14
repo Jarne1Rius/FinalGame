@@ -246,7 +246,6 @@ namespace Rius
 	inline HitInfo& RayCast(Ray& raycast)
 	{
 		std::vector<GameObject*> allGameObjects = SceneManager::GetCurrentScene()->m_pObjects;
-		Collider* current = nullptr;
 		HitInfo info;
 		info.length = FLT_MAX;
 		for (Collider* Collider : Collider::m_AllColliders)

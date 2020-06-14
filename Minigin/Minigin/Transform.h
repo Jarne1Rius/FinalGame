@@ -6,7 +6,7 @@
 
 namespace Rius
 {
-	class Transform: public BaseComponent
+	class Transform final: public BaseComponent
 	{
 	public:
 		Transform();
@@ -31,9 +31,6 @@ namespace Rius
 		glm::mat4& GetMatrix();
 		void Translate(const glm::vec3& newPos);
 		
-		//const glm::vec3& GetScale() const { return m_Rotation; }
-		//void SetRotation(glm::vec3& rotation);
-		//void SetRotation(float x, float y, float z);
 		void Rotate(float angle, glm::vec3 rotationAngle);
 		void Scale(glm::vec3 scale);
 		

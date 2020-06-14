@@ -6,7 +6,7 @@
 #include "TextureMaterial.h"
 
 Rius::HealthComponent::HealthComponent(int health, bool leftSide)
-	:m_LeftSide(leftSide), m_Health(health), m_OriginalHealth(health)
+	:m_LeftSide(leftSide), m_Health(health), m_OriginalHealth(health),m_Sprites{},m_pMat()
 {
 	m_pMat = new TextureMaterial{ "Resources/Enemy/Enemy.png","Health" + std::to_string(MaterialManager::m_ID),"Health" + std::to_string(MaterialManager::m_ID),true };
 	MaterialManager::AddMaterial(m_pMat);
@@ -18,7 +18,6 @@ Rius::HealthComponent::~HealthComponent()
 	{
 		delete m_Sprites[i];
 	}
-	//delete m_pMat;
 }
 
 void Rius::HealthComponent::Initialize()
@@ -28,7 +27,7 @@ void Rius::HealthComponent::Initialize()
 
 	for (int i = 0; i < m_Health; ++i)
 	{
-		SpriteRenderer* sprite = new SpriteRenderer{ m_pGameObject->GetTransform().GetPosition(),m_pMat,{startPos,scale,scale},false,ConvertToUVCoordinates(((m_LeftSide) ? Rectangle2D{84,90,8,-6} : Rectangle2D{95,90,8,-6}),m_pMat->GetTexture2D()) };
+		SpriteRenderer* sprite = new SpriteRenderer{ m_pGameObject->GetTransform().GetPosition(),m_pMat,{startPos,scale,scale},false,ConvertToUVCoordinates(((m_LeftSide) ? Rectangle2D{84,84,8,6} : Rectangle2D{95,84,8,6}),m_pMat->GetTexture2D()) };
 		m_Sprites[i] = sprite;
 
 
@@ -36,7 +35,7 @@ void Rius::HealthComponent::Initialize()
 	}
 }
 
-void Rius::HealthComponent::Update(float deltaT)
+void Rius::HealthComponent::Update(float )
 {
 	for (int i = 0; i < m_Health; ++i)
 	{

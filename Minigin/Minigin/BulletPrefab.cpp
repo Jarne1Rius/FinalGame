@@ -61,7 +61,7 @@ void Rius::BulletPrefab::OnTriggerEnter(Collider* other)
 {
 	if(other->GetGameObject()->GetTag() == Tag::Enemy)
 	{
-		other->GetGameObject()->GetComponent<Ai>()->DoDamage();
+		other->GetGameObject()->GetComponent<Ai>()->TakeDamage();
 		//delete m_pMat;
 		SceneManager::GetInstance().GetCurrentScene()->Remove(this);
 	}

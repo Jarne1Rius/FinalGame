@@ -40,7 +40,7 @@ void Rius::ResourceManager::Clear()
 	}
 	for (auto texture : M_Textures)
 	{
-		glDeleteTextures(1, &texture.second->ID);
+		glDeleteTextures(1, &texture.second->m_Id);
 		delete texture.second;
 	}
 }
@@ -51,7 +51,7 @@ void Rius::ResourceManager::ClearTexture(Texture2D* pTexture2D)
 	{
 		if (texture.second == pTexture2D)
 		{
-			glDeleteTextures(1, &texture.second->ID);
+			glDeleteTextures(1, &texture.second->m_Id);
 			delete texture.second;
 		}
 
@@ -86,7 +86,6 @@ Rius::Shader* Rius::ResourceManager::LoadShaderFromFile(const GLchar* vShaderFil
 	}
 	const GLchar* vShaderCode = vertexCode.c_str();
 	const GLchar* fShaderCode = fragmentCode.c_str();
-	const GLchar* gShaderCode = geometryCode.c_str();
 	// 2. Now create shader object from source code
 	Shader* shader = new Shader();
 	shader->Compile(vShaderCode, fShaderCode);
@@ -98,12 +97,12 @@ Rius::Texture2D* Rius::ResourceManager::LoadTextureFromFile(const GLchar* file, 
 	Texture2D* texture = new Texture2D();
 	if (alpha)
 	{
-		texture->Internal_Format = GL_RGBA;
-		texture->Image_Format = GL_RGBA;
+		texture->m_InternalFormat = GL_RGBA;
+		texture->m_ImageFormat = GL_RGBA;
 	}
 	// Load image
 	int width, height;
-	unsigned char* image = stbi_load(file, &width, &height, 0, texture->Image_Format == GL_RGBA ? STBI_rgb_alpha : STBI_rgb);
+	unsigned char* image = stbi_load(file, &width, &height, 0, texture->m_ImageFormat == GL_RGBA ? STBI_rgb_alpha : STBI_rgb);
 	// Now generate texture
 	texture->Generate(width, height, image);
 	// And finally free image data

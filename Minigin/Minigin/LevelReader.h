@@ -7,7 +7,7 @@
 
 namespace Rius
 {
-	class LevelReader
+	class LevelReader final
 	{
 	public:
 		static std::vector<std::vector<Rectangle2D>> ReadFromObjFile(const std::string filename);
@@ -32,5 +32,3 @@ namespace Rius
 	}
 
 }
-
-

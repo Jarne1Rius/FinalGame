@@ -4,7 +4,7 @@
 
 namespace Rius
 {
-	class BulletPrefab : public GameObject
+	class BulletPrefab final : public GameObject
 	{
 	public:
 		BulletPrefab(TextureMaterial* mat, const Rectangle2D& texCoordSizeOfTexture);

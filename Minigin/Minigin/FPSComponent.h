@@ -9,13 +9,17 @@ namespace Rius
 {
 	class Font;
 	class Transform;
-	class FPSComponent : public BaseComponent
+	class FpsComponent final : public BaseComponent
 	{
 
 	public:
-		explicit FPSComponent(glm::vec3 color = { 0,0,0 }, const std::string& font = "Resources/Lingua.otf");
-		virtual ~FPSComponent();
-		void Update(float deltaT) override;
+		explicit FpsComponent(glm::vec3 color = { 0,0,0 }, const std::string& font = "Resources/Lingua.otf");
+		~FpsComponent();
+		FpsComponent(const FpsComponent& other) = default;
+		FpsComponent(FpsComponent&& other) noexcept = default;
+		FpsComponent& operator= (const FpsComponent& other) = default;
+		FpsComponent& operator= (FpsComponent&& other) = default;
+
 		void Initialize() override;
 		void Render() const override;
 		void SetComponent(BaseComponent* comp) override ;

@@ -4,7 +4,7 @@
 
 namespace Rius
 {
-	class CircleCollider3D : public Collider
+	class CircleCollider3D final : public Collider
 	{
 	public:
 		CircleCollider3D(Circle3D circle, bool IsTrigger = false, CollisionGroup collisionGroup = Group0);
@@ -27,7 +27,7 @@ namespace Rius
 		bool CheckCollision(BoxCollider3D* collider) override;
 	private:
 		Circle3D m_Circle3D;
-		bool m_Trigger;
+		glm::vec3 m_StartPos;
 	};
 
 }

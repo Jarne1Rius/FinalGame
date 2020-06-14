@@ -19,7 +19,7 @@ void Rius::TextComponent::Initialize()
 {
 }
 
-void Rius::TextComponent::Update(float deltaT)
+void Rius::TextComponent::Update(float )
 {
 }
 

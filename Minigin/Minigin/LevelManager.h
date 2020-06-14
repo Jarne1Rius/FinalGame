@@ -10,7 +10,7 @@ namespace Rius
 	class Scene;
 	class TextureMaterial;
 
-	class Level
+	class Level final
 	{
 	public:
 		Level(std::vector<Rectangle2D> walls, int levelID, TextureMaterial* materialSmall, TextureMaterial* materialBig, std::string locationBigTexture, std::string locationSmallTexture,const std::vector<glm::vec3>& posEnemies, const std::vector<glm::vec2>& startPos = { {100, 70},{600,70} });

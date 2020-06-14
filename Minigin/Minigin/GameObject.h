@@ -36,9 +36,8 @@ namespace Rius
 
 		virtual void OnTriggerEnter(Collider* other);
 		virtual void OnCollisionEnter(Collider* other);
-		
-		
-		//getters
+
+
 		std::vector<GameObject*> GetAllChildren() const { return m_pChildren; }
 		std::vector<BaseComponent*> GetAllComponents() const { return m_pComponents; }
 		GameObject* GetParent() const { return  m_pParentObject; }
@@ -48,9 +47,9 @@ namespace Rius
 		bool GetStatic() const { return m_Static; }
 		void SetStatic(bool isStatic) { m_Static = isStatic; }
 		int GetId() const { return m_Id; }
-		//Subject* GetSubject() const { return m_Subject; }
 		void SetActive(bool active = false) { m_Active = active; }
 		bool GetActive()const { return m_Active; }
+		
 		BaseComponent* GetComponentById(int id);
 		template <class  T>
 		T* GetComponent()
@@ -81,23 +80,25 @@ namespace Rius
 			}
 			return  nullptr;
 		}
-
+		void SetPreviousPos(const glm::vec3& pos) { m_PreviousPos = pos; };
+		glm::vec3 getPreviousPos()const { return m_PreviousPos; };
 		//Need to change this
-		glm::vec3 m_PreviousPos;
 	protected:
 		RigidBodyComponent* m_pRigidBodyComponent;
 	private:
-		Transform m_Transform;
-		PlayerComponent* m_pPlayerComponent;
-		std::vector<BaseComponent*> m_pComponents{};
-		std::vector<GameObject*> m_pChildren{};
-		Tag m_Tag{};
 		bool m_Static;
 		bool m_Active = true;
 		int m_Id;
+		static int m_CurrentID;
+		Tag m_Tag;
+		glm::vec3 m_PreviousPos;
+
 		class GameScene* m_pParentScene;
 		GameObject* m_pParentObject;
-		//Subject* m_Subject;
-		static int m_CurrentID;
+		
+		Transform m_Transform;
+		PlayerComponent* m_pPlayerComponent;
+		std::vector<BaseComponent*> m_pComponents;
+		std::vector<GameObject*> m_pChildren;
 	};
 }

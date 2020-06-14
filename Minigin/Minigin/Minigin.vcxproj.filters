@@ -40,6 +40,9 @@
     <Filter Include="Source Files\Helpers\Observer">
       <UniqueIdentifier>{82e37147-7820-40d2-8816-1998228a4bd2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Managers\Input">
+      <UniqueIdentifier>{6b74a556-7b08-45fc-809f-1ea57117d56a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseComponent.h">
@@ -53,9 +56,6 @@
     </ClInclude>
     <ClInclude Include="Extra.h">
       <Filter>Source Files\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Source Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Source Files\Objects</Filter>
@@ -132,12 +132,6 @@
     <ClInclude Include="imgui_internal.h">
       <Filter>Source Files\Imgui</Filter>
     </ClInclude>
-    <ClInclude Include="BinaryReaderAndWriter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ReaderWriter.h">
-      <Filter>Source Files\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="Logger.h">
       <Filter>Source Files\Helpers</Filter>
     </ClInclude>
@@ -174,9 +168,6 @@
     <ClInclude Include="TextMaterial.h">
       <Filter>Source Files\Helpers\Materials</Filter>
     </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Source Files\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Observer.h">
       <Filter>Source Files\Helpers\Observer</Filter>
     </ClInclude>
@@ -185,9 +176,6 @@
     </ClInclude>
     <ClInclude Include="UI.h">
       <Filter>Source Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteRenderer.h">
-      <Filter>Source Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="HealthComponent.h">
       <Filter>Source Files\Components</Filter>
@@ -213,11 +201,20 @@
     <ClInclude Include="SpriteComponent.h">
       <Filter>Source Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="GameInstance.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ColliderEndScreen.h">
+      <Filter>Source Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="TriggersEndScreen.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="GameInstance.h">
+      <Filter>Source Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>Source Files\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Source Files\Managers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Source Files\Managers\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -229,9 +226,6 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Source Files\Managers</Filter>
@@ -305,9 +299,6 @@
     <ClCompile Include="imgui_widgets.cpp">
       <Filter>Source Files\Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="ReaderWriter.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="Logger.cpp">
       <Filter>Source Files\Helpers</Filter>
     </ClCompile>
@@ -353,14 +344,8 @@
     <ClCompile Include="Observer.cpp">
       <Filter>Source Files\Helpers\Observer</Filter>
     </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Source Files\Helpers</Filter>
-    </ClCompile>
     <ClCompile Include="UI.cpp">
       <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteRenderer.cpp">
-      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="HealthComponent.cpp">
       <Filter>Source Files\Components</Filter>
@@ -383,11 +368,20 @@
     <ClCompile Include="SpriteComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="GameInstance.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ColliderEndScreen.cpp">
+      <Filter>Source Files\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="TriggersEndScreen.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="GameInstance.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>Source Files\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Source Files\Managers\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Source Files\Managers\Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

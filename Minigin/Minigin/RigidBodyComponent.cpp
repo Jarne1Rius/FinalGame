@@ -2,13 +2,13 @@
 #include "RigidBodyComponent.h"
 #include "GameObject.h"
 #include "Minigin.h"
-#include "time.h"
+#pragma warning(push)
+#pragma warning( disable : 4201)
 #include <glm/gtx/norm.hpp>
-
-#include "Logger.h"
+#pragma warning( pop ) 
 
 Rius::RigidBodyComponent::RigidBodyComponent(float mass)
-	:m_AccelerationForce(0, 9.81f), m_Velocity(0, 0, 0), m_Mass(mass), m_Kinematic(false), m_MaxForce(2.f)
+	:m_AccelerationForce(0, 9.81f), m_Velocity(0, 0, 0), m_Mass(mass), m_Kinematic(false), m_MaxForce(1000.f),m_UpdatePos(),m_OnGround(),m_BounceMulti(0)
 {
 }
 
@@ -23,6 +23,10 @@ Rius::RigidBodyComponent::RigidBodyComponent(const RigidBodyComponent& other)
 	m_AccelerationForce = other.m_AccelerationForce;
 	m_Mass = other.m_Mass;
 	m_pGameObject = other.m_pGameObject;
+	m_BounceMulti = other.m_BounceMulti;
+	m_MaxForce = other.m_MaxForce;
+	m_OnGround = other.m_OnGround;
+	m_UpdatePos = other.m_UpdatePos;
 }
 
 
@@ -43,11 +47,11 @@ void Rius::RigidBodyComponent::AddForce(glm::vec2 force)
 	m_Velocity.y -= force.y * 10;
 	if (glm::length2(m_Velocity) > (m_MaxForce * m_MaxForce))
 	{
-		//m_Velocity = glm::normalize(m_Velocity) * m_MaxForce;
+		m_Velocity = glm::normalize(m_Velocity) * m_MaxForce;
 	}
 }
 
-void Rius::RigidBodyComponent::Bounce(float multiply)
+void Rius::RigidBodyComponent::Bounce(float )
 {
 	if (!m_OnGround)
 	{
@@ -60,7 +64,7 @@ void Rius::RigidBodyComponent::Bounce(float multiply)
 		}
 		else
 		{
-			m_pGameObject->GetTransform().SetPosition(m_pGameObject->GetTransform().GetPosition().x, -m_pGameObject->m_PreviousPos.y, m_pGameObject->GetTransform().GetPosition().z);
+			m_pGameObject->GetTransform().SetPosition(m_pGameObject->GetTransform().GetPosition().x, -m_pGameObject->getPreviousPos().y, m_pGameObject->GetTransform().GetPosition().z);
 			m_Velocity.y *= m_BounceMulti;
 		}
 
@@ -69,17 +73,17 @@ void Rius::RigidBodyComponent::Bounce(float multiply)
 			m_OnGround = true;
 			m_Velocity.y = 0;
 		}
-		m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
+		m_pGameObject->GetTransform().SetPosition(m_pGameObject->getPreviousPos());
 	}
 	else
 	{
-		m_pGameObject->GetTransform().SetPosition(m_pGameObject->m_PreviousPos);
+		m_pGameObject->GetTransform().SetPosition(m_pGameObject->getPreviousPos());
 	}
 }
 
 void Rius::RigidBodyComponent::Initialize()
 {
-	m_pGameObject->m_PreviousPos = m_pGameObject->GetTransform().GetPosition();
+	m_pGameObject->SetPreviousPos( m_pGameObject->GetTransform().GetPosition());
 }
 
 void Rius::RigidBodyComponent::Update(float deltaT)
@@ -91,7 +95,7 @@ void Rius::RigidBodyComponent::Update(float deltaT)
 		m_OnGround = false;
 	}
 	if (!m_UpdatePos)
-		m_pGameObject->m_PreviousPos = m_pGameObject->GetTransform().GetPosition();
+		m_pGameObject->SetPreviousPos(m_pGameObject->GetTransform().GetPosition());
 	else
 		m_UpdatePos = false;
 	Transform& transform = m_pGameObject->GetTransform();
@@ -117,16 +121,15 @@ bool Rius::RigidBodyComponent::IsOnGround()
 
 void Rius::RigidBodyComponent::MoveTo(const glm::vec3& location)
 {
-	//m_Prev = GetGameObject()->GetTransform().GetPosition();
 	m_Velocity.x = glm::vec3{ location - GetGameObject()->GetTransform().GetPosition() }.x;
 
 	m_UpdatePos = true;
-	m_pGameObject->m_PreviousPos = m_pGameObject->GetTransform().GetPosition() + glm::vec3{ 0,-0.1f,0 };
+	m_pGameObject->SetPreviousPos(m_pGameObject->GetTransform().GetPosition() + glm::vec3{ 0,-0.1f,0 });
 	GetGameObject()->GetTransform().SetPosition(location);
 
 }
 
-void Rius::RigidBodyComponent::OnCollisionEnter(Collider* collider)
+void Rius::RigidBodyComponent::OnCollisionEnter(Collider*)
 {
 	if (!m_pGameObject->GetStatic() || !m_Kinematic)
 		Bounce(1.f);

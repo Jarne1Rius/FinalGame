@@ -7,15 +7,17 @@ namespace Rius
 {
 	class SpriteComponent;
 
-	class PlayerComponent :	public BaseComponent
+	class PlayerComponent final :	public BaseComponent
 	{
 	public:
 		PlayerComponent(GameObject* pPrefabBullet);
 		~PlayerComponent();
+		
 		PlayerComponent(const PlayerComponent& other);
 		PlayerComponent(PlayerComponent&& other) noexcept = default;
 		PlayerComponent& operator= (const PlayerComponent& other) = default;
 		PlayerComponent& operator= (PlayerComponent&& other) = default;
+		
 		void SetComponent(BaseComponent * comp) override;
 		BaseComponent* Clone() override;
 		void Initialize() override;
@@ -25,7 +27,6 @@ namespace Rius
 		void Jump(float value);
 		void Move(float value);
 		void Fire(float value);
-	//	void LateUpdate() override;
 	public:
 		RigidBodyComponent* m_Rigid;
 		int m_Lives;

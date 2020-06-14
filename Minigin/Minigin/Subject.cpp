@@ -2,6 +2,7 @@
 #include "Subject.h"
 
 Rius::Subject::Subject()
+	:m_NumOfObservers(0),m_pObservers{}
 {
 }
 

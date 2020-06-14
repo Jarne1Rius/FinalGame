@@ -12,39 +12,55 @@ namespace Rius
 		closest, furthest
 	};
 
-	class Ai : public BaseComponent
+	class Ai final : public BaseComponent
 	{
 	public:
-		Ai(float durationWalking,const glm::vec2& randomRangeWalking, bool target);
+		Ai(float durationWalking,const glm::vec2& randomRangeWalking, bool target, int lives);
 		~Ai();
+		Ai(const Ai& other) = default;
+		Ai(Ai&& other) noexcept = default;
+		Ai& operator= (const Ai& other) = default;
+		Ai& operator= (Ai&& other) = default;
+
+		
 		void Initialize() override;
 		void Render() const override;
 		void Update(float deltaT) override;
 		void LateUpdate() override;
+
+		//TODO Chasing
 		void SetTarget(const std::vector<GameObject*>& targets) { m_Targets = targets; }
 		GameObject* GetCurrentTarget() const { return m_CurrentTarget; }
 		void SetCurrentTarget(GameObject* currentTarget);
 		void OnCollisionEnter(Collider* collider) override;
 		void OnTriggerEnter(Collider* collider) override;
-		void DoDamage() { m_Lives--; }
+		void TakeDamage() { m_Lives--; }
 	private:
+		
+		bool m_HitPlayer;
+		bool m_StartFollowing;
+
+		int m_Lives;
+		
+		float m_SecWalking;
+		float m_DurationRunning;
+		float m_Sec;
+		//For chasing not implemented right
+		float m_Radius;
+		ChaseEnemyType m_TypeChase;
+		
+		glm::vec2 m_RandomRangeWalking;
+		
+		FiniteStateMachine* m_pFSM;
+		
+		GameObject* m_CurrentTarget;
 		SpriteSheetComponent* m_Animation;
 		Collider* m_pCollider;
-		std::vector<GameObject*> m_Targets;
 		RigidBodyComponent* m_Rigid;
-		GameObject* m_CurrentTarget;
-		float m_Radius;
-		glm::vec3 m_Direction;
-		FiniteStateMachine* m_pFSM;
-		ChaseEnemyType m_TypeChase;
-		float m_DurationRunning;
-		bool m_StartFollowing;
-		int m_Lives = 1;
-		float m_Sec;
-		float m_SecWalking;
-		glm::vec2 m_RandomRangeWalking;
-		int m_Value;
-		bool m_HitPlayer;
+		
+		std::vector<GameObject*> m_Targets;
+
+		void SetFsm();
 	};
 }
 

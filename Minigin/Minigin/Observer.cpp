@@ -8,7 +8,7 @@ Rius::Observer::Observer()
 {
 }
 
-void Rius::Observer::OnNotify(GameObject* object, Event event)
+void Rius::Observer::OnNotify(GameObject* , Event )
 {
 }
 
@@ -27,6 +27,7 @@ void Rius::GUISystem::OnNotify(GameObject* object, Event event)
 	case Event::addscore:
 		GameInstance::GetInstance().GetPlayer(object).score += 10;
 		break;
+	default: ;
 	}
 }
 
@@ -48,5 +49,6 @@ void Rius::MovingObjectObserver::OnNotify(GameObject* object, Event event)
 	case Event::RemoveEnemy:
 		GameInstance::GetInstance().RemoveEnemy(object);
 		break;
+	default: ;
 	}
 }

@@ -42,8 +42,3 @@ void Rius::UI::Cleanup()
 {
 	delete m_TextRenderer;
 }
-
-
-Rius::UI::UI()
-{
-}

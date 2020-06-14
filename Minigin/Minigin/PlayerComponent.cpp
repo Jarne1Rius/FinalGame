@@ -9,7 +9,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 Rius::PlayerComponent::PlayerComponent(GameObject* prefabBullets)
-	:m_FSM(), m_MovementSpeed(), m_Lives(3), m_Moving(1.f), m_Jump(), m_Sprite(), m_Attack(), m_Rigid(), m_BulletsPrefabs(prefabBullets)
+	:m_FSM(), m_MovementSpeed(), m_Lives(3), m_Moving(1.f), m_Jump(), m_Sprite(), m_Attack(), m_Rigid(), m_BulletsPrefabs(prefabBullets),m_pCollider()
 {
 }
 
@@ -170,7 +170,7 @@ void Rius::PlayerComponent::TakeDamage(int amount)
 	m_Lives -= amount;
 }
 
-void Rius::PlayerComponent::Jump(float value)
+void Rius::PlayerComponent::Jump(float)
 {
 	std::string name = m_FSM->m_CurrentState->GetName();
 	if (name != "Menu" || name != "Defeat" || name != "Attack")
@@ -183,7 +183,7 @@ void Rius::PlayerComponent::Move(float value)
 	m_Moving = value;
 }
 
-void Rius::PlayerComponent::Fire(float value)
+void Rius::PlayerComponent::Fire(float)
 {
 	std::string name = m_FSM->m_CurrentState->GetName();
 	if (name != "Menu" || name != "Defeat")

@@ -3,7 +3,7 @@
 #include "Extra.h"
 namespace Rius
 {
-	class Logger
+	class Logger final
 	{
 	public:
 		Logger();

@@ -8,7 +8,7 @@ using namespace Rius;
 
 unsigned int Scene::m_IdCounter = 0;
 std::vector<GameObject*> Rius::Scene::m_pObjects;
-Scene::Scene(const std::string& name) : m_Name(name), m_Pool(30)
+Scene::Scene(const std::string& name) : m_Name(name),m_pBackground(nullptr),m_ReadyToRemove()
 {
 	UI::GetInstance().Initialize();
 }
@@ -32,7 +32,7 @@ void Scene::Remove()
 			delete m_ReadyToRemove[i];
 			break;
 		}
-		//if (m_pBackground == m_ReadyToRemove[i]) delete m_ReadyToRemove[i];
+		m_pBackground = nullptr;
 		delete m_ReadyToRemove[i];
 	}
 	m_ReadyToRemove.clear();
