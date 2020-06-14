@@ -54,7 +54,7 @@ void TestScene::Initialize()
 	PlayerComponent* playerComponent = new PlayerComponent{ m_pBullet };
 	m_Player->SetTag(Tag::Player);
 	m_Player->GetTransform().Scale({ -1,1,1 });
-	m_Player->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 50, 50), { 0.5f,0.5f }));
+	m_Player->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 40, 50), { 0.5f,0.5f }));
 	m_Player->GetComponent<BoxCollider2D>()->SetIgnoreGroups(Group2, true);
 	m_Player->AddComponent(playerComponent);
 	m_Player->AddComponent(m_Rigid);
@@ -72,7 +72,7 @@ void TestScene::Initialize()
 	playerComponent = new PlayerComponent{ m_pBullet };
 	m_Player->SetTag(Tag::Player);
 	m_Player->GetTransform().Scale({ -1,1,1 });
-	m_Player->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 50, 50), { 0.5f,0.5f }));
+	m_Player->AddComponent(new BoxCollider2D(Rectangle2D(0, 0, 40, 50), { 0.5f,0.5f }));
 	m_Player->GetComponent<BoxCollider2D>()->SetIgnoreGroups(Group2, true);
 	m_Player->AddComponent(playerComponent);
 	m_Player->AddComponent(m_Rigid);

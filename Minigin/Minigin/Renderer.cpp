@@ -50,8 +50,7 @@ Rius::Renderer::~Renderer()
 
 void Rius::Renderer::Destroy()
 {
-	
-	//glfwTerminate();
+	glfwTerminate();
 }
 void Rius::framebuffer_size_callback(GLFWwindow*, int width, int height)
 {
